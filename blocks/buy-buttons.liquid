@@ -56,8 +56,6 @@
 
     /*
       Quantity picker
-      Uses flex-grow instead of a literal width so the configured
-      percentages share the available width after the gap is removed.
     */
     .buy-buttons-block--{{ block.id }} .product-form-buttons:not(.product-form-buttons--stacked)
       .quantity-selector-wrapper,
@@ -69,6 +67,9 @@
 
     /*
       Add to cart wrapper
+
+      This now also catches the custom Add to Cart + Features wrapper
+      because it contains .add-to-cart-button.
     */
     .buy-buttons-block--{{ block.id }} .product-form-buttons:not(.product-form-buttons--stacked)
       > :has(.add-to-cart-button) {
@@ -77,8 +78,17 @@
     }
 
     /*
-      Fallback selector for themes where :has() isn't used by the
-      rendered structure.
+      Add to cart + features wrapper
+    */
+    .buy-buttons-block--{{ block.id }} .add-to-cart-with-features {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      width: 100%;
+    }
+
+    /*
+      Fallback selector
     */
     .buy-buttons-block--{{ block.id }} .product-form-buttons:not(.product-form-buttons--stacked)
       .add-to-cart-button {
@@ -130,21 +140,6 @@
       }
     {% endif %}
 
-    /*
-      Target the actual quantity selector/input controls as well.
-      These overrides are intentionally scoped to this buy-buttons block.
-    */
-    /* .buy-buttons-block--{{ block.id }} [class*="quantity-selector-wrapper"] input,
-    .buy-buttons-block--{{ block.id }} [class*="quantity-selector-wrapper"] button {
-      {% if block_settings.quantity_picker_background != blank %}
-        background-color: {{ block_settings.quantity_picker_background }};
-      {% endif %}
-
-      {% if block_settings.quantity_picker_border != blank %}
-        border-color: {{ block_settings.quantity_picker_border }};
-      {% endif %}
-    } */
-
     {% if block_settings.quantity_button_background != blank %}
       .buy-buttons-block--{{ block.id }}
         [class*="quantity-selector-wrapper"]
@@ -160,7 +155,6 @@
         .quantity-minus,
       .buy-buttons-block--{{ block.id }}
         [class*="quantity-selector-wrapper"]
-        .quantity-selector
         .quantity-plus {
         margin: 0 !important;
         padding: 0 !important;
@@ -222,12 +216,59 @@
 
     /*
       -----------------------------------------------------------------------
+      BUY BUTTON FEATURES
+      -----------------------------------------------------------------------
+    */
+
+    .buy-buttons-block--{{ block.id }} .buy-button-features {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: {{ block_settings.buy_button_features_gap }}px;
+      margin-top: {{ block_settings.buy_button_features_margin_top }}px;
+    }
+
+    .buy-buttons-block--{{ block.id }} .buy-button-feature {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 0;
+      flex: 1 1 0;
+      color: {{ block_settings.buy_button_features_text_color }};
+      font-size: {{ block_settings.buy_button_features_font_size }}px;
+      font-weight: {{ block_settings.buy_button_features_font_weight }};
+      text-align: center;
+    }
+
+    .buy-buttons-block--{{ block.id }} .buy-button-feature__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .buy-buttons-block--{{ block.id }} .buy-button-feature__icon img {
+      display: block;
+      width: {{ block_settings.buy_button_features_icon_size }}px;
+      height: {{ block_settings.buy_button_features_icon_size }}px;
+      object-fit: contain;
+    }
+
+    .buy-buttons-block--{{ block.id }} .buy-button-feature__text {
+      min-width: 0;
+    }
+
+    /*
+      -----------------------------------------------------------------------
       MOBILE LAYOUT
       -----------------------------------------------------------------------
       On mobile:
       - Quantity selector stacks above Add to Cart
+      - Add to Cart + Features wrapper takes 100%
       - Both elements use 100% width
-      - The desktop percentage split is ignored
     */
     @media screen and (max-width: 749px) {
       .buy-buttons-block--{{ block.id }} .product-form-buttons:not(.product-form-buttons--stacked) {
@@ -252,6 +293,11 @@
         max-width: 100%;
       }
 
+      .buy-buttons-block--{{ block.id }} .add-to-cart-with-features {
+        width: 100%;
+        max-width: 100%;
+      }
+
       .buy-buttons-block--{{ block.id }} .product-form-buttons:not(.product-form-buttons--stacked)
         .add-to-cart-button {
         width: 100%;
@@ -266,6 +312,10 @@
         .add-to-cart-button .button {
         width: 100%;
         max-width: 100%;
+      }
+
+      .buy-buttons-block--{{ block.id }} .buy-button-features {
+        width: 100%;
       }
     }
 
@@ -545,12 +595,66 @@
 
           {%- endif -%}
 
-          {% content_for 'block',
-            type: 'add-to-cart',
-            id: 'add-to-cart',
-            can_add_to_cart: can_add_to_cart,
-            add_to_cart_text: add_to_cart_text
-          %}
+          {%- comment -%}
+            -----------------------------------------------------------------
+            ADD TO CART + FEATURES
+            -----------------------------------------------------------------
+            The wrapper receives the Add to Cart width. The features row
+            therefore has exactly the same width as the Add to Cart button.
+          {%- endcomment -%}
+
+          <div class="add-to-cart-with-features">
+
+            {% content_for 'block',
+              type: 'add-to-cart',
+              id: 'add-to-cart',
+              can_add_to_cart: can_add_to_cart,
+              add_to_cart_text: add_to_cart_text
+            %}
+
+            {% if block_settings.enable_buy_button_features %}
+              <div class="buy-button-features buy-button-features--{{ block.id }}">
+
+                {% for i in (1..3) %}
+
+                  {% liquid
+                    assign icon_key = 'buy_button_feature_' | append: i | append: '_icon'
+                    assign text_key = 'buy_button_feature_' | append: i | append: '_text'
+
+                    assign feature_icon = block_settings[icon_key]
+                    assign feature_text = block_settings[text_key]
+                  %}
+
+                  <div class="buy-button-feature">
+
+                    {% if feature_icon != blank %}
+                      <span class="buy-button-feature__icon">
+                        {{
+                          feature_icon
+                          | image_url: width: 80
+                          | image_tag:
+                            loading: 'lazy',
+                            widths: '40, 60, 80',
+                            sizes: '40px',
+                            alt: feature_text
+                        }}
+                      </span>
+                    {% endif %}
+
+                    {% if feature_text != blank %}
+                      <span class="buy-button-feature__text">
+                        {{ feature_text }}
+                      </span>
+                    {% endif %}
+
+                  </div>
+
+                {% endfor %}
+
+              </div>
+            {% endif %}
+
+          </div>
 
           {% content_for 'block',
             type: 'accelerated-checkout',
@@ -975,6 +1079,159 @@
       "default": "none",
       "visible_if": "{{ block.settings.enable_custom_buy_buttons_layout }}"
     },
+
+    {
+      "type": "header",
+      "content": "Buy Button Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_buy_button_features",
+      "label": "Enable buy button features",
+      "default": false,
+      "visible_if": "{{ block.settings.enable_custom_buy_buttons_layout }}"
+    },
+    {
+      "type": "color",
+      "id": "buy_button_features_text_color",
+      "label": "Text color",
+      "default": "{{ settings.color_palette.foreground }}",
+      "alpha": true,
+      "visible_if": "{{ block.settings.enable_custom_buy_buttons_layout }}"
+    },
+    {
+      "type": "range",
+      "id": "buy_button_features_font_size",
+      "label": "Font size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+    {
+      "type": "select",
+      "id": "buy_button_features_font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+    {
+      "type": "range",
+      "id": "buy_button_features_gap",
+      "label": "Gap between features",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10,
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+    {
+      "type": "range",
+      "id": "buy_button_features_margin_top",
+      "label": "Space above features",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 10,
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+    {
+      "type": "range",
+      "id": "buy_button_features_icon_size",
+      "label": "Icon size",
+      "min": 10,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "buy_button_feature_1_enabled",
+      "label": "Enable feature 1",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "buy_button_feature_1_icon",
+      "label": "Feature 1 icon",
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+    {
+      "type": "text",
+      "id": "buy_button_feature_1_text",
+      "label": "Feature 1 text",
+      "default": "Fast Shipping",
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "buy_button_feature_2_enabled",
+      "label": "Enable feature 2",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "buy_button_feature_2_icon",
+      "label": "Feature 2 icon",
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+    {
+      "type": "text",
+      "id": "buy_button_feature_2_text",
+      "label": "Feature 2 text",
+      "default": "Secure Payment",
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "buy_button_feature_3_enabled",
+      "label": "Enable feature 3",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "buy_button_feature_3_icon",
+      "label": "Feature 3 icon",
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+    {
+      "type": "text",
+      "id": "buy_button_feature_3_text",
+      "label": "Feature 3 text",
+      "default": "Quality Guaranteed",
+      "visible_if": "{{ block.settings.enable_buy_button_features }}"
+    },
+
     {
       "type": "header",
       "content": "t:content.local_pickup"

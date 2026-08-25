@@ -32,6 +32,24 @@
           margin: 0;
           font-weight: {{ block.settings.variant_label_font_weight }};
         }
+
+        /*
+          -----------------------------------------------------------------------
+          MOBILE LAYOUT
+          -----------------------------------------------------------------------
+          On mobile, variant pickers always stack vertically and each
+          picker occupies the full available width.
+        */
+        @media screen and (max-width: 749px) {
+          .product-variant-picker-block-{{ block.id }} .variant-picker__form {
+            grid-template-columns: minmax(0, 1fr);
+          }
+
+          .product-variant-picker-block-{{ block.id }} .variant-picker__form > .variant-option {
+            width: 100%;
+            max-width: 100%;
+          }
+        }
       {% endstyle %}
     {% endif %}
 
