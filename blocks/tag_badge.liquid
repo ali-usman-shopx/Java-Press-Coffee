@@ -1,6 +1,7 @@
 {% comment %} tag_badge.liquid {% endcomment %}
 
 {% assign selected_product = closest.product %}
+{% assign badge_class = 'tag-badge-' | append: block.id %}
 
 {% liquid
   assign badge_tag = block.settings.badge_tag | strip
@@ -11,11 +12,19 @@
       assign show_badge = true
     endif
   endif
+
+  if block.settings.badge_type == 'best_seller'
+    assign badge_background_color = block.settings.best_seller_background_color
+    assign badge_text_color = block.settings.best_seller_text_color
+  elsif block.settings.badge_type == 'staff_pick'
+    assign badge_background_color = block.settings.staff_pick_background_color
+    assign badge_text_color = block.settings.staff_pick_text_color
+  endif
 %}
 
 {% if show_badge %}
   {% style %}
-    .tag-badge {
+    .{{ badge_class }} {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -29,12 +38,12 @@
       letter-spacing: 0.5px;
       line-height: 1.2;
       text-align: center;
-      background-color: {{ block.settings.background_color }};
-      color: {{ block.settings.text_color }};
+      background-color: {{ badge_background_color }};
+      color: {{ badge_text_color }};
     }
   {% endstyle %}
 
-  <span class="tag-badge">
+  <span class="{{ badge_class }}">
     {{ block.settings.badge_text }}
   </span>
 {% endif %}
@@ -73,16 +82,40 @@
       "default": "Best Seller"
     },
     {
+      "type": "header",
+      "content": "Best Seller Colors"
+    },
+    {
       "type": "color",
-      "id": "background_color",
+      "id": "best_seller_background_color",
       "label": "Background color",
       "default": "#EF4444"
     },
     {
       "type": "color",
-      "id": "text_color",
+      "id": "best_seller_text_color",
       "label": "Text color",
       "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Staff Pick Colors"
+    },
+    {
+      "type": "color",
+      "id": "staff_pick_background_color",
+      "label": "Background color",
+      "default": "#065D57"
+    },
+    {
+      "type": "color",
+      "id": "staff_pick_text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
     },
     {
       "type": "range",

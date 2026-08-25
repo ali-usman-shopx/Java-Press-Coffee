@@ -1,14 +1,47 @@
-
-
 {% liquid
   assign product_resource = closest.product
+
   if request.visual_preview_mode and product_resource == blank
     assign product_resource = collections.all.products.first
   endif
 -%}
 
 {% unless product_resource == blank %}
-  {% render 'variant-main-picker', product_resource: product_resource, section: section, product: product %}
+  <div class="product-variant-picker-block-{{ block.id }}">
+    {% if block.settings.enable_variant_style_override %}
+      {% style %}
+        .product-variant-picker-block-{{ block.id }} .variant-picker__form {
+          display: grid;
+          grid-template-columns: {% if block.settings.variant_picker_direction == 'row' %}repeat(2, minmax(0, 1fr)){% else %}minmax(0, 1fr){% endif %};
+          gap: {{ block.settings.variant_picker_gap }}px;
+          justify-items: {{ block.settings.variant_picker_alignment }};
+        }
+
+        .product-variant-picker-block-{{ block.id }} .variant-picker__form > .variant-option {
+          margin: 0;
+          min-width: 0;
+        }
+
+        .product-variant-picker-block-{{ block.id }} .variant-option > legend {
+          margin: 0;
+          padding: 0;
+          font-weight: {{ block.settings.variant_label_font_weight }};
+        }
+
+        .product-variant-picker-block-{{ block.id }} .variant-option--dropdowns > label {
+          margin: 0;
+          font-weight: {{ block.settings.variant_label_font_weight }};
+        }
+      {% endstyle %}
+    {% endif %}
+
+    {% render 'variant-main-picker',
+      product_resource: product_resource,
+      section: section,
+      product: product
+    %}
+  </div>
+
 {% endunless %}
 
 {% schema %}
@@ -42,6 +75,104 @@
       "label": "t:settings.swatches",
       "default": true
     },
+
+    {
+      "type": "header",
+      "content": "Variant Style Override"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_variant_style_override",
+      "label": "Override default variant styling",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "variant_label_font_weight",
+      "label": "Variant label font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "300 — Light"
+        },
+        {
+          "value": "400",
+          "label": "400 — Normal"
+        },
+        {
+          "value": "500",
+          "label": "500 — Medium"
+        },
+        {
+          "value": "600",
+          "label": "600 — Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "700 — Bold"
+        },
+        {
+          "value": "800",
+          "label": "800 — Extra Bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_variant_style_override }}"
+    },
+    {
+      "type": "select",
+      "id": "variant_picker_direction",
+      "label": "Variant picker direction",
+      "options": [
+        {
+          "value": "row",
+          "label": "Row"
+        },
+        {
+          "value": "column",
+          "label": "Column"
+        }
+      ],
+      "default": "column",
+      "visible_if": "{{ block.settings.enable_variant_style_override }}"
+    },
+    {
+      "type": "select",
+      "id": "variant_picker_alignment",
+      "label": "Variant picker alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        },
+        {
+          "value": "stretch",
+          "label": "Stretch"
+        }
+      ],
+      "default": "flex-start",
+      "visible_if": "{{ block.settings.enable_variant_style_override }}"
+    },
+    {
+      "type": "range",
+      "id": "variant_picker_gap",
+      "label": "Variant picker gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.enable_variant_style_override }}"
+    },
+
     {
       "type": "header",
       "content": "t:content.appearance"
@@ -141,6 +272,7 @@
       "label": "t:settings.alignment",
       "default": "left"
     },
+
     {
       "type": "header",
       "content": "t:content.padding"
