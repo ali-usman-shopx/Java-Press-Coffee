@@ -1,3 +1,7 @@
+{% comment %} review_score.liquid {% endcomment %}
+
+{% assign selected_product = closest.product %}
+
 {% liquid
   assign score_parts = block.settings.review_score_metafield | split: '.'
   assign count_parts = block.settings.review_count_metafield | split: '.'

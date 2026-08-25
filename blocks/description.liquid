@@ -1,3 +1,7 @@
+{% comment %} description.liquid {% endcomment %}
+
+{% assign selected_product = closest.product %}
+
 {% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
 
 {% if selected_product and selected_product.description != blank %}

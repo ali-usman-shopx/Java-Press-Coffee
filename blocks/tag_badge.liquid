@@ -1,3 +1,7 @@
+{% comment %} tag_badge.liquid {% endcomment %}
+
+{% assign selected_product = closest.product %}
+
 {% liquid
   assign badge_tag = block.settings.badge_tag | strip
   assign show_badge = false
@@ -11,7 +15,7 @@
 
 {% if show_badge %}
   {% style %}
-    . tag-badge {
+    .tag-badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -30,7 +34,7 @@
     }
   {% endstyle %}
 
-  <span class=" tag-badge">
+  <span class="tag-badge">
     {{ block.settings.badge_text }}
   </span>
 {% endif %}
