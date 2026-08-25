@@ -1700,7 +1700,7 @@
               "name": "t:names.group",
               "settings": {
                 "content_direction": "row",
-                "vertical_on_mobile": true,
+                "vertical_on_mobile": false,
                 "horizontal_alignment": "flex-start",
                 "vertical_alignment": "center",
                 "align_baseline": false,
@@ -1968,6 +1968,20 @@
               "settings": {
                 "stacking": false,
                 "text_color": "",
+                "enable_custom_buy_buttons_layout": true,
+                "quantity_picker_width": 35,
+                "add_to_cart_width": 70,
+                "buy_buttons_gap": 10,
+                "quantity_button_background": "#f2f2f2",
+                "quantity_picker_border": "{{ settings.color_palette.foreground }}",
+                "quantity_picker_border_width": 1,
+                "add_to_cart_text_color": "{{ settings.color_palette.background }}",
+                "add_to_cart_font_size": 18,
+                "add_to_cart_font_weight": "800",
+                "add_to_cart_hover_text_color": "{{ settings.color_palette.background }}",
+                "add_to_cart_hover_opacity": 1,
+                "add_to_cart_show_icon": false,
+                "add_to_cart_text_transform": "none",
                 "show_pickup_availability": true,
                 "gift_card_form": true,
                 "recipient_button_style": "default",
@@ -2027,6 +2041,7 @@
             "accordion_product_RGDW8T": {
               "type": "accordion_product",
               "name": "Accordion",
+              "disabled": true,
               "settings": {
                 "enable_about_product": true,
                 "about_product_title": "About Product",
