@@ -1,0 +1,120 @@
+{% liquid
+  assign badge_tag = block.settings.badge_tag | strip
+  assign show_badge = false
+
+  if selected_product and badge_tag != blank
+    if selected_product.tags contains badge_tag
+      assign show_badge = true
+    endif
+  endif
+%}
+
+{% if show_badge %}
+  {% style %}
+    . tag-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: {{ block.settings.badge_size }}px;
+      height: {{ block.settings.badge_size }}px;
+      padding: 6px;
+      border-radius: {{ block.settings.badge_border_radius }}px;
+      font-size: {{ block.settings.badge_font_size }}px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+      text-align: center;
+      background-color: {{ block.settings.background_color }};
+      color: {{ block.settings.text_color }};
+    }
+  {% endstyle %}
+
+  <span class=" tag-badge">
+    {{ block.settings.badge_text }}
+  </span>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Badge",
+  "settings": [
+    {
+      "type": "select",
+      "id": "badge_type",
+      "label": "Badge type",
+      "options": [
+        {
+          "value": "best_seller",
+          "label": "Best Seller"
+        },
+        {
+          "value": "staff_pick",
+          "label": "Staff Pick"
+        }
+      ],
+      "default": "best_seller"
+    },
+    {
+      "type": "text",
+      "id": "badge_tag",
+      "label": "Target product tag",
+      "default": "best-seller",
+      "info": "The badge is shown when the selected product contains this tag."
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "Best Seller"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#EF4444"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "badge_size",
+      "label": "Badge size",
+      "min": 40,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "label": "Font size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Badge"
+    }
+  ]
+}
+{% endschema %}

@@ -1,6 +1,35 @@
 
 
-{% render 'text', block: block %}
+{% if block.settings.override_font_enabled %}
+  {% style %}
+    .custom-text-{{ block.id }} .text,
+    .custom-text-{{ block.id }} :where(*) {
+      font-family: {{ block.settings.override_font }} !important;
+    }
+  {% endstyle %}
+{% endif %}
+
+{% if block.settings.enable_rotation %}
+  {% style %}
+    .custom-text-{{ block.id }} .text,
+    .custom-text-{{ block.id }} :where(*) {
+      rotate: {{ block.settings.rotation_z | plus: 0 }}deg;
+    }
+  {% endstyle %}
+{% endif %}
+
+{% if block.settings.enable_scale %}
+  {% style %}
+    .custom-text-{{ block.id }} .text,
+    .custom-text-{{ block.id }} :where(*) {
+      scale: {{ block.settings.scale | plus: 0 }};
+    }
+  {% endstyle %}
+{% endif %}
+
+<div class="custom-text-{{ block.id }}">
+  {% render 'text', block: block %}
+</div>
 
 {% schema %}
 {
@@ -132,6 +161,20 @@
       ],
       "default": "var(--font-body--family)",
       "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "override_font_enabled",
+      "label": "Override font family",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "override_font",
+      "label": "Override font",
+      "info": "Enter a CSS font-family value, e.g. Arial, sans-serif",
+      "default": "Arial, sans-serif",
+      "visible_if": "{{ block.settings.override_font_enabled }}"
     },
     {
       "type": "select",
@@ -292,6 +335,36 @@
     {
       "type": "header",
       "content": "t:content.appearance"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_rotation",
+      "label": "Enable Z-axis rotation",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "rotation_z",
+      "label": "Z-axis rotation",
+      "default": "0",
+      "info": "Enter the rotation in degrees.",
+      "visible_if": "{{ block.settings.enable_rotation }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_scale",
+      "label": "Enable scaling",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "scale",
+      "label": "Scale",
+      "min": 0.1,
+      "max": 3,
+      "step": 0.1,
+      "default": 1,
+      "visible_if": "{{ block.settings.enable_scale }}"
     },
     {
       "type": "color",
