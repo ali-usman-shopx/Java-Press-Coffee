@@ -97,6 +97,16 @@
   }
 {% endstylesheet %}
 
+{% if section.settings.enable_flex_override %}
+  {% style %}
+    .utilities--blocks-{{ section.blocks.size }} {
+      display: flex;
+      flex-direction: {{ section.settings.flex_direction }};
+      justify-content: {{ section.settings.flex_justify_content }};
+    }
+  {% endstyle %}
+{% endif %}
+
 {% schema %}
 {
   "name": "t:names.policies_and_links",
@@ -132,6 +142,70 @@
       "step": 1,
       "unit": "px",
       "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_flex_override",
+      "label": "Enable flex layout override",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "flex_direction",
+      "label": "Flex direction",
+      "options": [
+        {
+          "value": "row",
+          "label": "Row"
+        },
+        {
+          "value": "row-reverse",
+          "label": "Row reverse"
+        },
+        {
+          "value": "column",
+          "label": "Column"
+        },
+        {
+          "value": "column-reverse",
+          "label": "Column reverse"
+        }
+      ],
+      "default": "row",
+      "visible_if": "{{ section.settings.enable_flex_override }}"
+    },
+    {
+      "type": "select",
+      "id": "flex_justify_content",
+      "label": "Justify content",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        },
+        {
+          "value": "space-between",
+          "label": "Space between"
+        },
+        {
+          "value": "space-around",
+          "label": "Space around"
+        },
+        {
+          "value": "space-evenly",
+          "label": "Space evenly"
+        }
+      ],
+      "default": "center",
+      "visible_if": "{{ section.settings.enable_flex_override }}"
     },
     {
       "type": "color",
