@@ -31,6 +31,7 @@
     size-style
     {{ class }}
     {% if background_color != blank %} color-custom-{{ block_id }}{% endif %}
+    {% if settings.enable_relative_positioning %}group-block--relative{% endif %}
   "
   style="
     {% render 'border-override', settings: settings %}
@@ -116,6 +117,10 @@
 
   .group-block-content--order-reversed-desktop.layout-panel-flex--row {
     flex-direction: row-reverse;
+  }
+
+  .group-block--relative {
+    position: relative;
   }
 
   @media screen and (max-width: 749px) {

@@ -16,6 +16,7 @@
           "type": "group",
           "name": "Hero Content Wrapper",
           "settings": {
+            "enable_relative_positioning": false,
             "content_direction": "row",
             "vertical_on_mobile": true,
             "order_reversed_desktop": false,
@@ -58,6 +59,7 @@
               "type": "group",
               "name": "Info Wrapper",
               "settings": {
+                "enable_relative_positioning": false,
                 "content_direction": "column",
                 "vertical_on_mobile": true,
                 "order_reversed_desktop": false,
@@ -100,6 +102,7 @@
                   "type": "group",
                   "name": "t:names.group",
                   "settings": {
+                    "enable_relative_positioning": false,
                     "content_direction": "column",
                     "vertical_on_mobile": true,
                     "order_reversed_desktop": false,
@@ -142,6 +145,7 @@
                       "type": "group",
                       "name": "t:names.group",
                       "settings": {
+                        "enable_relative_positioning": false,
                         "content_direction": "row",
                         "vertical_on_mobile": true,
                         "order_reversed_desktop": false,
@@ -185,6 +189,11 @@
                           "name": "t:names.heading",
                           "settings": {
                             "text": "<p>Your</p>",
+                            "enable_absolute_positioning": false,
+                            "absolute_top": "0px",
+                            "absolute_right": "0px",
+                            "absolute_bottom": "0px",
+                            "absolute_left": "0px",
                             "width": "fit-content",
                             "max_width": "normal",
                             "alignment": "left",
@@ -217,6 +226,11 @@
                           "name": "t:names.heading",
                           "settings": {
                             "text": "<h2>Perfect</h2>",
+                            "enable_absolute_positioning": true,
+                            "absolute_top": "5px",
+                            "absolute_right": "0px",
+                            "absolute_bottom": "0px",
+                            "absolute_left": "135px",
                             "width": "fit-content",
                             "max_width": "normal",
                             "alignment": "left",
@@ -254,6 +268,7 @@
                       "type": "group",
                       "name": "t:names.group",
                       "settings": {
+                        "enable_relative_positioning": false,
                         "content_direction": "column",
                         "vertical_on_mobile": true,
                         "order_reversed_desktop": false,
@@ -297,6 +312,11 @@
                           "name": "t:names.heading",
                           "settings": {
                             "text": "<h2>Coffee Routine</h2>",
+                            "enable_absolute_positioning": false,
+                            "absolute_top": "0px",
+                            "absolute_right": "0px",
+                            "absolute_bottom": "0px",
+                            "absolute_left": "0px",
                             "width": "100%",
                             "max_width": "normal",
                             "alignment": "left",
@@ -333,6 +353,7 @@
                       "type": "group",
                       "name": "t:names.group",
                       "settings": {
+                        "enable_relative_positioning": false,
                         "content_direction": "column",
                         "vertical_on_mobile": true,
                         "order_reversed_desktop": false,
@@ -376,6 +397,11 @@
                           "name": "t:names.text",
                           "settings": {
                             "text": "<p>Discover your tailored at home coffee products & routine as we are your <strong>100% FREE Coffee Concierge</strong>!</p>",
+                            "enable_absolute_positioning": false,
+                            "absolute_top": "0px",
+                            "absolute_right": "0px",
+                            "absolute_bottom": "0px",
+                            "absolute_left": "0px",
                             "width": "100%",
                             "max_width": "normal",
                             "alignment": "left",
@@ -461,6 +487,7 @@
                   "type": "group",
                   "name": "t:names.group",
                   "settings": {
+                    "enable_relative_positioning": false,
                     "content_direction": "row",
                     "vertical_on_mobile": true,
                     "order_reversed_desktop": false,
@@ -517,6 +544,11 @@
                       "name": "t:names.text",
                       "settings": {
                         "text": "<p><strong>4.9/5.00 (10,000+ people living healthy lifestyle)</strong></p>",
+                        "enable_absolute_positioning": false,
+                        "absolute_top": "0px",
+                        "absolute_right": "0px",
+                        "absolute_bottom": "0px",
+                        "absolute_left": "0px",
                         "width": "fit-content",
                         "max_width": "normal",
                         "alignment": "left",
@@ -562,6 +594,7 @@
               "type": "group",
               "name": "Image Wrapper",
               "settings": {
+                "enable_relative_positioning": false,
                 "content_direction": "column",
                 "vertical_on_mobile": true,
                 "order_reversed_desktop": false,
@@ -679,6 +712,7 @@
           "type": "group",
           "name": "t:names.header",
           "settings": {
+            "enable_relative_positioning": false,
             "content_direction": "column",
             "vertical_on_mobile": true,
             "order_reversed_desktop": false,
@@ -722,6 +756,11 @@
               "name": "t:names.text",
               "settings": {
                 "text": "<h3>Try Our Best Sellers</h3>",
+                "enable_absolute_positioning": false,
+                "absolute_top": "0px",
+                "absolute_right": "0px",
+                "absolute_bottom": "0px",
+                "absolute_left": "0px",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "center",
@@ -849,6 +888,7 @@
           "type": "group",
           "name": "Tabs",
           "settings": {
+            "enable_relative_positioning": false,
             "content_direction": "column",
             "vertical_on_mobile": true,
             "order_reversed_desktop": false,
@@ -1022,6 +1062,7 @@
               "type": "group",
               "name": "t:names.header",
               "settings": {
+                "enable_relative_positioning": false,
                 "content_direction": "column",
                 "vertical_on_mobile": true,
                 "order_reversed_desktop": false,
@@ -1065,6 +1106,11 @@
                   "name": "t:names.text",
                   "settings": {
                     "text": "<h3>Try Our Best Sellers</h3>",
+                    "enable_absolute_positioning": false,
+                    "absolute_top": "0px",
+                    "absolute_right": "0px",
+                    "absolute_bottom": "0px",
+                    "absolute_left": "0px",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "center",
@@ -1488,6 +1534,7 @@
           "type": "group",
           "name": "Left",
           "settings": {
+            "enable_relative_positioning": false,
             "content_direction": "column",
             "vertical_on_mobile": true,
             "order_reversed_desktop": false,
@@ -1561,6 +1608,7 @@
           "type": "group",
           "name": "Right",
           "settings": {
+            "enable_relative_positioning": false,
             "content_direction": "column",
             "vertical_on_mobile": true,
             "order_reversed_desktop": false,
@@ -1730,6 +1778,7 @@
               "type": "group",
               "name": "t:names.group",
               "settings": {
+                "enable_relative_positioning": false,
                 "content_direction": "row",
                 "vertical_on_mobile": false,
                 "order_reversed_desktop": false,
@@ -1812,6 +1861,7 @@
               "type": "group",
               "name": "t:names.header",
               "settings": {
+                "enable_relative_positioning": false,
                 "content_direction": "column",
                 "vertical_on_mobile": true,
                 "order_reversed_desktop": false,
@@ -2150,6 +2200,7 @@
           "type": "group",
           "name": "t:names.header",
           "settings": {
+            "enable_relative_positioning": false,
             "content_direction": "column",
             "vertical_on_mobile": true,
             "order_reversed_desktop": false,
@@ -2193,6 +2244,11 @@
               "name": "t:names.text",
               "settings": {
                 "text": "<h3>Shop by collection</h3>",
+                "enable_absolute_positioning": false,
+                "absolute_top": "0px",
+                "absolute_right": "0px",
+                "absolute_bottom": "0px",
+                "absolute_left": "0px",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",

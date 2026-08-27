@@ -27,6 +27,19 @@
   {% endstyle %}
 {% endif %}
 
+{% if block.settings.enable_absolute_positioning %}
+  {% style %}
+    .custom-text-{{ block.id }} {
+      position: absolute;
+      top: {{ block.settings.absolute_top }};
+      right: {{ block.settings.absolute_right }};
+      bottom: {{ block.settings.absolute_bottom }};
+      left: {{ block.settings.absolute_left }};
+      z-index: 999;
+    }
+  {% endstyle %}
+{% endif %}
+
 <div class="custom-text-{{ block.id }}">
   {% render 'text', block: block %}
 </div>
@@ -40,6 +53,44 @@
       "type": "richtext",
       "id": "text",
       "label": "t:settings.text"
+    },
+    {
+      "type": "header",
+      "content": "Absolute positioning"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_absolute_positioning",
+      "label": "Enable absolute positioning",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "absolute_top",
+      "label": "Top offset",
+      "default": "0px",
+      "visible_if": "{{ block.settings.enable_absolute_positioning }}"
+    },
+    {
+      "type": "text",
+      "id": "absolute_right",
+      "label": "Right offset",
+      "default": "0px",
+      "visible_if": "{{ block.settings.enable_absolute_positioning }}"
+    },
+    {
+      "type": "text",
+      "id": "absolute_bottom",
+      "label": "Bottom offset",
+      "default": "0px",
+      "visible_if": "{{ block.settings.enable_absolute_positioning }}"
+    },
+    {
+      "type": "text",
+      "id": "absolute_left",
+      "label": "Left offset",
+      "default": "0px",
+      "visible_if": "{{ block.settings.enable_absolute_positioning }}"
     },
     {
       "type": "header",
