@@ -9,7 +9,8 @@
 %}
 {% render 'button-custom-styles', block_settings: block_settings, block_id: block.id %}
 <div
-  class="email-signup-block size-style spacing-style"
+  {% comment %} class="email-signup-block size-style spacing-style" {% endcomment %}
+  class="email-signup-block size-style spacing-style {% unless block_settings.enable_input_focus_outline %}email-signup--no-focus-outline{% endunless %}"
   style="
     {% render 'size-style', settings: block_settings %}
     {% render 'spacing-style', settings: block_settings %}
@@ -56,7 +57,7 @@
       >
         {{ 'blocks.email_signup.label' | t }}
       </label>
-      <input
+      {% comment %} <input
         id="EmailInput-{{ block.id }}"
         class="email-signup__input email-signup__input--{{ block_settings.border_style }} {% if is_custom_input %}{{ block_settings.input_type_preset }}{% else %}{{ settings.type_preset }}{% endif %} {{ block_settings.border_variation }}"
         type="email"
@@ -73,7 +74,40 @@
         {% elsif form.posted_successfully? and form.id == blank %}
           aria-describedby="Email-signup__message-success-{{ block.id }}"
         {% endif %}
-      >
+      > {% endcomment %}
+      
+      <div class="email-signup__input-wrapper">
+        {% if block_settings.enable_input_icon and block_settings.input_icon != blank %}
+          <span
+            class="email-signup__input-icon"
+            aria-hidden="true"
+            style="--input-icon-offset: {{ block_settings.input_icon_offset }}px;"
+          >
+            {{ block_settings.input_icon | image_url: width: 40 | image_tag: loading: 'lazy' }}
+          </span>
+        {% endif %}
+
+        <input
+          id="EmailInput-{{ block.id }}"
+          class="email-signup__input email-signup__input--{{ block_settings.border_style }} {% if is_custom_input %}{{ block_settings.input_type_preset }}{% else %}{{ settings.type_preset }}{% endif %} {{ block_settings.border_variation }}"
+          style="{% if block_settings.enable_input_margins %}margin-left: {{ block_settings.input_margin_left }}px;{% endif %}"
+          type="email"
+          name="contact[email]"
+          autocorrect="off"
+          autocapitalize="off"
+          autocomplete="email"
+          placeholder="{% if block_settings.enable_custom_placeholder and block_settings.input_placeholder != blank %}{{ block_settings.input_placeholder | escape }}{% else %}{{ 'blocks.email_signup.placeholder' | t }}{% endif %}"
+          required
+          {% if form.errors and form.id == blank %}
+            autofocus
+            aria-invalid="true"
+            aria-describedby="Email-signup__message-error-{{ block.id }}"
+          {% elsif form.posted_successfully? and form.id == blank %}
+            aria-describedby="Email-signup__message-success-{{ block.id }}"
+          {% endif %}
+        >
+      </div>
+
       <button
         class="email-signup__button {% if block_settings.integrated_button or block_settings.border_style == 'underline' %}email-signup__button--integrated{% endif %} email-signup__button--{{ block_settings.display_type }} {{ block_settings.button_type_preset }} {{ block_settings.style_class }} {{ block_settings.style_class }}--{{ block.id }}"
         {% if block_settings.display_type != 'text' %}
@@ -264,6 +298,53 @@
     background-color: transparent;
     border: none;
     border-radius: 0;
+  }
+
+  .email-signup__input-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .email-signup__input-wrapper .email-signup__input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .email-signup__input-icon {
+    position: absolute;
+    left: var(--input-icon-offset);
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .email-signup__input-icon img {
+    display: block;
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+  
+  .email-signup__input-wrapper .email-signup__input {
+    min-width: 0;
+  }
+  
+  /* Feature flag: remove input focus styling */
+  .email-signup-block.email-signup--no-focus-outline
+    .email-signup__input:focus,
+  .email-signup-block.email-signup--no-focus-outline
+    .email-signup__input:focus-visible {
+    outline: none;
+    box-shadow: none;
   }
 
   .email-signup__button-icon {
@@ -621,6 +702,65 @@
       "default": "paragraph",
       "info": "t:info.edit_presets_in_theme_settings",
       "visible_if": "{{ block.settings.input_style == \"custom\" }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_input_margins",
+      "label": "Customize input Margins",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "input_margin_left",
+      "label": "Input margin left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_input_margins }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_input_focus_outline",
+      "label": "Show input focus outline",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_input_icon",
+      "label": "Show input icon",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "input_icon",
+      "label": "Input icon",
+      "visible_if": "{{ block.settings.enable_input_icon }}"
+    },
+    {
+      "type": "range",
+      "id": "input_icon_offset",
+      "label": "Icon horizontal position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.enable_input_icon }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_placeholder",
+      "label": "Use custom placeholder",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "label": "Placeholder text",
+      "default": "Enter your email",
+      "visible_if": "{{ block.settings.enable_custom_placeholder }}"
     },
     {
       "type": "header",
