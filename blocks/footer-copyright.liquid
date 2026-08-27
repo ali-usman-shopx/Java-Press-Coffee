@@ -1,5 +1,6 @@
 
 {% assign block_settings = block.settings %}
+
 <div
   class="
     footer-utilities__group-copyright
@@ -9,12 +10,27 @@
   style="
     {% render 'typography-style', preset: 'custom', settings: block_settings %}
     {% if block_settings.text_color != blank %}--color-utilities: {{ block_settings.text_color }};{% endif %}
+    {% if block_settings.enable_font_weight_override %}font-weight: {{ block_settings.font_weight_override }};{% endif %}
   "
   {{ block.shopify_attributes }}
 >
   <span class="footer-utilities__text">
+    {% if block_settings.enable_prefix_override and block_settings.prefix != blank %}
+      {{ block_settings.prefix }}
+    {% endif %}
+
     &copy; {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url -}}
+
+    {% if block_settings.enable_store_name_override and block_settings.store_name_override != blank %}
+      {{ block_settings.store_name_override | link_to: routes.root_url }}
+    {% else %}
+      {{ shop.name | link_to: routes.root_url }}
+    {% endif %}
+
+    {% if block_settings.enable_suffix_override and block_settings.suffix != blank %}
+      {{ block_settings.suffix }}
+    {% endif %}
+
     {%- if block_settings.show_powered_by -%}
       , {{ powered_by_link }}
     {%- endif -%}
@@ -41,6 +57,88 @@
     {
       "type": "paragraph",
       "content": "t:content.manage_store_name"
+    },
+    {
+      "type": "header",
+      "content": "Text overrides"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_prefix_override",
+      "label": "Enable prefix override",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "prefix",
+      "label": "Prefix",
+      "default": "prefix",
+      "visible_if": "{{ block.settings.enable_prefix_override }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_store_name_override",
+      "label": "Enable store name override",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "store_name_override",
+      "label": "Store name",
+      "default": "store name",
+      "visible_if": "{{ block.settings.enable_store_name_override }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_suffix_override",
+      "label": "Enable suffix override",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "suffix",
+      "label": "Suffix",
+      "default": "suffix",
+      "visible_if": "{{ block.settings.enable_suffix_override }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_font_weight_override",
+      "label": "Enable font weight override",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "font_weight_override",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semibold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_font_weight_override }}"
     },
     {
       "type": "header",

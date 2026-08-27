@@ -1,0 +1,937 @@
+{% doc %}
+  @prompt
+    Here, I want you to generate the following elements for the selected product:
+    
+    Best seller pill if tag found; staff pick pill if tag found.
+    A title with product's title.
+    Review stars (custom.reviews_score metafield) and the count (custom.reviews_count) in the standard format. I want to be able to adjust the color of the stars from the GUI.
+    Price and compare-at price; the price will be colored to be accent color (ability to set via GUI).
+    Product's description.
+    Divider (color should be adjustable).
+    2 columns for the variant options.
+    Col 1 will be Potency with a drop-down select input defaulted to 800mg option.
+    Col 2 will be Flavor also with a drop-down select input defaulted to Chocolate and Caramel.
+    After that, 2 more columns for quantity (complete with - and + buttons), and an add to cart button (accent background and white text)., The product will be selected automatically from a tag, so expose the value of the tag so that I can set it via the GUI and update the code accordingly., also expose the target tag values for best seller and staff pick.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% liquid
+  assign selected_product = null
+  
+  if block.settings.product_tag != blank
+    for product in collections.all.products
+      if product.tags contains block.settings.product_tag
+        assign selected_product = product
+        break
+      endif
+    endfor
+  endif
+%}
+
+{% style %}
+  .ai-product-info-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+  }
+
+  .ai-product-info__badges-{{ ai_gen_id }} {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .ai-product-info__badge-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6px 12px;
+    {% comment %} border-radius: {{ block.settings.badge_border_radius }}px; {% endcomment %}
+    border-radius: 50%;
+    {% comment %} padding-top: 15px;
+    padding-bottom: 15px; {% endcomment %}
+    height: 70px;
+    width: 70px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  .ai-product-info__badge--best-seller-{{ ai_gen_id }} {
+    background-color: {{ block.settings.best_seller_bg_color }};
+    color: {{ block.settings.best_seller_text_color }};
+  }
+
+  .ai-product-info__badge--staff-pick-{{ ai_gen_id }} {
+    background-color: {{ block.settings.staff_pick_bg_color }};
+    color: {{ block.settings.staff_pick_text_color }};
+  }
+
+  .ai-product-info__title-{{ ai_gen_id }} {
+    margin: 0 0 16px;
+    font-size: {{ block.settings.title_size }}px;
+    line-height: 1.2;
+  }
+
+  .ai-product-info__reviews-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .ai-product-info__stars-{{ ai_gen_id }} {
+    display: flex;
+    gap: 2px;
+  }
+
+  .ai-product-info__star-{{ ai_gen_id }} {
+    width: {{ block.settings.star_size }}px;
+    height: {{ block.settings.star_size }}px;
+  }
+
+  .ai-product-info__star-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    fill: {{ block.settings.star_color }};
+  }
+
+  .ai-product-info__star--empty-{{ ai_gen_id }} svg {
+    fill: {{ block.settings.star_empty_color }};
+  }
+
+  ai-product-info__review-score-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+  }
+
+  .ai-product-info__review-count-{{ ai_gen_id }} {
+    font-size: 14px;
+    {% comment %} color: #666; {% endcomment %}
+    color: black;
+    font-weight: bold;
+  }
+
+  .ai-product-info__price-wrapper-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .ai-product-info__price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.accent_color }};
+  }
+
+  .ai-product-info__compare-price-{{ ai_gen_id }} {
+    font-size: {{ block.settings.price_size | times: 0.65 }}px;
+    color: #999;
+    text-decoration: line-through;
+  }
+
+  .ai-product-info__description-{{ ai_gen_id }} {
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.6;
+    {% comment %} color: #333; {% endcomment %}
+    color: black;
+  }
+
+  .ai-product-info__divider-{{ ai_gen_id }} {
+    height: 1px;
+    background-color: {{ block.settings.divider_color }};
+    margin: 24px 0;
+    border: none;
+  }
+
+  .ai-product-info__variants-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .ai-product-info__variant-group-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ai-product-info__variant-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+  }
+
+  .ai-product-info__variant-select-{{ ai_gen_id }} {
+    padding: 12px;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  {% comment %} .ai-product-info__actions-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .ai-product-info__quantity-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    overflow: hidden;
+    height: 48px;
+  }
+
+  .ai-product-info__quantity-button-{{ ai_gen_id }} {
+    width: 40px;
+    height: 100%;
+    border: none;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+  .ai-product-info__quantity-input-{{ ai_gen_id }} {
+    flex: 1;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    -moz-appearance: textfield;
+  } {% endcomment %}
+
+  .ai-product-info__actions-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .ai-product-info__quantity-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    align-items: center;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    overflow: hidden;
+    height: 48px;
+  }
+
+  .ai-product-info__quantity-button-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+
+  .ai-product-info__quantity-input-{{ ai_gen_id }} {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    -moz-appearance: textfield;
+  }
+
+  .ai-product-info__quantity-button-{{ ai_gen_id }}:hover {
+    background-color: #e5e5e5;
+  }
+
+  .ai-product-info__quantity-button-{{ ai_gen_id }}:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+
+  .ai-product-info__quantity-input-{{ ai_gen_id }}::-webkit-outer-spin-button,
+  .ai-product-info__quantity-input-{{ ai_gen_id }}::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .ai-product-info__add-to-cart-{{ ai_gen_id }} {
+    width: 100%;
+    height: 48px;
+    background-color: {{ block.settings.accent_color }};
+    color: #ffffff;
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .ai-product-info__add-to-cart-{{ ai_gen_id }}:hover {
+    opacity: 0.9;
+  }
+
+  .ai-product-info__add-to-cart-{{ ai_gen_id }}:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .ai-product-info__accordion-{{ ai_gen_id }} {
+    width: 100%;
+    margin: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ai-product-info__accordion-item-{{ ai_gen_id }} {
+    background-color: {{ block.settings.accordion_bg_color }};
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .ai-product-info__accordion-summary-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: {{ block.settings.accordion_padding }}px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .ai-product-info__accordion-summary-{{ ai_gen_id }}::-webkit-details-marker {
+    display: none;
+  }
+
+  .ai-product-info__accordion-icon-{{ ai_gen_id }} {
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 400;
+  }
+
+  .ai-product-info__accordion-icon-{{ ai_gen_id }}::before {
+    content: '+';
+  }
+
+  .ai-product-info__accordion-item-{{ ai_gen_id }}[open]
+    .ai-product-info__accordion-icon-{{ ai_gen_id }}::before {
+    content: '×';
+  }
+
+  .ai-product-info__accordion-content-{{ ai_gen_id }} {
+    padding: 0 {{ block.settings.accordion_padding }}px {{ block.settings.accordion_padding }}px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+  }
+
+  .ai-product-info__empty-state-{{ ai_gen_id }} {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    color: #666;
+  }
+
+  .ai-product-info__empty-state-title-{{ ai_gen_id }} {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  .ai-product-info__empty-state-text-{{ ai_gen_id }} {
+    font-size: 14px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-product-info__variants-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-product-info__actions-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstyle %}
+
+<product-info-{{ ai_gen_id }}
+  class="ai-product-info-{{ ai_gen_id }}"
+  data-product-id="{{ selected_product.id }}"
+  data-variant-id="{{ selected_product.selected_or_first_available_variant.id }}"
+  {{ block.shopify_attributes }}
+>
+  {% if selected_product %}
+    {% liquid
+      assign has_best_seller = false
+      assign has_staff_pick = false
+      
+      if block.settings.best_seller_tag != blank
+        for tag in selected_product.tags
+          if tag == block.settings.best_seller_tag
+            assign has_best_seller = true
+            break
+          endif
+        endfor
+      endif
+      
+      if block.settings.staff_pick_tag != blank
+        for tag in selected_product.tags
+          if tag == block.settings.staff_pick_tag
+            assign has_staff_pick = true
+            break
+          endif
+        endfor
+      endif
+    %}
+
+    {% if has_best_seller or has_staff_pick %}
+      <div class="ai-product-info__badges-{{ ai_gen_id }}">
+        {% if has_best_seller %}
+          <span class="ai-product-info__badge-{{ ai_gen_id }} ai-product-info__badge--best-seller-{{ ai_gen_id }}">
+            Best<br>Seller
+          </span>
+        {% endif %}
+        {% if has_staff_pick %}
+          <span class="ai-product-info__badge-{{ ai_gen_id }} ai-product-info__badge--staff-pick-{{ ai_gen_id }}">
+            Staff<br>Pick
+          </span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <h1 class="ai-product-info__title-{{ ai_gen_id }}">{{ selected_product.title }}</h1>
+
+    {% liquid
+      assign reviews_score = selected_product.metafields.custom.review_score.value | round
+      assign reviews_score_raw = selected_product.metafields.custom.review_score.value
+      assign reviews_count = selected_product.metafields.custom.reviews_count.value
+    %}
+
+    {% if reviews_score and reviews_count %}
+      <div class="ai-product-info__reviews-{{ ai_gen_id }}">
+        <div class="ai-product-info__stars-{{ ai_gen_id }}">
+          {% for i in (1..5) %}
+            {% if i <= reviews_score %}
+              <span class="ai-product-info__star-{{ ai_gen_id }}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </span>
+            {% else %}
+              <span class="ai-product-info__star-{{ ai_gen_id }} ai-product-info__star--empty-{{ ai_gen_id }}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              </span>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <span class="ai-product-info__review-score-{{ ai_gen_id }}">{{ reviews_score_raw }}/5.00</span>
+        <span class="ai-product-info__review-count-{{ ai_gen_id }}">({{ reviews_count }})</span>
+      </div>
+    {% endif %}
+
+    <div class="ai-product-info__price-wrapper-{{ ai_gen_id }}">
+      <span class="ai-product-info__price-{{ ai_gen_id }}">
+        {{ selected_product.selected_or_first_available_variant.price | money }}
+      </span>
+      {% if selected_product.selected_or_first_available_variant.compare_at_price > selected_product.selected_or_first_available_variant.price %}
+        <span class="ai-product-info__compare-price-{{ ai_gen_id }}">
+          {{ selected_product.selected_or_first_available_variant.compare_at_price | money }}
+        </span>
+      {% endif %}
+    </div>
+
+    {% if selected_product.description != blank %}
+      <div class="ai-product-info__description-{{ ai_gen_id }}">
+        {{ selected_product.description }}
+      </div>
+    {% endif %}
+
+    <hr class="ai-product-info__divider-{{ ai_gen_id }}">
+
+    <div class="ai-product-info__variants-{{ ai_gen_id }}">
+      <div class="ai-product-info__variant-group-{{ ai_gen_id }}">
+        <label class="ai-product-info__variant-label-{{ ai_gen_id }}" for="potency-{{ ai_gen_id }}">
+          Potency
+        </label>
+        <select
+          id="potency-{{ ai_gen_id }}"
+          class="ai-product-info__variant-select-{{ ai_gen_id }}"
+          data-variant-option="potency"
+        >
+          <option value="400mg">400mg</option>
+          <option value="800mg" selected>800mg</option>
+          <option value="1200mg">1200mg</option>
+          <option value="1600mg">1600mg</option>
+        </select>
+      </div>
+
+      <div class="ai-product-info__variant-group-{{ ai_gen_id }}">
+        <label class="ai-product-info__variant-label-{{ ai_gen_id }}" for="flavor-{{ ai_gen_id }}">
+          Flavor
+        </label>
+        <select
+          id="flavor-{{ ai_gen_id }}"
+          class="ai-product-info__variant-select-{{ ai_gen_id }}"
+          data-variant-option="flavor"
+        >
+          <option value="Chocolate and Caramel" selected>Chocolate and Caramel</option>
+          <option value="Vanilla">Vanilla</option>
+          <option value="Strawberry">Strawberry</option>
+          <option value="Mint">Mint</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ai-product-info__actions-{{ ai_gen_id }}">
+      <div class="ai-product-info__quantity-{{ ai_gen_id }}">
+        <button
+          type="button"
+          class="ai-product-info__quantity-button-{{ ai_gen_id }}"
+          data-quantity-decrease
+          aria-label="Decrease quantity"
+        >
+          −
+        </button>
+        <input
+          type="number"
+          class="ai-product-info__quantity-input-{{ ai_gen_id }}"
+          value="1"
+          min="1"
+          data-quantity-input
+          aria-label="Quantity"
+        >
+        <button
+          type="button"
+          class="ai-product-info__quantity-button-{{ ai_gen_id }}"
+          data-quantity-increase
+          aria-label="Increase quantity"
+        >
+          +
+        </button>
+      </div>
+
+      <button
+        type="button"
+        class="ai-product-info__add-to-cart-{{ ai_gen_id }}"
+        data-add-to-cart
+        {% unless selected_product.selected_or_first_available_variant.available %}disabled{% endunless %}
+      >
+        {% if selected_product.selected_or_first_available_variant.available %}
+          Add to Cart
+        {% else %}
+          Sold Out
+        {% endif %}
+      </button>
+    </div>
+
+    {% if block.settings.enable_accordion %}
+      {% assign about_product_parts = block.settings.about_product_metafield | split: '.' %}
+      {% assign about_product = selected_product.metafields[about_product_parts[0]][about_product_parts[1]] %}
+
+      {% assign ingredients_parts = block.settings.ingredients_metafield | split: '.' %}
+      {% assign ingredients = selected_product.metafields[ingredients_parts[0]][ingredients_parts[1]] %}
+
+      {% if about_product != blank or ingredients != blank %}
+        <div class="ai-product-info__accordion-{{ ai_gen_id }}">
+
+          {% if about_product != blank %}
+            <details class="ai-product-info__accordion-item-{{ ai_gen_id }}">
+              <summary class="ai-product-info__accordion-summary-{{ ai_gen_id }}">
+                <span>About Product</span>
+                <span class="ai-product-info__accordion-icon-{{ ai_gen_id }}"></span>
+              </summary>
+              <div class="ai-product-info__accordion-content-{{ ai_gen_id }}">
+                {{ about_product.value }}
+              </div>
+            </details>
+          {% endif %}
+
+          {% if ingredients != blank %}
+            <details class="ai-product-info__accordion-item-{{ ai_gen_id }}">
+              <summary class="ai-product-info__accordion-summary-{{ ai_gen_id }}">
+                <span>Ingredients</span>
+                <span class="ai-product-info__accordion-icon-{{ ai_gen_id }}"></span>
+              </summary>
+              <div class="ai-product-info__accordion-content-{{ ai_gen_id }}">
+                {% if ingredients.type contains 'list' %}
+                  {{ ingredients.value | join: ', ' }}
+                {% else %}
+                  {{ ingredients.value }}
+                {% endif %}
+              </div>
+            </details>
+          {% endif %}
+
+        </div>
+      {% endif %}
+    {% endif %}
+  {% else %}
+    <div class="ai-product-info__empty-state-{{ ai_gen_id }}">
+      <div class="ai-product-info__empty-state-title-{{ ai_gen_id }}">
+        No product found
+      </div>
+      <div class="ai-product-info__empty-state-text-{{ ai_gen_id }}">
+        {% if block.settings.product_tag == blank %}
+          Please enter a product tag in the block settings
+        {% else %}
+          No product found with tag "{{ block.settings.product_tag }}"
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</product-info-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ProductInfo{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.quantityInput = this.querySelector('[data-quantity-input]');
+        this.decreaseButton = this.querySelector('[data-quantity-decrease]');
+        this.increaseButton = this.querySelector('[data-quantity-increase]');
+        this.addToCartButton = this.querySelector('[data-add-to-cart]');
+      }
+
+      connectedCallback() {
+        this.setupQuantityControls();
+        this.setupAddToCart();
+      }
+
+      setupQuantityControls() {
+        if (!this.quantityInput) return;
+
+        this.decreaseButton.addEventListener('click', () => {
+          const currentValue = parseInt(this.quantityInput.value);
+          if (currentValue > 1) {
+            this.quantityInput.value = currentValue - 1;
+            this.updateDecreaseButtonState();
+          }
+        });
+
+        this.increaseButton.addEventListener('click', () => {
+          const currentValue = parseInt(this.quantityInput.value);
+          this.quantityInput.value = currentValue + 1;
+          this.updateDecreaseButtonState();
+        });
+
+        this.quantityInput.addEventListener('change', () => {
+          const value = parseInt(this.quantityInput.value);
+          if (value < 1 || isNaN(value)) {
+            this.quantityInput.value = 1;
+          }
+          this.updateDecreaseButtonState();
+        });
+
+        this.updateDecreaseButtonState();
+      }
+
+      updateDecreaseButtonState() {
+        const currentValue = parseInt(this.quantityInput.value);
+        this.decreaseButton.disabled = currentValue <= 1;
+      }
+
+      setupAddToCart() {
+        if (!this.addToCartButton) return;
+
+        this.addToCartButton.addEventListener('click', () => {
+          const quantity = parseInt(this.quantityInput.value);
+          const variantId = this.dataset.variantId;
+          
+          if (variantId) {
+            this.addToCart(variantId, quantity);
+          }
+        });
+      }
+
+      addToCart(variantId, quantity) {
+        this.addToCartButton.disabled = true;
+        this.addToCartButton.textContent = 'Adding...';
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: variantId,
+            quantity: quantity
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.addToCartButton.textContent = 'Added!';
+          setTimeout(() => {
+            this.addToCartButton.textContent = 'Add to Cart';
+            this.addToCartButton.disabled = false;
+          }, 2000);
+
+          window.dispatchEvent(new CustomEvent('cart:refresh'));
+        })
+        .catch(error => {
+          console.error('Error adding to cart:', error);
+          this.addToCartButton.textContent = 'Error - Try Again';
+          setTimeout(() => {
+            this.addToCartButton.textContent = 'Add to Cart';
+            this.addToCartButton.disabled = false;
+          }, 2000);
+        });
+      }
+    }
+
+    customElements.define('product-info-{{ ai_gen_id }}', ProductInfo{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product info",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product selection"
+    },
+    {
+      "type": "text",
+      "id": "product_tag",
+      "label": "Product tag",
+      "info": "Enter the tag to automatically select a product"
+    },
+    {
+      "type": "text",
+      "id": "best_seller_tag",
+      "label": "Best seller tag",
+      "default": "best-seller",
+      "info": "Tag to identify best seller products"
+    },
+    {
+      "type": "text",
+      "id": "staff_pick_tag",
+      "label": "Staff pick tag",
+      "default": "staff-pick",
+      "info": "Tag to identify staff pick products"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Badges"
+    },
+    {
+      "type": "range",
+      "id": "badge_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "best_seller_bg_color",
+      "label": "Best seller background",
+      "default": "#EF4444"
+    },
+    {
+      "type": "color",
+      "id": "best_seller_text_color",
+      "label": "Best seller text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "staff_pick_bg_color",
+      "label": "Staff pick background",
+      "default": "#065D57"
+    },
+    {
+      "type": "color",
+      "id": "staff_pick_text_color",
+      "label": "Staff pick text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Size",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Reviews"
+    },
+    {
+      "type": "range",
+      "id": "star_size",
+      "label": "Star size",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#DEB127"
+    },
+    {
+      "type": "color",
+      "id": "star_empty_color",
+      "label": "Empty star color",
+      "default": "#dfdfdf"
+    },
+    {
+      "type": "header",
+      "content": "Price"
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Size",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#EF4444"
+    },
+    {
+      "type": "header",
+      "content": "Divider"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Color",
+      "default": "#dfdfdf"
+    },
+    {
+      "type": "header",
+      "content": "Inputs"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Border color",
+      "default": "#dfdfdf"
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Accordion"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_accordion",
+      "label": "Enable accordion",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "about_product_metafield",
+      "label": "About Product metafield",
+      "info": "Enter the full metafield ID, e.g. custom.about_product",
+      "visible_if": "{{ block.settings.enable_accordion }}"
+    },
+    {
+      "type": "text",
+      "id": "ingredients_metafield",
+      "label": "Ingredients metafield",
+      "info": "Enter the full metafield ID, e.g. custom.ingredients",
+      "visible_if": "{{ block.settings.enable_accordion }}"
+    },
+    {
+      "type": "color",
+      "id": "accordion_bg_color",
+      "label": "Background color",
+      "default": "#f3f3f3",
+      "visible_if": "{{ block.settings.enable_accordion }}"
+    },
+    {
+      "type": "range",
+      "id": "accordion_padding",
+      "label": "Padding",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.enable_accordion }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product info"
+    }
+  ]
+}
+{% endschema %}

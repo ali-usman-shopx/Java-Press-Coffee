@@ -1,5 +1,5 @@
 
-{% render 'button', link: block.settings.link %}
+{% render 'button', link: block.settings.link, block: block %}
 
 {% schema %}
 {
@@ -83,6 +83,41 @@
       "label": "t:settings.link_text_color",
       "placeholder": "t:settings.default",
       "visible_if": "{{ block.settings.style_class == 'button-unstyled' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_button_font_weight_override",
+      "label": "Override Button Font Weight",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra-bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_button_font_weight_override }}"
     },
     {
       "type": "header",

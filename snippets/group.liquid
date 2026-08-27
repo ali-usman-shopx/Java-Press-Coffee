@@ -31,6 +31,7 @@
     size-style
     {{ class }}
     {% if background_color != blank %} color-custom-{{ block_id }}{% endif %}
+    {% if settings.enable_relative_positioning %}group-block--relative{% endif %}
   "
   style="
     {% render 'border-override', settings: settings %}
@@ -65,6 +66,16 @@
     {% endif %}
   </div>
 
+  {% comment %} <div
+    class="
+      group-block-content
+      {% if request.design_mode %}group-block-content--design-mode{% endif %}
+      layout-panel-flex
+      layout-panel-flex--{{ settings.content_direction | default: 'column' }}
+      {% if settings.vertical_on_mobile %} mobile-column{% endif %}
+    "
+    style="{% render 'layout-panel-style', settings: settings %}"
+  > {% endcomment %}
   <div
     class="
       group-block-content
@@ -72,6 +83,8 @@
       layout-panel-flex
       layout-panel-flex--{{ settings.content_direction | default: 'column' }}
       {% if settings.vertical_on_mobile %} mobile-column{% endif %}
+      {% if settings.order_reversed_desktop %}group-block-content--order-reversed-desktop{% endif %}
+      {% if settings.order_reversed_mobile %}group-block-content--order-reversed-mobile{% endif %}
     "
     style="{% render 'layout-panel-style', settings: settings %}"
   >
@@ -96,5 +109,27 @@
   /* Needs the .group-block__link ~ to be specific enough to take effect. */
   .group-block__link ~ .group-block-content--design-mode {
     pointer-events: auto;
+  }
+
+  .group-block-content--order-reversed-desktop {
+    flex-direction: column-reverse;
+  }
+
+  .group-block-content--order-reversed-desktop.layout-panel-flex--row {
+    flex-direction: row-reverse;
+  }
+
+  .group-block--relative {
+    position: relative;
+  }
+
+  @media screen and (max-width: 749px) {
+    .group-block-content--order-reversed-mobile {
+      flex-direction: column-reverse;
+    }
+
+    .group-block-content--order-reversed-mobile.layout-panel-flex--row:not(.mobile-column) {
+      flex-direction: row-reverse;
+    }
   }
 {% endstylesheet %}

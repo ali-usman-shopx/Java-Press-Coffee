@@ -1,5 +1,27 @@
+/* @font-face {
+  font-family: 'Raleway';
+  src: url('https://cdn.shopify.com/s/files/1/0803/8465/5559/files/Raleway-Regular.ttf?v=1787641803') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+} */
+@font-face {
+  font-family: 'Raleway';
+  src: url('https://cdn.shopify.com/s/files/1/0803/8465/5559/files/Raleway-VariableFont_wght.ttf?v=1787821590') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comforter';
+  src: url('https://cdn.shopify.com/s/files/1/0803/8465/5559/files/Comforter-Regular.ttf?v=1787641803') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
+  font-family: "Raleway" !important;
 }
 
 body {

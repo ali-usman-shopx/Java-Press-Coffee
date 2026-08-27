@@ -1,0 +1,1352 @@
+{% doc %}
+  @prompt
+    Generate something like:
+    
+    {% assign header_id = section.id | replace: '_', '' | downcase %}
+    
+    {% style %}
+      .custom-header-{{ header_id }} {
+        --header-primary: {{ section.settings.primary_text_color }};
+        --header-secondary: {{ section.settings.secondary_text_color }};
+        --header-accent: {{ section.settings.accent_color }};
+        --header-background: {{ section.settings.background_color }};
+        --header-contrast: {{ section.settings.contrast_text_color }};
+        --header-menu-border: {{ section.settings.background_color | color_modify: 'alpha', 0.5 }};
+    
+        position: relative;
+        z-index: 100;
+        width: 100%;
+        background: var(--header-background);
+        color: var(--header-primary);
+      }
+    
+      .custom-header-{{ header_id }}__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        max-width: {{ section.settings.max_width }}px;
+        min-height: {{ section.settings.header_height }}px;
+        margin: 0 auto;
+        padding: 0 {{ section.settings.horizontal_padding }}px;
+      }
+    
+      .custom-header-{{ header_id }}__brand {
+        color: var(--header-primary);
+        font-family: {{ section.settings.brand_font.family }}, {{ section.settings.brand_font.fallback_families }};
+        font-size: {{ section.settings.brand_font_size }}px;
+        font-weight: {{ section.settings.brand_font_weight }};
+        line-height: 1;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+    
+      .custom-header-{{ header_id }}__navigation {
+        display: flex;
+        align-items: center;
+        gap: {{ section.settings.navigation_gap }}px;
+        height: 100%;
+      }
+    
+      .custom-header-{{ header_id }}__nav-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        height: 100%;
+      }
+    
+      .custom-header-{{ header_id }}__nav-link {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: 100%;
+        padding: 10px 0;
+        color: var(--header-secondary);
+        font-size: {{ section.settings.navigation_font_size }}px;
+        font-weight: {{ section.settings.navigation_font_weight }};
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.2s ease;
+      }
+    
+      .custom-header-{{ header_id }}__nav-link:hover,
+      .custom-header-{{ header_id }}__nav-item:hover > .custom-header-{{ header_id }}__nav-link {
+        color: var(--header-primary);
+      }
+    
+      .custom-header-{{ header_id }}__chevron {
+        width: 12px;
+        height: 12px;
+        transition: transform 0.2s ease;
+      }
+    
+      .custom-header-{{ header_id }}__nav-item:hover .custom-header-{{ header_id }}__chevron {
+        transform: rotate(180deg);
+      }
+    
+      .custom-header-{{ header_id }}__dropdown {
+        position: absolute;
+        top: calc(100% + 1px);
+        left: 50%;
+        min-width: {{ section.settings.dropdown_width }}px;
+        padding: 8px;
+        background: var(--header-accent);
+        border-radius: {{ section.settings.dropdown_radius }}px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, 8px);
+        transition:
+          opacity 0.2s ease,
+          visibility 0.2s ease,
+          transform 0.2s ease;
+      }
+    
+      .custom-header-{{ header_id }}__nav-item:hover .custom-header-{{ header_id }}__dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
+      }
+    
+      .custom-header-{{ header_id }}__dropdown-link {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-height: 42px;
+        padding: 10px 14px;
+        color: var(--header-contrast);
+        font-size: {{ section.settings.dropdown_font_size }}px;
+        text-decoration: none;
+        border-bottom: 1px solid var(--header-menu-border);
+        transition:
+          color 0.2s ease,
+          background-color 0.2s ease;
+      }
+    
+      .custom-header-{{ header_id }}__dropdown-link:last-child {
+        border-bottom: none;
+      }
+    
+      .custom-header-{{ header_id }}__dropdown-link:hover,
+      .custom-header-{{ header_id }}__dropdown-link:focus-visible {
+        color: var(--header-accent);
+        background: var(--header-background);
+        border-bottom-color: var(--header-background);
+      }
+    
+      .custom-header-{{ header_id }}__dropdown-link::after {
+        content: "";
+        position: absolute;
+        bottom: 4px;
+        left: 14px;
+        width: 4px;
+        height: 4px;
+        background: currentColor;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+    
+      .custom-header-{{ header_id }}__dropdown-link:hover::after,
+      .custom-header-{{ header_id }}__dropdown-link:focus-visible::after {
+        opacity: 1;
+      }
+    
+      .custom-header-{{ header_id }}__actions {
+        display: flex;
+        align-items: center;
+        gap: {{ section.settings.action_gap }}px;
+        margin-left: {{ section.settings.navigation_gap }}px;
+      }
+    
+      .custom-header-{{ header_id }}__cart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        color: var(--header-accent);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+      }
+    
+      .custom-header-{{ header_id }}__cart svg {
+        width: {{ section.settings.cart_icon_size }}, Update the header with a brand in the left hand side (the text and font of which I should be able to adjust), and in the right hand sub div, I want to have my options "Learning Center", "Our Coffee Solutions", "About Us", and "Blog", all of which should be editable. Learning Center and Our Coffee solutions are drop down menus (allow me to add the options later). After that, there will be a cart icon (I will change the icon later), and a Shop Now button. The shop now button will become smaller and be labeled "Shop" on mobile; and the branding should be in the center on Mobile, and the options should be collapsed into a burger menu which will open a drawer from the left upon click. Lastly, I want you to allow me to change the colors easily; there will be a primary text color, a secondary text color, an accent color, a background color, and a contrast text color. The icon and button will have the accent color (and the text of the button will be contrast color). The active/hovered option of the drop down options should have background of background color, dividing borders within the menu with background color but 0.5 opacity (replaced with 1 opacity on hover or active), and the menu options will have text color set to accent color along with a dot underneath the text while the menu is open. The options will normally have secondary text color., It isn't filling to be the full width of the page. Also, the background color does not apply to the entire navbar; only to the menu items. Create a different color field for the navbar background color and call it nav-bg or something similar.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .custom-header-{{ ai_gen_id }} {
+    --header-primary: {{ block.settings.primary_text_color }};
+    --header-secondary: {{ block.settings.secondary_text_color }};
+    --header-accent: {{ block.settings.accent_color }};
+    --header-background: {{ block.settings.background_color }};
+    --header-nav-bg: {{ block.settings.nav_background_color }};
+    --header-contrast: {{ block.settings.contrast_text_color }};
+    --header-menu-border: {{ block.settings.background_color | color_modify: 'alpha', 0.5 }};
+
+    position: relative;
+    z-index: 100;
+    width: 100%;
+    background: var(--header-nav-bg);
+    color: var(--header-primary);
+    display: block;
+  }
+
+  .custom-header-{{ ai_gen_id }}__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: {{ block.settings.max_width }}px;
+    min-height: {{ block.settings.header_height }}px;
+    margin: 0 auto;
+    padding: 0 {{ block.settings.horizontal_padding }}px;
+  }
+
+  .custom-header-{{ ai_gen_id }}__brand {
+    color: var(--header-primary);
+    font-family: {{ block.settings.brand_font.family }}, {{ block.settings.brand_font.fallback_families }};
+    font-size: {{ block.settings.brand_font_size }}px;
+    font-weight: {{ block.settings.brand_font_weight }};
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .custom-header-{{ ai_gen_id }}__right {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.navigation_gap }}px;
+  }
+
+  .custom-header-{{ ai_gen_id }}__navigation {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.navigation_gap }}px;
+    height: 100%;
+  }
+
+  .custom-header-{{ ai_gen_id }}__nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .custom-header-{{ ai_gen_id }}__nav-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    padding: 10px 0;
+    color: var(--header-secondary);
+    font-size: {{ block.settings.navigation_font_size }}px;
+    font-weight: {{ block.settings.navigation_font_weight }};
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  .custom-header-{{ ai_gen_id }}__nav-link:hover,
+  .custom-header-{{ ai_gen_id }}__nav-item:hover > .custom-header-{{ ai_gen_id }}__nav-link {
+    color: var(--header-primary);
+  }
+
+  .custom-header-{{ ai_gen_id }}__chevron {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.2s ease;
+  }
+
+  .custom-header-{{ ai_gen_id }}__nav-item:hover .custom-header-{{ ai_gen_id }}__chevron {
+    transform: rotate(180deg);
+  }
+
+  .custom-header-{{ ai_gen_id }}__dropdown {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 50%;
+    min-width: {{ block.settings.dropdown_width }}px;
+    padding: 8px;
+    background: var(--header-accent);
+    border-radius: {{ block.settings.dropdown_radius }}px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 8px);
+    transition:
+      opacity 0.2s ease,
+      visibility 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .custom-header-{{ ai_gen_id }}__nav-item:hover .custom-header-{{ ai_gen_id }}__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+
+  .custom-header-{{ ai_gen_id }}__dropdown-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 10px 14px;
+    color: var(--header-contrast);
+    font-size: {{ block.settings.dropdown_font_size }}px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--header-menu-border);
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      border-bottom-color 0.2s ease;
+  }
+
+  .custom-header-{{ ai_gen_id }}__dropdown-link:last-child {
+    border-bottom: none;
+  }
+
+  .custom-header-{{ ai_gen_id }}__dropdown-link:hover,
+  .custom-header-{{ ai_gen_id }}__dropdown-link:focus-visible {
+    color: var(--header-accent);
+    background: var(--header-background);
+    border-bottom-color: var(--header-background);
+  }
+
+  .custom-header-{{ ai_gen_id }}__dropdown-link::after {
+    content: "";
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: currentColor;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .custom-header-{{ ai_gen_id }}__dropdown-link:hover::after,
+  .custom-header-{{ ai_gen_id }}__dropdown-link:focus-visible::after {
+    opacity: 1;
+  }
+
+  .custom-header-{{ ai_gen_id }}__actions {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.action_gap }}px;
+  }
+
+  .custom-header-{{ ai_gen_id }}__cart {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    color: var(--header-accent);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .custom-header-{{ ai_gen_id }}__cart svg {
+    width: {{ block.settings.cart_icon_size }}px;
+    height: {{ block.settings.cart_icon_size }}px;
+  }
+
+  .custom-header-{{ ai_gen_id }}__cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background: var(--header-accent);
+    color: var(--header-contrast);
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 50%;
+  }
+
+  .custom-header-{{ ai_gen_id }}__shop-button {
+    padding: 12px 24px;
+    background: var(--header-accent);
+    color: var(--header-contrast);
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: {{ block.settings.button_font_size }}px;
+    font-weight: {{ block.settings.button_font_weight }};
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .custom-header-{{ ai_gen_id }}__shop-button:hover {
+    opacity: 0.9;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--header-primary);
+    cursor: pointer;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-toggle svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--header-nav-bg);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-drawer.active {
+    transform: translateX(0);
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 999;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid var(--header-menu-border);
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--header-primary);
+    cursor: pointer;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-close svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-nav {
+    padding: 20px;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-nav-item {
+    margin-bottom: 20px;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    color: var(--header-secondary);
+    font-size: {{ block.settings.navigation_font_size }}px;
+    font-weight: {{ block.settings.navigation_font_weight }};
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-nav-link:hover {
+    color: var(--header-primary);
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--header-secondary);
+    cursor: pointer;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-dropdown-toggle svg {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.2s ease;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-dropdown-toggle.active svg {
+    transform: rotate(180deg);
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-dropdown {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-dropdown.active {
+    max-height: 500px;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-dropdown-link {
+    display: block;
+    padding: 10px 0 10px 20px;
+    color: var(--header-secondary);
+    font-size: {{ block.settings.dropdown_font_size }}px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .custom-header-{{ ai_gen_id }}__mobile-dropdown-link:hover {
+    color: var(--header-primary);
+  }
+
+  @media screen and (max-width: 989px) {
+    .custom-header-{{ ai_gen_id }}__navigation {
+      display: none;
+    }
+
+    .custom-header-{{ ai_gen_id }}__mobile-toggle {
+      display: flex;
+    }
+
+    .custom-header-{{ ai_gen_id }}__brand {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .custom-header-{{ ai_gen_id }}__shop-button {
+      padding: 8px 16px;
+      font-size: {{ block.settings.button_font_size | times: 0.9 }}px;
+    }
+
+    .custom-header-{{ ai_gen_id }}__inner {
+      padding: 0 {{ block.settings.horizontal_padding | times: 0.5 }}px;
+    }
+  }
+{% endstyle %}
+
+<custom-header-{{ ai_gen_id }} class="custom-header-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="custom-header-{{ ai_gen_id }}__inner">
+    <button class="custom-header-{{ ai_gen_id }}__mobile-toggle" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <a href="{{ block.settings.brand_link }}" class="custom-header-{{ ai_gen_id }}__brand">
+      {{ block.settings.brand_text }}
+    </a>
+
+    <div class="custom-header-{{ ai_gen_id }}__right">
+      <nav class="custom-header-{{ ai_gen_id }}__navigation">
+        <div class="custom-header-{{ ai_gen_id }}__nav-item">
+          <a href="{{ block.settings.learning_center_link }}" class="custom-header-{{ ai_gen_id }}__nav-link">
+            {{ block.settings.learning_center_text }}
+            <svg class="custom-header-{{ ai_gen_id }}__chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+          </a>
+          <div class="custom-header-{{ ai_gen_id }}__dropdown">
+            {% for i in (1..5) %}
+              {% liquid
+                assign dropdown_enabled_key = 'learning_center_dropdown_' | append: i | append: '_enabled'
+                assign dropdown_text_key = 'learning_center_dropdown_' | append: i | append: '_text'
+                assign dropdown_link_key = 'learning_center_dropdown_' | append: i | append: '_link'
+
+                assign dropdown_enabled = block.settings[dropdown_enabled_key]
+                assign dropdown_text = block.settings[dropdown_text_key]
+                assign dropdown_link = block.settings[dropdown_link_key]
+              %}
+              {% if dropdown_enabled %}
+                <a href="{{ dropdown_link }}" class="custom-header-{{ ai_gen_id }}__dropdown-link">
+                  {{ dropdown_text }}
+                </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="custom-header-{{ ai_gen_id }}__nav-item">
+          <a href="{{ block.settings.coffee_solutions_link }}" class="custom-header-{{ ai_gen_id }}__nav-link">
+            {{ block.settings.coffee_solutions_text }}
+            <svg class="custom-header-{{ ai_gen_id }}__chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+          </a>
+          <div class="custom-header-{{ ai_gen_id }}__dropdown">
+            {% for i in (1..5) %}
+              {% liquid
+                assign dropdown_enabled_key = 'coffee_solutions_dropdown_' | append: i | append: '_enabled'
+                assign dropdown_text_key = 'coffee_solutions_dropdown_' | append: i | append: '_text'
+                assign dropdown_link_key = 'coffee_solutions_dropdown_' | append: i | append: '_link'
+
+                assign dropdown_enabled = block.settings[dropdown_enabled_key]
+                assign dropdown_text = block.settings[dropdown_text_key]
+                assign dropdown_link = block.settings[dropdown_link_key]
+              %}
+              {% if dropdown_enabled %}
+                <a href="{{ dropdown_link }}" class="custom-header-{{ ai_gen_id }}__dropdown-link">
+                  {{ dropdown_text }}
+                </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="custom-header-{{ ai_gen_id }}__nav-item">
+          <a href="{{ block.settings.about_us_link }}" class="custom-header-{{ ai_gen_id }}__nav-link">
+            {{ block.settings.about_us_text }}
+          </a>
+        </div>
+
+        <div class="custom-header-{{ ai_gen_id }}__nav-item">
+          <a href="{{ block.settings.blog_link }}" class="custom-header-{{ ai_gen_id }}__nav-link">
+            {{ block.settings.blog_text }}
+          </a>
+        </div>
+      </nav>
+
+      <div class="custom-header-{{ ai_gen_id }}__actions">
+        <a href="{{ routes.cart_url }}" class="custom-header-{{ ai_gen_id }}__cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 2L7 6M17 2l2 4M3 6h18M5 6l2 14h10l2-14"/>
+          </svg>
+          {% if cart.item_count > 0 %}
+            <span class="custom-header-{{ ai_gen_id }}__cart-count">{{ cart.item_count }}</span>
+          {% endif %}
+        </a>
+
+        <a href="{{ block.settings.shop_button_link }}" class="custom-header-{{ ai_gen_id }}__shop-button">
+          <span class="custom-header-{{ ai_gen_id }}__shop-button-desktop">{{ block.settings.shop_button_text }}</span>
+          <span class="custom-header-{{ ai_gen_id }}__shop-button-mobile">{{ block.settings.shop_button_mobile_text }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-header-{{ ai_gen_id }}__mobile-overlay"></div>
+  <div class="custom-header-{{ ai_gen_id }}__mobile-drawer">
+    <div class="custom-header-{{ ai_gen_id }}__mobile-header">
+      <span style="color: var(--header-primary); font-weight: 600;">Menu</span>
+      <button class="custom-header-{{ ai_gen_id }}__mobile-close" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="custom-header-{{ ai_gen_id }}__mobile-nav">
+      <div class="custom-header-{{ ai_gen_id }}__mobile-nav-item">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <a href="{{ block.settings.learning_center_link }}" class="custom-header-{{ ai_gen_id }}__mobile-nav-link" style="flex: 1;">
+            {{ block.settings.learning_center_text }}
+          </a>
+          <button class="custom-header-{{ ai_gen_id }}__mobile-dropdown-toggle" data-dropdown="learning-center">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+          </button>
+        </div>
+        <div class="custom-header-{{ ai_gen_id }}__mobile-dropdown" data-dropdown-content="learning-center">
+          {% for i in (1..5) %}
+            {% liquid
+              assign dropdown_enabled_key = 'learning_center_dropdown_' | append: i | append: '_enabled'
+              assign dropdown_text_key = 'learning_center_dropdown_' | append: i | append: '_text'
+              assign dropdown_link_key = 'learning_center_dropdown_' | append: i | append: '_link'
+
+              assign dropdown_enabled = block.settings[dropdown_enabled_key]
+              assign dropdown_text = block.settings[dropdown_text_key]
+              assign dropdown_link = block.settings[dropdown_link_key]
+            %}
+            {% if dropdown_enabled %}
+              <a href="{{ dropdown_link }}" class="custom-header-{{ ai_gen_id }}__mobile-dropdown-link">
+                {{ dropdown_text }}
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="custom-header-{{ ai_gen_id }}__mobile-nav-item">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <a href="{{ block.settings.coffee_solutions_link }}" class="custom-header-{{ ai_gen_id }}__mobile-nav-link" style="flex: 1;">
+            {{ block.settings.coffee_solutions_text }}
+          </a>
+          <button class="custom-header-{{ ai_gen_id }}__mobile-dropdown-toggle" data-dropdown="coffee-solutions">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+          </button>
+        </div>
+        <div class="custom-header-{{ ai_gen_id }}__mobile-dropdown" data-dropdown-content="coffee-solutions">
+          {% for i in (1..5) %}
+            {% liquid
+              assign dropdown_enabled_key = 'coffee_solutions_dropdown_' | append: i | append: '_enabled'
+              assign dropdown_text_key = 'coffee_solutions_dropdown_' | append: i | append: '_text'
+              assign dropdown_link_key = 'coffee_solutions_dropdown_' | append: i | append: '_link'
+
+              assign dropdown_enabled = block.settings[dropdown_enabled_key]
+              assign dropdown_text = block.settings[dropdown_text_key]
+              assign dropdown_link = block.settings[dropdown_link_key]
+            %}
+            {% if dropdown_enabled %}
+              <a href="{{ dropdown_link }}" class="custom-header-{{ ai_gen_id }}__mobile-dropdown-link">
+                {{ dropdown_text }}
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="custom-header-{{ ai_gen_id }}__mobile-nav-item">
+        <a href="{{ block.settings.about_us_link }}" class="custom-header-{{ ai_gen_id }}__mobile-nav-link">
+          {{ block.settings.about_us_text }}
+        </a>
+      </div>
+
+      <div class="custom-header-{{ ai_gen_id }}__mobile-nav-item">
+        <a href="{{ block.settings.blog_link }}" class="custom-header-{{ ai_gen_id }}__mobile-nav-link">
+          {{ block.settings.blog_text }}
+        </a>
+      </div>
+    </nav>
+  </div>
+</custom-header-{{ ai_gen_id }}>
+
+<style>
+  .custom-header-{{ ai_gen_id }}__shop-button-mobile {
+    display: none;
+  }
+
+  @media screen and (max-width: 989px) {
+    .custom-header-{{ ai_gen_id }}__shop-button-desktop {
+      display: none;
+    }
+
+    .custom-header-{{ ai_gen_id }}__shop-button-mobile {
+      display: inline;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    class CustomHeader{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.mobileToggle = this.querySelector('.custom-header-{{ ai_gen_id }}__mobile-toggle');
+        this.mobileClose = this.querySelector('.custom-header-{{ ai_gen_id }}__mobile-close');
+        this.mobileDrawer = this.querySelector('.custom-header-{{ ai_gen_id }}__mobile-drawer');
+        this.mobileOverlay = this.querySelector('.custom-header-{{ ai_gen_id }}__mobile-overlay');
+        this.dropdownToggles = this.querySelectorAll('.custom-header-{{ ai_gen_id }}__mobile-dropdown-toggle');
+      }
+
+      connectedCallback() {
+        this.setupAccessibility();
+        this.setupMobileMenu();
+        this.setupMobileDropdowns();
+      }
+
+      setupAccessibility() {
+        const navItems = this.querySelectorAll('.custom-header-{{ ai_gen_id }}__nav-item');
+        
+        navItems.forEach((item) => {
+          const link = item.querySelector('.custom-header-{{ ai_gen_id }}__nav-link');
+          const dropdown = item.querySelector('.custom-header-{{ ai_gen_id }}__dropdown');
+          
+          if (dropdown) {
+            link.setAttribute('aria-haspopup', 'true');
+            link.setAttribute('aria-expanded', 'false');
+            
+            item.addEventListener('mouseenter', () => {
+              link.setAttribute('aria-expanded', 'true');
+            });
+            
+            item.addEventListener('mouseleave', () => {
+              link.setAttribute('aria-expanded', 'false');
+            });
+          }
+        });
+      }
+
+      setupMobileMenu() {
+        this.mobileToggle.addEventListener('click', () => {
+          this.openMobileMenu();
+        });
+
+        this.mobileClose.addEventListener('click', () => {
+          this.closeMobileMenu();
+        });
+
+        this.mobileOverlay.addEventListener('click', () => {
+          this.closeMobileMenu();
+        });
+      }
+
+      openMobileMenu() {
+        this.mobileDrawer.classList.add('active');
+        this.mobileOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      closeMobileMenu() {
+        this.mobileDrawer.classList.remove('active');
+        this.mobileOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      setupMobileDropdowns() {
+        this.dropdownToggles.forEach((toggle) => {
+          toggle.addEventListener('click', () => {
+            const dropdownId = toggle.getAttribute('data-dropdown');
+            const dropdownContent = this.querySelector(`[data-dropdown-content="${dropdownId}"]`);
+            
+            toggle.classList.toggle('active');
+            dropdownContent.classList.toggle('active');
+          });
+        });
+      }
+    }
+
+    customElements.define('custom-header-{{ ai_gen_id }}', CustomHeader{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Custom header",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 1000,
+      "max": 2000,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "header_height",
+      "label": "Height",
+      "min": 50,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "nav_background_color",
+      "label": "Navbar background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Dropdown background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "primary_text_color",
+      "label": "Primary text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text_color",
+      "label": "Secondary text",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#000f9f"
+    },
+    {
+      "type": "color",
+      "id": "contrast_text_color",
+      "label": "Contrast text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Text",
+      "default": "Store Name"
+    },
+    {
+      "type": "url",
+      "id": "brand_link",
+      "label": "Link"
+    },
+    {
+      "type": "font_picker",
+      "id": "brand_font",
+      "label": "Font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "brand_font_size",
+      "label": "Font size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "brand_font_weight",
+      "label": "Font weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "range",
+      "id": "navigation_gap",
+      "label": "Gap",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "navigation_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "navigation_font_weight",
+      "label": "Font weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Learning Center"
+    },
+    {
+      "type": "text",
+      "id": "learning_center_text",
+      "label": "Text",
+      "default": "Learning Center"
+    },
+    {
+      "type": "url",
+      "id": "learning_center_link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "learning_center_dropdown_1_enabled",
+      "label": "Dropdown item 1 enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "learning_center_dropdown_1_text",
+      "label": "Dropdown item 1 text"
+    },
+    {
+      "type": "url",
+      "id": "learning_center_dropdown_1_link",
+      "label": "Dropdown item 1 link"
+    },
+    {
+      "type": "checkbox",
+      "id": "learning_center_dropdown_2_enabled",
+      "label": "Dropdown item 2 enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "learning_center_dropdown_2_text",
+      "label": "Dropdown item 2 text"
+    },
+    {
+      "type": "url",
+      "id": "learning_center_dropdown_2_link",
+      "label": "Dropdown item 2 link"
+    },
+    {
+      "type": "checkbox",
+      "id": "learning_center_dropdown_3_enabled",
+      "label": "Dropdown item 3 enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "learning_center_dropdown_3_text",
+      "label": "Dropdown item 3 text"
+    },
+    {
+      "type": "url",
+      "id": "learning_center_dropdown_3_link",
+      "label": "Dropdown item 3 link"
+    },
+    {
+      "type": "checkbox",
+      "id": "learning_center_dropdown_4_enabled",
+      "label": "Dropdown item 4 enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "learning_center_dropdown_4_text",
+      "label": "Dropdown item 4 text"
+    },
+    {
+      "type": "url",
+      "id": "learning_center_dropdown_4_link",
+      "label": "Dropdown item 4 link"
+    },
+    {
+      "type": "checkbox",
+      "id": "learning_center_dropdown_5_enabled",
+      "label": "Dropdown item 5 enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "learning_center_dropdown_5_text",
+      "label": "Dropdown item 5 text"
+    },
+    {
+      "type": "url",
+      "id": "learning_center_dropdown_5_link",
+      "label": "Dropdown item 5 link"
+    },
+    {
+      "type": "header",
+      "content": "Our Coffee Solutions"
+    },
+    {
+      "type": "text",
+      "id": "coffee_solutions_text",
+      "label": "Text",
+      "default": "Our Coffee Solutions"
+    },
+    {
+      "type": "url",
+      "id": "coffee_solutions_link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "coffee_solutions_dropdown_1_enabled",
+      "label": "Dropdown item 1 enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "coffee_solutions_dropdown_1_text",
+      "label": "Dropdown item 1 text"
+    },
+    {
+      "type": "url",
+      "id": "coffee_solutions_dropdown_1_link",
+      "label": "Dropdown item 1 link"
+    },
+    {
+      "type": "checkbox",
+      "id": "coffee_solutions_dropdown_2_enabled",
+      "label": "Dropdown item 2 enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "coffee_solutions_dropdown_2_text",
+      "label": "Dropdown item 2 text"
+    },
+    {
+      "type": "url",
+      "id": "coffee_solutions_dropdown_2_link",
+      "label": "Dropdown item 2 link"
+    },
+    {
+      "type": "checkbox",
+      "id": "coffee_solutions_dropdown_3_enabled",
+      "label": "Dropdown item 3 enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "coffee_solutions_dropdown_3_text",
+      "label": "Dropdown item 3 text"
+    },
+    {
+      "type": "url",
+      "id": "coffee_solutions_dropdown_3_link",
+      "label": "Dropdown item 3 link"
+    },
+    {
+      "type": "checkbox",
+      "id": "coffee_solutions_dropdown_4_enabled",
+      "label": "Dropdown item 4 enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "coffee_solutions_dropdown_4_text",
+      "label": "Dropdown item 4 text"
+    },
+    {
+      "type": "url",
+      "id": "coffee_solutions_dropdown_4_link",
+      "label": "Dropdown item 4 link"
+    },
+    {
+      "type": "checkbox",
+      "id": "coffee_solutions_dropdown_5_enabled",
+      "label": "Dropdown item 5 enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "coffee_solutions_dropdown_5_text",
+      "label": "Dropdown item 5 text"
+    },
+    {
+      "type": "url",
+      "id": "coffee_solutions_dropdown_5_link",
+      "label": "Dropdown item 5 link"
+    },
+    {
+      "type": "header",
+      "content": "About Us"
+    },
+    {
+      "type": "text",
+      "id": "about_us_text",
+      "label": "Text",
+      "default": "About Us"
+    },
+    {
+      "type": "url",
+      "id": "about_us_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Blog"
+    },
+    {
+      "type": "text",
+      "id": "blog_text",
+      "label": "Text",
+      "default": "Blog"
+    },
+    {
+      "type": "url",
+      "id": "blog_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Dropdown style"
+    },
+    {
+      "type": "range",
+      "id": "dropdown_width",
+      "label": "Width",
+      "min": 150,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "dropdown_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "dropdown_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Actions"
+    },
+    {
+      "type": "range",
+      "id": "action_gap",
+      "label": "Gap",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "cart_icon_size",
+      "label": "Cart icon size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Shop button"
+    },
+    {
+      "type": "text",
+      "id": "shop_button_text",
+      "label": "Desktop text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "text",
+      "id": "shop_button_mobile_text",
+      "label": "Mobile text",
+      "default": "Shop"
+    },
+    {
+      "type": "url",
+      "id": "shop_button_link",
+      "label": "Link"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_font_weight",
+      "label": "Font weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom header"
+    }
+  ]
+}
+{% endschema %}

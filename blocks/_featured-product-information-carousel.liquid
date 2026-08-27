@@ -1,15 +1,54 @@
+{% if block.settings.disable_carousel %}
+  {% assign featured_media = closest.product.featured_media %}
 
-
-{% render 'product-media-gallery-content',
-  media_presentation: 'carousel',
-  block_settings: block.settings,
-  block_id: block.id,
-  block_shopify_attributes: block.shopify_attributes,
-  block: block,
-  section: section
-%}
+  {% if featured_media %}
+    <div
+      class="product-media-gallery-single spacing-style sticky-content"
+      style="
+        {% render 'spacing-style', settings: block.settings %}
+        --media-radius: {{ block.settings.media_radius }}px;
+      "
+      {{ block.shopify_attributes }}
+    >
+      <div
+        class="
+          product-media-container
+          product-media-container--{{ featured_media.media_type }}
+          {% if block.settings.zoom %}product-media-container--zoomable{% endif %}
+          {% if block.settings.constrain_to_viewport %}constrain-height{% endif %}
+          {% if block.settings.aspect_ratio != 'adapt' %}media-fit-cover{% endif %}
+          {% if block.settings.aspect_ratio == 'adapt' and block.settings.constrain_to_viewport %}media-fit-{{ block.settings.media_fit }}{% endif %}
+        "
+        style="
+          {% if block.settings.aspect_ratio != 'adapt' %}
+            --media-preview-ratio: {{ block.settings.aspect_ratio }};
+          {% elsif featured_media.preview_image.aspect_ratio %}
+            --media-preview-ratio: {{ featured_media.preview_image.aspect_ratio }};
+          {% endif %}
+          --media-radius: {{ block.settings.media_radius }}px;
+        "
+      >
+        {%- render 'product-media',
+          media: featured_media,
+          sizes: '100vw',
+          is_main_product_media: true
+        -%}
+      </div>
+    </div>
+  {% endif %}
+{% else %}
+  {% render 'product-media-gallery-content',
+    media_presentation: 'carousel',
+    block_settings: block.settings,
+    block_id: block.id,
+    block_shopify_attributes: block.shopify_attributes,
+    block: block,
+    section: section
+  %}
+{% endif %}
 
 {% schema %}
+
 {
   "name": "t:names.product_media",
   "tag": null,
@@ -38,12 +77,14 @@
       ],
       "default": "adapt"
     },
+
     {
       "type": "checkbox",
       "id": "constrain_to_viewport",
       "label": "t:settings.limit_media_to_screen_height",
       "default": false
     },
+
     {
       "type": "select",
       "id": "media_fit",
@@ -61,6 +102,7 @@
       "default": "cover",
       "visible_if": "{{ block.settings.aspect_ratio == 'adapt' and block.settings.constrain_to_viewport == true }}"
     },
+
     {
       "type": "range",
       "id": "media_radius",
@@ -71,6 +113,7 @@
       "unit": "px",
       "default": 4
     },
+
     {
       "type": "checkbox",
       "id": "extend_media",
@@ -78,28 +121,40 @@
       "default": true,
       "visible_if": "{{ section.settings.content_width == 'content-center-aligned' }}"
     },
+
     {
       "type": "checkbox",
       "id": "zoom",
       "label": "t:settings.enable_zoom",
       "default": true
     },
+
     {
       "type": "checkbox",
       "id": "video_loop",
       "label": "t:settings.enable_video_looping",
       "default": false
     },
+
     {
       "type": "checkbox",
       "id": "hide_variants",
       "default": false,
       "label": "t:settings.hide_unselected_variant_media"
     },
+
+    {
+      "type": "checkbox",
+      "id": "disable_carousel",
+      "label": "Disable carousel",
+      "default": false
+    },
+
     {
       "type": "header",
       "content": "t:content.carousel"
     },
+
     {
       "type": "select",
       "id": "icons_style",
@@ -124,6 +179,7 @@
       ],
       "default": "arrow"
     },
+
     {
       "type": "select",
       "id": "slideshow_controls_style",
@@ -143,6 +199,7 @@
         }
       ]
     },
+
     {
       "type": "select",
       "id": "slideshow_mobile_controls_style",
@@ -166,11 +223,13 @@
         }
       ]
     },
+
     {
       "type": "header",
       "content": "t:content.thumbnails",
       "visible_if": "{{ block.settings.slideshow_controls_style == 'thumbnails' or block.settings.slideshow_mobile_controls_style == 'thumbnails' }}"
     },
+
     {
       "type": "select",
       "id": "thumbnail_position",
@@ -192,6 +251,7 @@
       "default": "bottom",
       "visible_if": "{{ block.settings.slideshow_controls_style == 'thumbnails' }}"
     },
+
     {
       "type": "range",
       "id": "thumbnail_width",
@@ -203,6 +263,7 @@
       "default": 64,
       "visible_if": "{{ block.settings.slideshow_controls_style == 'thumbnails' }}"
     },
+
     {
       "type": "range",
       "id": "thumbnail_radius",
@@ -214,10 +275,12 @@
       "default": 0,
       "visible_if": "{{ block.settings.slideshow_controls_style == 'thumbnails' or block.settings.slideshow_mobile_controls_style == 'thumbnails' }}"
     },
+
     {
       "type": "header",
       "content": "t:content.padding"
     },
+
     {
       "type": "range",
       "id": "padding-block-start",
@@ -228,6 +291,7 @@
       "unit": "px",
       "default": 0
     },
+
     {
       "type": "range",
       "id": "padding-block-end",
@@ -238,6 +302,7 @@
       "unit": "px",
       "default": 0
     },
+
     {
       "type": "range",
       "id": "padding-inline-start",
@@ -248,6 +313,7 @@
       "unit": "px",
       "default": 0
     },
+
     {
       "type": "range",
       "id": "padding-inline-end",
@@ -259,10 +325,12 @@
       "default": 0
     }
   ],
+
   "presets": [
     {
       "name": "t:names.product_media"
     }
   ]
 }
+
 {% endschema %}
