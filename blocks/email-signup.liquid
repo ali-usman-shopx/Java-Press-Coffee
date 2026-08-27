@@ -110,6 +110,9 @@
 
       <button
         class="email-signup__button {% if block_settings.integrated_button or block_settings.border_style == 'underline' %}email-signup__button--integrated{% endif %} email-signup__button--{{ block_settings.display_type }} {{ block_settings.button_type_preset }} {{ block_settings.style_class }} {{ block_settings.style_class }}--{{ block.id }}"
+        {% if block.settings.enable_button_font_weight_override %}
+          style="font-weight: {{ block_settings.button_font_weight }};"
+        {% endif %}
         {% if block_settings.display_type != 'text' %}
           aria-label="{{ 'actions.sign_up' | t }}"
         {% endif %}
@@ -898,6 +901,41 @@
       "default": "paragraph",
       "info": "t:info.edit_presets_in_theme_settings",
       "visible_if": "{{ block.settings.display_type == \"text\" }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_button_font_weight_override",
+      "label": "Overrride Button Font Weight",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_font_weight",
+      "label": "Button font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra-bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_button_font_weight_override }}"
     },
     {
       "type": "header",
