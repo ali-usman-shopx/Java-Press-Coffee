@@ -1588,6 +1588,52 @@
         "padding-block-end": 48
       }
     },
+    "17879065549a521325": {
+      "type": "_blocks",
+      "blocks": {
+        "judge_me_reviews_review_widget_czHbHA": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1000,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_czHbHA"
+      ],
+      "name": "Reviews from JudgeMe",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
     "product_recommendations_qggXJq": {
       "type": "product-recommendations",
       "blocks": {
@@ -1693,9 +1739,9 @@
             "padding-inline-start": 0,
             "padding-inline-end": 0,
             "enable_custom_product_card": true,
-            "image_background": "#f5f5f5",
+            "image_background": "#D9D9D9",
             "image_border_radius": 5,
-            "image_padding": 0,
+            "image_padding": 16,
             "image_margin_bottom": 16,
             "stamp_image": "shopify://shop_images/stamp_desktop.png",
             "stamp_size": 60,
@@ -1999,6 +2045,7 @@
     "main",
     "section_Gjkq6A",
     "section_GL4KE9",
+    "17879065549a521325",
     "product_recommendations_qggXJq",
     "section_xDEa3J"
   ]
