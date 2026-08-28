@@ -13,8 +13,121 @@
   "sections": {
     "header_announcements_9jGBFp": {
       "type": "header-announcements",
+      "blocks": {
+        "announcement_YyfVyg": {
+          "type": "_announcement",
+          "name": "t:names.announcement",
+          "disabled": true,
+          "settings": {
+            "text": "Shop our latest arrivals!",
+            "enable_link": false,
+            "link": "",
+            "link_text": "Shop now",
+            "open_link_in_new_tab": false,
+            "font": "var(--font-subheading--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none",
+            "link_color": "",
+            "link_font_size": 16,
+            "link_font_weight": "",
+            "link_case": "none",
+            "link_decoration": "underline",
+            "link_decoration_color": "",
+            "link_decoration_thickness": 0,
+            "link_underline_offset": 0,
+            "enable_link_hover": false,
+            "link_hover_color": "",
+            "link_hover_font_weight": "",
+            "link_hover_decoration": "underline",
+            "link_hover_decoration_color": "",
+            "link_hover_opacity": 100,
+            "text_color": ""
+          },
+          "blocks": {}
+        },
+        "announcement_DntdhF": {
+          "type": "_announcement",
+          "name": "t:names.announcement",
+          "settings": {
+            "text": "We are here to help as your coffee concierge!",
+            "enable_link": true,
+            "link": "#",
+            "link_text": "TAKE THE SURVEY",
+            "open_link_in_new_tab": false,
+            "font": "var(--font-subheading--family)",
+            "font_size": "1rem",
+            "weight": "600",
+            "letter_spacing": "normal",
+            "case": "none",
+            "link_color": "{{ settings.color_palette.color3 }}",
+            "link_font_size": 16,
+            "link_font_weight": "",
+            "link_case": "uppercase",
+            "link_decoration": "underline",
+            "link_decoration_color": "{{ settings.color_palette.color3 }}",
+            "link_decoration_thickness": 2,
+            "link_underline_offset": 1,
+            "enable_link_hover": false,
+            "link_hover_color": "",
+            "link_hover_font_weight": "",
+            "link_hover_decoration": "underline",
+            "link_hover_decoration_color": "",
+            "link_hover_opacity": 100,
+            "text_color": "#424242"
+          },
+          "blocks": {}
+        },
+        "announcement_y843TY": {
+          "type": "_announcement",
+          "name": "t:names.announcement",
+          "settings": {
+            "text": "We are here to help as your coffee concierge!",
+            "enable_link": true,
+            "link": "#",
+            "link_text": "TAKE THE SURVEY",
+            "open_link_in_new_tab": false,
+            "font": "var(--font-subheading--family)",
+            "font_size": "1rem",
+            "weight": "600",
+            "letter_spacing": "normal",
+            "case": "none",
+            "link_color": "{{ settings.color_palette.color3 }}",
+            "link_font_size": 16,
+            "link_font_weight": "",
+            "link_case": "uppercase",
+            "link_decoration": "underline",
+            "link_decoration_color": "{{ settings.color_palette.color3 }}",
+            "link_decoration_thickness": 2,
+            "link_underline_offset": 1,
+            "enable_link_hover": false,
+            "link_hover_color": "",
+            "link_hover_font_weight": "",
+            "link_hover_decoration": "underline",
+            "link_hover_decoration_color": "",
+            "link_hover_opacity": 100,
+            "text_color": "#424242"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "announcement_YyfVyg",
+        "announcement_DntdhF",
+        "announcement_y843TY"
+      ],
       "name": "t:names.announcement_bar",
-      "settings": {}
+      "settings": {
+        "speed": 10,
+        "section_width": "page-width",
+        "enable_custom_background": true,
+        "background_color": "#d3d3d3",
+        "divider_width": 0,
+        "divider_color": "",
+        "padding-block-start": 22,
+        "padding-block-end": 22
+      }
     },
     "header_section": {
       "type": "header",
