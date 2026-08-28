@@ -10,6 +10,12 @@
   assign reviews_count = selected_product.metafields[count_parts[0]][count_parts[1]].value
 
   assign reviews_score = reviews_score_raw | round
+  
+  if block.settings.enable_review_override
+    assign reviews_score_raw = block.settings.manual_review_score
+    assign reviews_count = block.settings.manual_review_count
+    assign reviews_score = reviews_score_raw | round
+  endif
 %}
 
 {% if reviews_score_raw != blank and reviews_count != blank %}
@@ -83,6 +89,27 @@
 {
   "name": "Reviews",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_review_override",
+      "label": "Enable manual review override",
+      "default": false,
+      "info": "When enabled, the manual review score and review count below will be used instead of the product metafields."
+    },
+    {
+      "type": "text",
+      "id": "manual_review_score",
+      "label": "Manual review score",
+      "default": "5.00",
+      "info": "Enter the review score to display, e.g. 4.8"
+    },
+    {
+      "type": "text",
+      "id": "manual_review_count",
+      "label": "Manual review count",
+      "default": "0",
+      "info": "Enter the review count to display, e.g. 127. It will appear inside parentheses."
+    },
     {
       "type": "text",
       "id": "review_score_metafield",
