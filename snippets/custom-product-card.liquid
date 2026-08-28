@@ -206,6 +206,10 @@
   .custom-product-card-{{ card_id }}__add-to-cart:disabled {
     cursor: default;
   }
+
+  .custom-product-card-{{ card_id }}__form {
+    width: 100%;
+  }
 {% endstyle %}
 
 <div class="custom-product-card-{{ card_id }}">
@@ -291,18 +295,65 @@
 
     </div>
 
-    <button
-      type="button"
-      class="custom-product-card-{{ card_id }}__add-to-cart"
-      data-variant-id="{{ custom_product.selected_or_first_available_variant.id }}"
+    <product-form-component
+        data-section-id="{{ section.id }}"
+        data-product-id="{{ custom_product.id }}"
+        data-product-url="{{ custom_product.url }}"
+        on:submit="/handleSubmit"
+        data-quantity-default="1"
+        data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
     >
-      {{ card_settings.button_text }}
-    </button>
+    <div
+        class="visually-hidden"
+        aria-live="assertive"
+        role="status"
+        aria-atomic="true"
+        ref="liveRegion"
+    ></div>
+
+    {% assign custom_form_id = 'CustomProductForm-' | append: card_id %}
+
+    {% form 'product',
+        custom_product,
+        id: custom_form_id,
+        class: custom_form_class,
+        data-type: 'add-to-cart-form'
+    %}
+
+        <input
+        type="hidden"
+        name="id"
+        ref="variantId"
+        value="{{ custom_product.selected_or_first_available_variant.id }}"
+        >
+
+        <input
+        type="hidden"
+        name="quantity"
+        value="1"
+        >
+
+        <add-to-cart-component>
+        <button
+            type="submit"
+            name="add"
+            class="custom-product-card-{{ card_id }}__add-to-cart"
+            ref="addToCartButton"
+            {% unless custom_product.available %}
+            disabled
+            {% endunless %}
+        >
+            {{ card_settings.button_text }}
+        </button>
+        </add-to-cart-component>
+
+    {% endform %}
+    </product-form-component>
 
   </div>
 </div>
 
-<script>
+{% comment %} <script>
   (() => {
     const card = document.querySelector(
       '.custom-product-card-{{ card_id }}'
@@ -364,4 +415,4 @@
         });
     });
   })();
-</script>
+</script> {% endcomment %}
