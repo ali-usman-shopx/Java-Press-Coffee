@@ -19,9 +19,11 @@
     flex-wrap: wrap;
     border-bottom: 1px solid black;
     {% comment %} justify-content: center; {% endcomment %}
-    padding-left: 10%;
-    padding-right: 10%;
-    justify-content: space-around;
+    {% comment %} padding-left: {{ block.settings.tab_padding }}; {% endcomment %}
+    {% comment %} padding-right: {{ block.settings.tab_padding }}; {% endcomment %}
+    {% comment %} justify-content: space-around; {% endcomment %}
+    justify-content: center;
+    gap: {{ block.settings.tabs_gap_desktop }};
     flex-wrap: nowrap;
     overflow-x: auto;
     
@@ -38,6 +40,8 @@
 
   .ai-product-carousel__tab-{{ ai_gen_id }} {
     padding: 12px 24px;
+    padding-left: {{ block.settings.tab_padding }};
+    padding-right: {{ block.settings.tab_padding }};
     {% comment %} background-color: {{ block.settings.tab_background }}; {% endcomment %}
     background-color: transparent;
     color: {{ block.settings.tab_text_color }};
@@ -302,6 +306,11 @@
 
     .ai-product-carousel__nav-{{ ai_gen_id }}--next {
       right: 0;
+    }
+
+    .ai-product-carousel__tabs-{{ ai_gen_id }} {
+      gap: {{ block.settings.tabs_gap_mobile }};
+      justify-content: start;
     }
   }
 {% endstyle %}
@@ -834,6 +843,24 @@
     {
       "type": "header",
       "content": "Collections"
+    },
+    {
+      "type": "text",
+      "id": "tabs_gap_desktop",
+      "label": "Tab gap (desktop)",
+      "default": "76px"
+    },
+    {
+      "type": "text",
+      "id": "tabs_gap_mobile",
+      "label": "Tab gap (mobile)",
+      "default": "30px"
+    },
+    {
+      "type": "text",
+      "id": "tab_padding",
+      "label": "tab_padding",
+      "default": "10%"
     },
     {
       "type": "collection",

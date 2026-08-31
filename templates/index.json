@@ -820,6 +820,9 @@
         "ai_gen_block_28c996c_rRTXQm": {
           "type": "ai_gen_block_28c996c",
           "settings": {
+            "tabs_gap_desktop": "76px",
+            "tabs_gap_mobile": "30px",
+            "tab_padding": "5px",
             "collection_1": "coffee",
             "tab_1_label": "Best sellers",
             "collection_2": "frontpage",
