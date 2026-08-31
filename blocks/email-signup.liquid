@@ -7,6 +7,60 @@
     assign is_custom_input = true
   endif
 %}
+
+{% if block_settings.override_hover_css %}
+  {% style %}
+    .override_hover_button--{{ block.id }}:hover {
+      {{ block_settings.hover_css }}
+    }
+  {% endstyle %}
+{% endif %}
+
+{% comment %}
+  Mobile button customizations.
+  These are intentionally placed in {% style %} rather than {% stylesheet %}
+  because the values below come from block.settings and therefore require Liquid.
+{% endcomment %}
+{% if block_settings.enable_mobile_button_customizations %}
+  {% style %}
+    @media screen and (max-width: 749px) {
+      {% if block_settings.enable_mobile_button_text and block_settings.mobile_button_label != blank %}
+        .email-signup-block .email-signup__button--text.mobile-button-text-override--{{ block.id }} {
+          font-size: inherit;
+        }
+      {% endif %}
+
+      {% if block_settings.enable_mobile_button_padding %}
+        .email-signup-block .email-signup__button.mobile-button-padding-override--{{ block.id }} {
+          padding-left: {{ block_settings.mobile_button_padding_left }}px;
+          padding-right: {{ block_settings.mobile_button_padding_right }}px;
+        }
+
+        {% comment %}
+          Preserve the existing integrated/unstyled button behavior where
+          appropriate while only overriding the horizontal padding on mobile.
+        {% endcomment %}
+        .email-signup-block .email-signup__button--integrated.mobile-button-padding-override--{{ block.id }} {
+          padding-left: {{ block_settings.mobile_button_padding_left }}px;
+          padding-right: {{ block_settings.mobile_button_padding_right }}px;
+        }
+
+        .email-signup-block .email-signup__button--integrated.email-signup__button--text.button-unstyled.mobile-button-padding-override--{{ block.id }} {
+          padding-left: {{ block_settings.mobile_button_padding_left }}px;
+          padding-right: {{ block_settings.mobile_button_padding_right }}px;
+        }
+      {% endif %}
+
+      {% if block_settings.enable_mobile_button_margin %}
+        .email-signup-block .email-signup__button.mobile-button-margin-override--{{ block.id }} {
+          margin-left: {{ block_settings.mobile_button_margin_left }}px;
+          margin-right: {{ block_settings.mobile_button_margin_right }}px;
+        }
+      {% endif %}
+    }
+  {% endstyle %}
+{% endif %}
+
 {% render 'button-custom-styles', block_settings: block_settings, block_id: block.id %}
 <div
   {% comment %} class="email-signup-block size-style spacing-style" {% endcomment %}
@@ -109,7 +163,25 @@
       </div>
 
       <button
-        class="email-signup__button {% if block_settings.integrated_button or block_settings.border_style == 'underline' %}email-signup__button--integrated{% endif %} email-signup__button--{{ block_settings.display_type }} {{ block_settings.button_type_preset }} {{ block_settings.style_class }} {{ block_settings.style_class }}--{{ block.id }}"
+        class="
+          email-signup__button
+          {% if block_settings.integrated_button or block_settings.border_style == 'underline' %}email-signup__button--integrated{% endif %} email-signup__button--{{ block_settings.display_type }}
+          {{ block_settings.button_type_preset }}
+          {{ block_settings.style_class }}
+          {{ block_settings.style_class }}--{{ block.id }}
+          {% if block_settings.override_hover_css %}
+            override_hover_button--{{ block.id }}
+          {% endif %}
+          {% if block_settings.enable_mobile_button_customizations and block_settings.enable_mobile_button_text and block_settings.mobile_button_label != blank %}
+            mobile-button-text-override--{{ block.id }}
+          {% endif %}
+          {% if block_settings.enable_mobile_button_customizations and block_settings.enable_mobile_button_padding %}
+            mobile-button-padding-override--{{ block.id }}
+          {% endif %}
+          {% if block_settings.enable_mobile_button_customizations and block_settings.enable_mobile_button_margin %}
+            mobile-button-margin-override--{{ block.id }}
+          {% endif %}
+        "
         {% if block.settings.enable_button_font_weight_override %}
           style="font-weight: {{ block_settings.button_font_weight }};"
         {% endif %}
@@ -118,7 +190,16 @@
         {% endif %}
       >
         {% if block_settings.display_type == 'text' %}
-          {{ block_settings.label }}
+          {% if block_settings.enable_mobile_button_customizations and block_settings.enable_mobile_button_text and block_settings.mobile_button_label != blank %}
+            <span class="email-signup__button-label-desktop">
+              {{ block_settings.label }}
+            </span>
+            <span class="email-signup__button-label-mobile">
+              {{ block_settings.mobile_button_label }}
+            </span>
+          {% else %}
+            {{ block_settings.label }}
+          {% endif %}
         {% else %}
           <svg
             viewBox="0 0 20 20"
@@ -488,6 +569,37 @@
     margin: 0;
   }
 {% endstylesheet %}
+
+{% style %}
+  /*
+    Mobile button text override helpers.
+
+    The desktop label remains the original label. The mobile label is hidden
+    by default and only becomes active when the mobile customization flag
+    and mobile text flag are enabled.
+  */
+  .email-signup__button-label-desktop {
+    color: {{ block_settings.custom_button_text }} !important;
+    font-weight: {{ block_settings.button_font_weight }} !important;
+  }
+
+  .email-signup__button-label-mobile {
+    color: {{ block_settings.custom_button_text }} !important;
+    font-weight: {{ block_settings.button_font_weight }} !important;
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .email-signup__button-label-desktop {
+      display: none;
+    }
+
+    .email-signup__button-label-mobile {
+      display: inline;
+    }
+  }
+{% endstyle %}
+
 
 {% schema %}
 {
@@ -861,6 +973,20 @@
       "visible_if": "{{ block.settings.border_style != \"underline\" }}"
     },
     {
+      "type": "checkbox",
+      "id": "override_hover_css",
+      "label": "Override On Hover CSS",
+      "default": false,
+      "visible_if": "{{ block.settings.integrated_button }}"
+    },
+    {
+      "type": "html",
+      "id": "hover_css",
+      "label": "On Hover CSS",
+      "placeholder": "opacity: 0.8; color: white;",
+      "visible_if": "{{ block.settings.integrated_button and block.settings.override_hover_css }}"
+    },
+    {
       "type": "select",
       "id": "button_type_preset",
       "label": "t:settings.type_preset",
@@ -937,6 +1063,90 @@
       "default": "400",
       "visible_if": "{{ block.settings.enable_button_font_weight_override }}"
     },
+
+    {
+      "type": "header",
+      "content": "Mobile Button Customizations"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_button_customizations",
+      "label": "Enable mobile button customizations",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_button_text",
+      "label": "Customize mobile button text",
+      "default": false,
+      "visible_if": "{{ block.settings.enable_mobile_button_customizations }}"
+    },
+    {
+      "type": "text",
+      "id": "mobile_button_label",
+      "label": "Mobile button text",
+      "default": "Sign up",
+      "visible_if": "{{ block.settings.enable_mobile_button_customizations and block.settings.enable_mobile_button_text and block.settings.display_type == \"text\" }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_button_padding",
+      "label": "Customize mobile button padding",
+      "default": false,
+      "visible_if": "{{ block.settings.enable_mobile_button_customizations }}"
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_padding_left",
+      "label": "Mobile button left padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ block.settings.enable_mobile_button_customizations and block.settings.enable_mobile_button_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_padding_right",
+      "label": "Mobile button right padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ block.settings.enable_mobile_button_customizations and block.settings.enable_mobile_button_padding }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_button_margin",
+      "label": "Customize mobile button margin",
+      "default": false,
+      "visible_if": "{{ block.settings.enable_mobile_button_customizations }}"
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_margin_left",
+      "label": "Mobile button left margin",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_mobile_button_customizations and block.settings.enable_mobile_button_margin }}"
+    },
+    {
+      "type": "range",
+      "id": "mobile_button_margin_right",
+      "label": "Mobile button right margin",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_mobile_button_customizations and block.settings.enable_mobile_button_margin }}"
+    },
+
     {
       "type": "header",
       "content": "t:content.padding"

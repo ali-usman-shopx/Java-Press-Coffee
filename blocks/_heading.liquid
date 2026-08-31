@@ -1,14 +1,35 @@
 
 
 {%- doc -%}
+
   Renders a heading block.
 
   @param {string} text
+
 {%- enddoc -%}
 
-{% render 'text', width: '100%', block: block, fallback_text: text %}
+{% if block.settings.enable_custom_css %}
+  {% style %}
+    @media screen and (min-width: 750px) {
+      .custom-heading-{{ block.id }} {
+        {{ block.settings.custom_css_desktop }}
+      }
+    }
+
+    @media screen and (max-width: 749px) {
+      .custom-heading-{{ block.id }} {
+        {{ block.settings.custom_css_mobile }}
+      }
+    }
+  {% endstyle %}
+{% endif %}
+
+<div class="custom-heading-{{ block.id }}">
+  {% render 'text', width: '100%', block: block, fallback_text: text %}
+</div>
 
 {% schema %}
+
 {
   "name": "t:names.heading",
   "tag": null,
@@ -274,6 +295,30 @@
     },
     {
       "type": "header",
+      "content": "Custom CSS overrides"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_css",
+      "label": "Enable custom CSS",
+      "default": false
+    },
+    {
+      "type": "html",
+      "id": "custom_css_desktop",
+      "label": "Desktop CSS",
+      "info": "CSS applied to this heading block on desktop. Do not include <style> tags.",
+      "visible_if": "{{ block.settings.enable_custom_css }}"
+    },
+    {
+      "type": "html",
+      "id": "custom_css_mobile",
+      "label": "Mobile CSS",
+      "info": "CSS applied to this heading block on mobile. Do not include <style> tags.",
+      "visible_if": "{{ block.settings.enable_custom_css }}"
+    },
+    {
+      "type": "header",
       "content": "t:content.padding"
     },
     {
@@ -318,4 +363,5 @@
     }
   ]
 }
+
 {% endschema %}

@@ -19,9 +19,11 @@
     flex-wrap: wrap;
     border-bottom: 1px solid black;
     {% comment %} justify-content: center; {% endcomment %}
-    padding-left: 10%;
-    padding-right: 10%;
-    justify-content: space-around;
+    {% comment %} padding-left: {{ block.settings.tab_padding }}; {% endcomment %}
+    {% comment %} padding-right: {{ block.settings.tab_padding }}; {% endcomment %}
+    {% comment %} justify-content: space-around; {% endcomment %}
+    justify-content: center;
+    gap: {{ block.settings.tabs_gap_desktop }};
     flex-wrap: nowrap;
     overflow-x: auto;
     
@@ -38,6 +40,8 @@
 
   .ai-product-carousel__tab-{{ ai_gen_id }} {
     padding: 12px 24px;
+    padding-left: {{ block.settings.tab_padding }};
+    padding-right: {{ block.settings.tab_padding }};
     {% comment %} background-color: {{ block.settings.tab_background }}; {% endcomment %}
     background-color: transparent;
     color: {{ block.settings.tab_text_color }};
@@ -99,7 +103,7 @@
     background-color: transparent;
   }
 
-  .ai-product-carousel__image-container-{{ ai_gen_id }} {
+  {% comment %} .ai-product-carousel__image-container-{{ ai_gen_id }} {
     position: relative;
     background-color: {{ block.settings.image_background }};
     {% comment %} border-radius: {{ block.settings.image_border_radius }}px; {% endcomment %}
@@ -115,6 +119,33 @@
     display: block;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+  } {% endcomment %}
+
+  .ai-product-carousel__image-container-{{ ai_gen_id }} {
+    position: relative;
+    background-color: {{ block.settings.image_background }};
+    border-radius: 5px;
+    padding: {{ block.settings.image_padding }}px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .ai-product-carousel__image-container-{{ ai_gen_id }} > a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .ai-product-carousel__image-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    box-sizing: border-box;
   }
 
   .ai-product-carousel__stamp-{{ ai_gen_id }} {
@@ -303,6 +334,11 @@
     .ai-product-carousel__nav-{{ ai_gen_id }}--next {
       right: 0;
     }
+
+    .ai-product-carousel__tabs-{{ ai_gen_id }} {
+      gap: {{ block.settings.tabs_gap_mobile }};
+      justify-content: start;
+    }
   }
 {% endstyle %}
 
@@ -364,6 +400,8 @@
                             src="{{ block.settings.stamp_image | image_url: width: 200 }}"
                             alt="{{ block.settings.stamp_image.alt | escape }}"
                             loading="lazy"
+                            width="200"
+                            height="auto"
                           >
                         </div>
                       {% endif %}
@@ -472,7 +510,8 @@
                   </svg>
                 </button>
               {% endif %} {% endcomment %}
-              {% if collection.products.size > block.settings.products_per_row %}
+              {% comment %} {% if collection.products.size > block.settings.products_per_row %} {% endcomment %}
+              {% if collection.products.size > 1 %}
                 <button
                   class="ai-product-carousel__nav-{{ ai_gen_id }} ai-product-carousel__nav-{{ ai_gen_id }}--prev"
                   data-nav="prev"
@@ -539,6 +578,7 @@
         this.setupNavigation();
         this.setupDots();
         this.setupAddToCart();
+        this.setupResizeHandler();
       }
 
       setupTabs() {
@@ -600,7 +640,7 @@
         });
       }
 
-      setupDots() {
+      {% comment %} setupDots() {
         this.dotContainers.forEach((container) => {
           const collectionId = container.dataset.dots;
           const track = this.querySelector(`[data-track="${collectionId}"]`);
@@ -620,6 +660,44 @@
             dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
 
             if (i === 0) {
+              dot.classList.add('active');
+            }
+
+            dot.addEventListener('click', () => {
+              this.goToSlide(collectionId, i);
+            });
+
+            container.appendChild(dot);
+          }
+        });
+      } {% endcomment %}
+
+      setupDots() {
+        this.dotContainers.forEach((container) => {
+          const collectionId = container.dataset.dots;
+          const track = this.querySelector(`[data-track="${collectionId}"]`);
+          const cards = track.querySelectorAll('.ai-product-carousel__card-{{ ai_gen_id }}');
+
+          if (!cards.length) return;
+
+          const isMobile = window.innerWidth < 750;
+
+          // Desktop: indicators represent carousel positions.
+          // Mobile: one indicator represents each card.
+          const dotCount = isMobile
+            ? cards.length
+            : Math.max(1, cards.length - this.productsPerRow + 1);
+
+          container.innerHTML = '';
+
+          for (let i = 0; i < dotCount; i++) {
+            const dot = document.createElement('button');
+
+            dot.className = 'ai-product-carousel__dot-{{ ai_gen_id }}';
+            dot.dataset.slide = i;
+            dot.setAttribute('aria-label', `Go to card ${i + 1}`);
+
+            if (i === this.currentSlide[collectionId]) {
               dot.classList.add('active');
             }
 
@@ -675,7 +753,7 @@
         });
       }
 
-      goToSlide(collectionId, slide) {
+      {% comment %} goToSlide(collectionId, slide) {
         const track = this.querySelector(`[data-track="${collectionId}"]`);
         const cards = track.querySelectorAll('.ai-product-carousel__card-{{ ai_gen_id }}');
 
@@ -690,6 +768,56 @@
         const cardWidth = cards[0].offsetWidth;
         const gap = {{ block.settings.card_gap }};
         const offset = this.currentSlide[collectionId] * (cardWidth + gap);
+
+        track.style.transform = `translateX(-${offset}px)`;
+
+        this.updateDots(collectionId);
+      } {% endcomment %}
+
+      goToSlide(collectionId, slide) {
+        const track = this.querySelector(`[data-track="${collectionId}"]`);
+        const cards = track.querySelectorAll('.ai-product-carousel__card-{{ ai_gen_id }}');
+
+        if (!cards.length) return;
+
+        const isMobile = window.innerWidth < 750;
+        const perRow = isMobile ? this.productsPerRowMobile : this.productsPerRow;
+
+        const cardWidth = cards[0].offsetWidth;
+        const gap = {{ block.settings.card_gap }};
+        const step = cardWidth + gap;
+
+        let maxSlide;
+
+        if (isMobile) {
+          // Mobile indicators represent individual cards.
+          maxSlide = cards.length - 1;
+        } else {
+          // Desktop indicators represent valid carousel positions.
+          maxSlide = Math.max(0, cards.length - perRow);
+        }
+
+        const requestedSlide = Math.max(0, Math.min(slide, maxSlide));
+
+        /*
+        * Prevent the track from translating farther than its
+        * actual scrollable width.
+        *
+        * This is especially important on mobile because there
+        * are more indicators than there are complete 2-card views.
+        */
+        const wrapper = track.parentElement;
+        const maxOffset = Math.max(
+          0,
+          track.scrollWidth - wrapper.clientWidth
+        );
+
+        const offset = Math.min(
+          requestedSlide * step,
+          maxOffset
+        );
+
+        this.currentSlide[collectionId] = requestedSlide;
 
         track.style.transform = `translateX(-${offset}px)`;
 
@@ -710,6 +838,24 @@
           );
         });
       }
+
+      setupResizeHandler() {
+        let resizeTimeout;
+
+        window.addEventListener('resize', () => {
+          clearTimeout(resizeTimeout);
+
+          resizeTimeout = setTimeout(() => {
+            const currentSlides = { ...this.currentSlide };
+
+            this.setupDots();
+
+            Object.keys(currentSlides).forEach((collectionId) => {
+              this.goToSlide(collectionId, currentSlides[collectionId]);
+            });
+          }, 150);
+        });
+      }
     }
 
     customElements.define('product-carousel-{{ ai_gen_id }}', ProductCarousel{{ ai_gen_id }});
@@ -724,6 +870,24 @@
     {
       "type": "header",
       "content": "Collections"
+    },
+    {
+      "type": "text",
+      "id": "tabs_gap_desktop",
+      "label": "Tab gap (desktop)",
+      "default": "76px"
+    },
+    {
+      "type": "text",
+      "id": "tabs_gap_mobile",
+      "label": "Tab gap (mobile)",
+      "default": "30px"
+    },
+    {
+      "type": "text",
+      "id": "tab_padding",
+      "label": "tab_padding",
+      "default": "10%"
     },
     {
       "type": "collection",

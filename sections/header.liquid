@@ -339,6 +339,9 @@
   {% if section.settings.menu_row == 'top' and bottom_row_blocks.size > 0 %}
     data-submenu-overlap-bottom-row
   {% endif %}
+  {% if section.settings.enable_independent_dropdowns %}
+    data-independent-dropdowns
+  {% endif %}
   {% if background_transparent_color_value %}
     data-transparent-background="{{ background_transparent_color_value }}"
   {% endif %}
@@ -359,6 +362,13 @@
       --header-actions-font-family: var(--font-{{ section.settings.actions_font | default: 'heading' }}--family);
       --header-actions-font-weight: var(--font-{{ section.settings.actions_font | default: 'heading' }}--weight);
       --header-actions-text-case: {{ section.settings.actions_text_case | default: 'none' }};
+    {% endif %}
+    {% if section.settings.enable_dropdown_background %}
+      --dropdown-background-color: {{ section.settings.dropdown_background_color }};
+    {% endif %}
+    {% if section.settings.enable_dropdown_item_borders %}
+      --dropdown-item-border-color: {{ section.settings.dropdown_item_border_color }};
+      --dropdown-item-border-width: {{ section.settings.dropdown_item_border_width }}px;
     {% endif %}
   "
 >
@@ -469,7 +479,7 @@
   type="module"
 ></script>
 
-{% stylesheet %}
+{% style %}
   body {
     --header-height: 60px;
     --header-group-height: var(--header-height);
@@ -1183,7 +1193,362 @@
     font-family: var(--menu-localization-font);
     font-size: var(--menu-localization-font-size);
   }
-{% endstylesheet %}
+
+  /* ============================================================
+  * Independent desktop dropdowns
+  *
+  * When enabled, submenus behave like traditional dropdowns:
+  * - The header itself does not grow when a menu opens.
+  * - The dropdown is positioned below the existing header.
+  * - The dropdown overlays the page instead of becoming part
+  *   of the expanded header.
+  *
+  * Disabled by default via the data-independent-dropdowns
+  * attribute on #header-component.
+  * ============================================================ */
+
+  @media screen and (min-width: 750px) {
+    #header-component[data-independent-dropdowns] {
+      /*
+      * Keep the actual header height independent from the
+      * submenu height calculated by header.js.
+      */
+      --independent-dropdown-header-height: var(--header-height);
+
+      /*
+      * The open underlay normally expands to
+      * --full-open-header-height. Prevent that behavior.
+      */
+      .header__underlay-open {
+        height: var(--header-height);
+      }
+
+      /*
+      * The open underlay should no longer paint the submenu
+      * portion of the header.
+      */
+      .header__underlay-open {
+        background: linear-gradient(
+          var(--color-background-top-row) 0 var(--top-row-height),
+          var(--color-background-bottom-row) var(--top-row-height) var(--header-height)
+        );
+      }
+
+      /*
+      * The submenu itself becomes an independent layer below
+      * the actual header.
+      */
+      .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
+        /* top: var(--header-height); */
+        top: calc(var(--header-height) + {{ section.settings.dropdown_top_offset }}px) !important;
+        left: 0;
+        width: 100%;
+
+        /*
+        * Remove the expanded-header clipping mechanism.
+        */
+        clip-path: none;
+
+        /*
+        * The submenu is no longer positioned using the difference
+        * between full-open-header-height and submenu-height.
+        */
+        transform: none;
+      }
+
+      /*
+      * The submenu content currently inherits a transform based
+      * on the expanded header:
+      *
+      * transform:
+      *   translateY(
+      *     calc(var(--full-open-header-height) - var(--submenu-height))
+      *   );
+      *
+      * Cancel that behavior.
+      */
+      .menu-list__submenu-inner {
+        transform: none;
+      }
+
+      /*
+      * The normal expanded-header system raises the row when
+      * the submenu opens. Keep the row at its normal stacking
+      * level while allowing the dropdown itself to sit above
+      * page content.
+      */
+      .header__row:has(.mega-menu__list:hover),
+      .header__row:has(.menu-list__submenu:not([inert])) {
+        z-index: var(--layer-heightened);
+      }
+
+      /*
+      * Ensure the dropdown itself remains above the content
+      * underneath the header.
+      */
+      .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
+        z-index: var(--layer-header-menu);
+      }
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    #header-component[data-independent-dropdowns] {
+
+      .menu-list__submenu,
+      .menu-list__submenu-inner,
+      .mega-menu,
+      .mega-menu__grid {
+        display: block !important;
+        grid-column: auto !important;
+        grid-template-columns: none !important;
+        gap: 0 !important;
+      }
+
+    }
+  }
+{% endstyle %}
+
+{% style %}
+  {% if section.settings.enable_independent_dropdowns %}
+    #header-component .menu-list__submenu-inner {
+      padding-bottom: 0 !important;
+      padding-top: 0 !important;
+    }
+  {% endif %}
+  
+  @media screen and (min-width: 750px) {
+    #header-component[data-independent-dropdowns] {
+      .menu-list__submenu-inner {
+        display: block;
+        width: 100%;
+      }
+
+      .mega-menu {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .mega-menu__grid {
+        display: block;
+        width: 100%;
+      }
+
+      .mega-menu__column {
+        width: 100%;
+      }
+    }
+  }
+
+  /* ============================================================
+  * Dropdown background
+  * ============================================================ */
+
+  @media screen and (min-width: 750px) {
+    #header-component[data-independent-dropdowns] {
+      {% if section.settings.enable_dropdown_background %}
+        .menu-list__submenu-inner {
+          background-color: var(--dropdown-background-color);
+        }
+      {% endif %}
+
+      {% if section.settings.enable_dropdown_item_borders %}
+        /*
+        * Each menu item occupies the full width of the
+        * dropdown container.
+        */
+        /* .menu-list__submenu-inner > .menu-list__list-item {
+          width: 100%;
+          border-top: var(--dropdown-item-border-width)
+            solid
+            var(--dropdown-item-border-color);
+        } */
+
+        /*
+        * Give the final item the bottom border as well.
+        * Using top borders for the individual items prevents
+        * adjacent items from producing a doubled border.
+        */
+        .menu-list__submenu-inner > .menu-list__list-item:last-child {
+          border-bottom: var(--dropdown-item-border-width)
+            solid
+            var(--dropdown-item-border-color);
+        }
+      {% endif %}
+    }
+  }
+{% endstyle %}
+
+{% style %}
+  @media screen and (min-width: 750px) {
+    #header-component[data-independent-dropdowns] {
+
+      /*
+      * The dropdown should be exactly as wide as the
+      * top-level menu item that opens it.
+      */
+      .menu-list__list-item:where(:not([slot='overflow'])) {
+        position: relative;
+      }
+
+      .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+
+        clip-path: none;
+        transform: none;
+      }
+
+      /*
+      * Keep the dropdown contents constrained to the
+      * width of the opening menu item.
+      */
+      .menu-list__submenu-inner {
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+      }
+
+      /*
+      * Make each menu item fill the dropdown container.
+      */
+      {% if section.settings.enable_dropdown_item_borders %}
+        .menu-list__submenu-inner > .menu-list__list-item {
+          width: 100%;
+          border-top: var(--dropdown-item-border-width)
+            solid
+            var(--dropdown-item-border-color);
+        }
+
+        .menu-list__submenu-inner > .menu-list__list-item:last-child {
+          border-bottom: var(--dropdown-item-border-width)
+            solid
+            var(--dropdown-item-border-color);
+        }
+      {% endif %}
+
+      {% if section.settings.enable_dropdown_background %}
+        .menu-list__submenu-inner {
+          background-color: var(--dropdown-background-color);
+        }
+      {% endif %}
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    #header-component[data-independent-dropdowns] {
+
+      .menu-list__submenu-inner {
+        width: 100%;
+        min-width: 100%;
+        max-width: none;
+      }
+
+      .menu-list__submenu-inner > .menu-list__list-item {
+        width: 100%;
+        min-width: 100%;
+        max-width: none;
+      }
+
+      .menu-list__submenu-inner > .menu-list__list-item > a,
+      .menu-list__submenu-inner > .menu-list__list-item > button {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        white-space: nowrap;
+      }
+    }
+  }
+
+{% endstyle %}
+
+{% style %}
+
+  {% if section.settings.enable_menu_hover_customization %}
+    #header-component .menu-list__list-item:has(> .menu-list__trigger) {
+      --dropdown-hover-dot-size: {{ section.settings.dropdown_hover_dot_size }}px;
+      --dropdown-hover-dot-color: {{ section.settings.dropdown_hover_dot_color }};
+      --dropdown-hover-text-color: {{ section.settings.dropdown_hover_text_color | default: 'inherit' }};
+    }
+
+    #header-component
+      .menu-list__list-item:has(> .menu-list__trigger):hover
+      > .menu-list__trigger
+      > .menu-list__link {
+      color: var(--dropdown-hover-text-color);
+    }
+
+    /* #header-component
+      .menu-list__list-item:has(> .menu-list__trigger):hover
+      > .menu-list__trigger
+      > .menu-list__link::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: var(--dropdown-hover-dot-size);
+      height: var(--dropdown-hover-dot-size);
+      border-radius: 50%;
+      background-color: var(--dropdown-hover-dot-color);
+      transform: translateX(-50%);
+      display: block;
+    } */
+
+    #header-component .menu-list__list-item:has(> .menu-list__trigger) {
+      --dropdown-hover-dot-size: {{ section.settings.dropdown_hover_dot_size }}px;
+      --dropdown-hover-dot-color: {{ section.settings.dropdown_hover_dot_color }};
+      --dropdown-hover-text-color: {{ section.settings.dropdown_hover_text_color | default: 'inherit' }};
+      --dropdown-hover-dot-offset: {{ section.settings.dropdown_hover_dot_offset }}px;
+    }
+
+    #header-component
+      .menu-list__list-item:has(> .menu-list__trigger):hover
+      > .menu-list__trigger
+      > .menu-list__link {
+      color: var(--dropdown-hover-text-color);
+    }
+
+    #header-component
+      .menu-list__list-item:has(> .menu-list__trigger):hover
+      > .menu-list__trigger
+      > .menu-list__link
+      > .menu-list__link-title {
+      position: relative;
+    }
+
+    #header-component
+      .menu-list__list-item:has(> .menu-list__trigger):hover
+      > .menu-list__trigger
+      > .menu-list__link
+      > .menu-list__link-title::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: calc(100% + var(--dropdown-hover-dot-offset));
+      width: var(--dropdown-hover-dot-size);
+      height: var(--dropdown-hover-dot-size);
+      border-radius: 50%;
+      background-color: var(--dropdown-hover-dot-color);
+      transform: translateX(-50%);
+    }
+  {% endif %}
+
+  {% if section.settings.enable_submenu_customization %}
+    #header-component .menu-list__submenu .mega-menu__link {
+      padding-inline: {{ section.settings.submenu_item_padding_horizontal }}px;
+      padding-block: {{ section.settings.submenu_item_padding_vertical }}px;
+    }
+
+    {% assign custom_submenu_hover_css = section.settings.custom_submenu_hover_css
+      | replace: '<submenu>', '#header-component .menu-list__submenu .mega-menu__link' %}
+
+    {{ custom_submenu_hover_css }}
+  {% endif %}
+{% endstyle %}
 
 {% unless request.design_mode %}
   <script type="module">
@@ -1200,6 +1565,136 @@
   "tag": "header",
   "class": "header-section",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_independent_dropdowns",
+      "label": "Enable independent dropdown menus",
+      "info": "When enabled, desktop dropdown menus open over the page without increasing the header height.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_dropdown_background",
+      "label": "Enable dropdown background",
+      "info": "Adds a background color to desktop dropdown menus.",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "dropdown_background_color",
+      "label": "Dropdown background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_dropdown_item_borders",
+      "label": "Enable dropdown item borders",
+      "info": "Adds top and bottom borders to desktop dropdown menu items.",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "dropdown_item_border_color",
+      "label": "Dropdown item border color",
+      "default": "#E5E5E5"
+    },
+    {
+      "type": "range",
+      "id": "dropdown_item_border_width",
+      "label": "Dropdown item border width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "dropdown_top_offset",
+      "label": "Dropdown top offset",
+      "min": -50,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_menu_hover_customization",
+      "label": "Enable menu hover customization",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "dropdown_hover_dot_size",
+      "label": "Dropdown hover dot size",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 3,
+      "visible_if": "{{ section.settings.enable_menu_hover_customization }}"
+    },
+    {
+      "type": "range",
+      "id": "dropdown_hover_dot_offset",
+      "label": "Dropdown hover dot offset",
+      "min": -10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 4,
+      "visible_if": "{{ section.settings.enable_menu_hover_customization }}"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_hover_dot_color",
+      "label": "Dropdown hover dot color",
+      "default": "#000000",
+      "visible_if": "{{ section.settings.enable_menu_hover_customization }}"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_hover_text_color",
+      "label": "Dropdown hover text color",
+      "placeholder": "t:settings.default",
+      "visible_if": "{{ section.settings.enable_menu_hover_customization }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_submenu_customization",
+      "label": "Enable submenu customization",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "submenu_item_padding_horizontal",
+      "label": "Submenu item horizontal padding",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ section.settings.enable_submenu_customization }}"
+    },
+    {
+      "type": "range",
+      "id": "submenu_item_padding_vertical",
+      "label": "Submenu item vertical padding",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8,
+      "visible_if": "{{ section.settings.enable_submenu_customization }}"
+    },
+    {
+      "type": "html",
+      "id": "custom_submenu_hover_css",
+      "label": "Custom submenu hover CSS",
+      "info": "Use <submenu> as the submenu item selector. Example: <submenu>:hover { text-decoration: underline; }",
+      "visible_if": "{{ section.settings.enable_submenu_customization }}"
+    },
     {
       "type": "header",
       "content": "t:content.logo"

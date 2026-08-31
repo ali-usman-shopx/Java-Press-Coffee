@@ -182,6 +182,18 @@
   }
 {% endstyle %}
 
+{% style %}
+  {% if block_settings.enable_mobile_font_size_override %}
+    @media screen and (max-width: 749px) {
+      .text-block--{{ block.id }} {
+        * {
+          font-size: {{ block_settings.mobile_font_size }}px;
+        }
+      }
+    }
+  {% endif %}
+{% endstyle %}
+
 {% schema %}
 {
   "name": "t:names.announcement",
@@ -322,6 +334,23 @@
         }
       ],
       "default": "1rem"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_font_size_override",
+      "label": "Enable mobile font size override",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "mobile_font_size",
+      "label": "Mobile font size",
+      "min": 8,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "visible_if": "{{ block.settings.enable_mobile_font_size_override }}"
     },
     {
       "type": "select",

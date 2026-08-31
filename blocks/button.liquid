@@ -176,6 +176,23 @@
       "unit": "%",
       "default": 100,
       "visible_if": "{{ block.settings.width_mobile == \"custom\" }}"
+    },
+    {
+      "type": "header",
+      "content": "Hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "override_hover_css",
+      "label": "Override On Hover CSS",
+      "default": false
+    },
+    {
+      "type": "html",
+      "id": "hover_css",
+      "label": "On Hover CSS",
+      "placeholder": "opacity: 0.8; color: white;",
+      "visible_if": "{{ block.settings.override_hover_css }}"
     }
   ],
   "presets": [

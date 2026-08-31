@@ -60,7 +60,10 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "enable_custom_css": false,
+            "custom_css_desktop": "",
+            "custom_css_mobile": ""
           },
           "blocks": {}
         },
@@ -96,8 +99,11 @@
             "corner_radius": 0,
             "padding-block-start": 0,
             "padding-block-end": 0,
-            "padding-inline-start": 46,
-            "padding-inline-end": 47
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "enable_custom_css": true,
+            "custom_css_desktop": "max-width: 991px;",
+            "custom_css_mobile": "max-width: 92.3%;\n\n* {\nfont-size: 24px !important;\nline-height: 120% !important;\nletter-spacing: 0% !important;\n}"
           },
           "blocks": {}
         },
@@ -176,7 +182,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             },
@@ -212,7 +221,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             },
@@ -248,7 +260,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             }
@@ -291,9 +306,20 @@
             "display_type": "text",
             "label": "SUBSCRIBE NOW →",
             "integrated_button": true,
+            "override_hover_css": true,
+            "hover_css": "color: white;",
             "button_type_preset": "paragraph",
             "enable_button_font_weight_override": true,
             "button_font_weight": "700",
+            "enable_mobile_button_customizations": true,
+            "enable_mobile_button_text": true,
+            "mobile_button_label": "SUBSCRIBE →",
+            "enable_mobile_button_padding": true,
+            "mobile_button_padding_left": 6,
+            "mobile_button_padding_right": 6,
+            "enable_mobile_button_margin": false,
+            "mobile_button_margin_left": 0,
+            "mobile_button_margin_right": 0,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
@@ -461,7 +487,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 },
@@ -498,7 +527,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 },
@@ -979,7 +1011,10 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "enable_custom_css": false,
+                        "custom_css_desktop": "",
+                        "custom_css_mobile": ""
                       },
                       "blocks": {}
                     },
@@ -1059,7 +1094,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1144,7 +1182,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1229,7 +1270,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1314,7 +1358,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1408,7 +1455,10 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "enable_custom_css": false,
+                        "custom_css_desktop": "",
+                        "custom_css_mobile": ""
                       },
                       "blocks": {}
                     },
@@ -1488,7 +1538,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1573,7 +1626,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1658,7 +1714,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1743,7 +1802,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1886,7 +1948,10 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "enable_custom_css": false,
+                        "custom_css_desktop": "",
+                        "custom_css_mobile": ""
                       },
                       "blocks": {}
                     },
@@ -1966,7 +2031,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -2051,7 +2119,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -2137,7 +2208,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -2223,7 +2297,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -2271,7 +2348,7 @@
         "section_height": "",
         "section_height_custom": 50,
         "background_media": "none",
-        "background_color": "{{ settings.color_palette.color5 }}",
+        "background_color": "#065d57",
         "video_position": "cover",
         "background_image_position": "cover",
         "toggle_overlay": false,
@@ -2353,7 +2430,7 @@
         "enable_flex_override": true,
         "flex_direction": "row",
         "flex_justify_content": "center",
-        "background_color": "{{ settings.color_palette.color5 }}",
+        "background_color": "#065d57",
         "divider_thickness": 1,
         "divider_color": "#478783",
         "padding-block-start": 20,
@@ -2437,7 +2514,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             },
@@ -2473,7 +2553,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             }
@@ -2514,9 +2597,20 @@
             "display_type": "arrow",
             "label": "Sign up",
             "integrated_button": true,
+            "override_hover_css": false,
+            "hover_css": "",
             "button_type_preset": "paragraph",
             "enable_button_font_weight_override": false,
             "button_font_weight": "400",
+            "enable_mobile_button_customizations": false,
+            "enable_mobile_button_text": false,
+            "mobile_button_label": "Sign up",
+            "enable_mobile_button_padding": false,
+            "mobile_button_padding_left": 24,
+            "mobile_button_padding_right": 24,
+            "enable_mobile_button_margin": false,
+            "mobile_button_margin_left": 0,
+            "mobile_button_margin_right": 0,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,

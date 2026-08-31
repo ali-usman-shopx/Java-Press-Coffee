@@ -40,6 +40,24 @@
   {% endstyle %}
 {% endif %}
 
+{% if block.settings.enable_custom_css %}
+  {% style %}
+    /* Desktop custom CSS */
+    @media screen and (min-width: 750px) {
+      .custom-text-{{ block.id }} {
+        {{ block.settings.custom_css_desktop }}
+      }
+    }
+
+    /* Mobile custom CSS */
+    @media screen and (max-width: 749px) {
+      .custom-text-{{ block.id }} {
+        {{ block.settings.custom_css_mobile }}
+      }
+    }
+  {% endstyle %}
+{% endif %}
+
 <div class="custom-text-{{ block.id }}">
   {% render 'text', block: block %}
 </div>
@@ -490,6 +508,30 @@
       "step": 1,
       "unit": "px",
       "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Custom CSS overrides"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_css",
+      "label": "Enable custom CSS",
+      "default": false
+    },
+    {
+      "type": "html",
+      "id": "custom_css_desktop",
+      "label": "Desktop CSS",
+      "info": "CSS applied to this text block on desktop. Do not include <style> tags.",
+      "visible_if": "{{ block.settings.enable_custom_css }}"
+    },
+    {
+      "type": "html",
+      "id": "custom_css_mobile",
+      "label": "Mobile CSS",
+      "info": "CSS applied to this text block on mobile. Do not include <style> tags.",
+      "visible_if": "{{ block.settings.enable_custom_css }}"
     }
   ],
   "presets": [

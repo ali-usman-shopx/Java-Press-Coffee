@@ -11,6 +11,14 @@
 {% assign block_settings = block.settings %}
 {% render 'button-custom-styles', block_settings: block_settings, block_id: block.id %}
 
+{% if block_settings.override_hover_css %}
+  {% style %}
+    .override_hover_button--{{ block.id }}:hover {
+      {{ block_settings.hover_css }}
+    }
+  {% endstyle %}
+{% endif %}
+
 <a
   {% if link == blank %}
     role="link"
@@ -22,6 +30,9 @@
     size-style
     {{ block_settings.style_class }}
     {{ block_settings.style_class }}--{{ block.id }}
+    {% if block_settings.override_hover_css %}
+      override_hover_button--{{ block.id }}
+    {% endif %}
   "
   style="
     {% render 'size-style', settings: block_settings %}
