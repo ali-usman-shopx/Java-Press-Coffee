@@ -7,6 +7,15 @@
     assign is_custom_input = true
   endif
 %}
+
+{% if block_settings.override_hover_css %}
+  {% style %}
+    .override_hover_button--{{ block.id }}:hover {
+      {{ block_settings.hover_css }}
+    }
+  {% endstyle %}
+{% endif %}
+
 {% render 'button-custom-styles', block_settings: block_settings, block_id: block.id %}
 <div
   {% comment %} class="email-signup-block size-style spacing-style" {% endcomment %}
@@ -109,7 +118,16 @@
       </div>
 
       <button
-        class="email-signup__button {% if block_settings.integrated_button or block_settings.border_style == 'underline' %}email-signup__button--integrated{% endif %} email-signup__button--{{ block_settings.display_type }} {{ block_settings.button_type_preset }} {{ block_settings.style_class }} {{ block_settings.style_class }}--{{ block.id }}"
+        class="
+          email-signup__button
+          {% if block_settings.integrated_button or block_settings.border_style == 'underline' %}email-signup__button--integrated{% endif %} email-signup__button--{{ block_settings.display_type }}
+          {{ block_settings.button_type_preset }}
+          {{ block_settings.style_class }}
+          {{ block_settings.style_class }}--{{ block.id }}
+          {% if block_settings.override_hover_css %}
+            override_hover_button--{{ block.id }}
+          {% endif %}
+        "
         {% if block.settings.enable_button_font_weight_override %}
           style="font-weight: {{ block_settings.button_font_weight }};"
         {% endif %}
@@ -859,6 +877,20 @@
       "label": "t:settings.integrated_button",
       "default": false,
       "visible_if": "{{ block.settings.border_style != \"underline\" }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "override_hover_css",
+      "label": "Override On Hover CSS",
+      "default": false,
+      "visible_if": "{{ block.settings.integrated_button }}"
+    },
+    {
+      "type": "html",
+      "id": "hover_css",
+      "label": "On Hover CSS",
+      "placeholder": "opacity: 0.8; color: white;",
+      "visible_if": "{{ block.settings.integrated_button and block.settings.override_hover_css }}"
     },
     {
       "type": "select",

@@ -458,7 +458,9 @@
                     "width": "custom",
                     "custom_width": 94,
                     "width_mobile": "custom",
-                    "custom_width_mobile": 100
+                    "custom_width_mobile": 100,
+                    "override_hover_css": true,
+                    "hover_css": "color: white;"
                   },
                   "blocks": {}
                 },
@@ -479,7 +481,9 @@
                     "width": "custom",
                     "custom_width": 94,
                     "width_mobile": "custom",
-                    "custom_width_mobile": 100
+                    "custom_width_mobile": 100,
+                    "override_hover_css": true,
+                    "hover_css": "color: white; background-color: #03302d;"
                   },
                   "blocks": {}
                 },
