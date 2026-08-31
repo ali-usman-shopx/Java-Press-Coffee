@@ -543,7 +543,7 @@
                         "star_gap": 2,
                         "star_color": "#deb127",
                         "empty_star_color": "#dfdfdf",
-                        "text_size": 12,
+                        "text_size": 11,
                         "text_weight": "700",
                         "text_color": "{{ settings.color_palette.background }}",
                         "content_gap": 8,

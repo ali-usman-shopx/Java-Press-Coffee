@@ -60,7 +60,10 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "enable_custom_css": false,
+            "custom_css_desktop": "",
+            "custom_css_mobile": ""
           },
           "blocks": {}
         },
@@ -96,8 +99,11 @@
             "corner_radius": 0,
             "padding-block-start": 0,
             "padding-block-end": 0,
-            "padding-inline-start": 46,
-            "padding-inline-end": 47
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "enable_custom_css": true,
+            "custom_css_desktop": "max-width: 991px;",
+            "custom_css_mobile": "max-width: 92.3%;\n\n* {\nfont-size: 24px !important;\nline-height: 120% !important;\nletter-spacing: 0% !important;\n}"
           },
           "blocks": {}
         },
@@ -176,7 +182,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             },
@@ -212,7 +221,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             },
@@ -248,7 +260,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             }
@@ -463,7 +478,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 },
@@ -500,7 +518,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 },
@@ -981,7 +1002,10 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "enable_custom_css": false,
+                        "custom_css_desktop": "",
+                        "custom_css_mobile": ""
                       },
                       "blocks": {}
                     },
@@ -1061,7 +1085,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1146,7 +1173,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1231,7 +1261,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1316,7 +1349,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1410,7 +1446,10 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "enable_custom_css": false,
+                        "custom_css_desktop": "",
+                        "custom_css_mobile": ""
                       },
                       "blocks": {}
                     },
@@ -1490,7 +1529,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1575,7 +1617,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1660,7 +1705,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1745,7 +1793,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -1888,7 +1939,10 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "enable_custom_css": false,
+                        "custom_css_desktop": "",
+                        "custom_css_mobile": ""
                       },
                       "blocks": {}
                     },
@@ -1968,7 +2022,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -2053,7 +2110,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -2139,7 +2199,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -2225,7 +2288,10 @@
                             "padding-block-start": 0,
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
-                            "padding-inline-end": 0
+                            "padding-inline-end": 0,
+                            "enable_custom_css": false,
+                            "custom_css_desktop": "",
+                            "custom_css_mobile": ""
                           },
                           "blocks": {}
                         }
@@ -2439,7 +2505,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             },
@@ -2475,7 +2544,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             }
