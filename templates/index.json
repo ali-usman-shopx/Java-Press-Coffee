@@ -435,9 +435,9 @@
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
                             "padding-inline-end": 0,
-                            "enable_custom_css": false,
+                            "enable_custom_css": true,
                             "custom_css_desktop": "",
-                            "custom_css_mobile": ""
+                            "custom_css_mobile": "* {\nfont-size: 13px;\ntext-align: center;\nmax-width: 98%;\nalign-self: center;\n}"
                           },
                           "blocks": {}
                         }
@@ -1892,10 +1892,10 @@
             "thumbnail_position": "bottom",
             "thumbnail_width": 44,
             "thumbnail_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-block-start": 25,
+            "padding-block-end": 25,
+            "padding-inline-start": 100,
+            "padding-inline-end": 100
           },
           "blocks": {}
         },
