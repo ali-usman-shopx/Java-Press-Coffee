@@ -7,6 +7,10 @@
       style="
         {% render 'spacing-style', settings: block.settings %}
         --media-radius: {{ block.settings.media_radius }}px;
+        {% if block.settings.enable_media_background %}
+          background-color: {{ block.settings.media_background_color }};
+        {% endif %}
+        border-radius: 5px;
       "
       {{ block.shopify_attributes }}
     >
@@ -113,7 +117,18 @@
       "unit": "px",
       "default": 4
     },
-
+    {
+      "type": "checkbox",
+      "id": "enable_media_background",
+      "label": "Enable media background",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "media_background_color",
+      "label": "Media background color",
+      "default": "#FFFFFF"
+    },
     {
       "type": "checkbox",
       "id": "extend_media",

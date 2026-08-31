@@ -1881,6 +1881,8 @@
             "constrain_to_viewport": true,
             "media_fit": "contain",
             "media_radius": 0,
+            "enable_media_background": true,
+            "media_background_color": "#D9D9D9",
             "extend_media": false,
             "zoom": true,
             "video_loop": false,
@@ -2342,7 +2344,7 @@
         "desktop_media_position": "left",
         "equal_columns": true,
         "limit_details_width": false,
-        "gap": 0,
+        "gap": 32,
         "background_color": "",
         "padding-block-start": 40,
         "padding-block-end": 40
