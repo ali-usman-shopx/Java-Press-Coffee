@@ -887,6 +887,7 @@
             "image_background": "#f5f5f5",
             "image_border_radius": 12,
             "image_padding": 16,
+            "stamp_image": "shopify://shop_images/stamp_desktop.png",
             "stamp_size": 60,
             "stamp_position_top": 10,
             "stamp_position_right": 10,
@@ -1872,7 +1873,7 @@
           "type": "_featured-product-information-carousel",
           "static": true,
           "settings": {
-            "aspect_ratio": "adapt",
+            "aspect_ratio": "1",
             "constrain_to_viewport": true,
             "media_fit": "contain",
             "media_radius": 0,
