@@ -253,18 +253,18 @@
                             "enable_rotation": true,
                             "rotation_z": "-5",
                             "enable_scale": true,
-                            "scale": 1.3,
+                            "scale": 1,
                             "text_color": "{{ settings.color_palette.color6 }}",
                             "background": false,
                             "background_color": "#00000026",
                             "corner_radius": 0,
                             "padding-block-start": 0,
                             "padding-block-end": 0,
-                            "padding-inline-start": 36,
+                            "padding-inline-start": 0,
                             "padding-inline-end": 0,
                             "enable_custom_css": true,
-                            "custom_css_desktop": "top: -25px;",
-                            "custom_css_mobile": "left: 38%;\ntop: -25px;\n\n* {\nfont-size: 42px !important;\n}"
+                            "custom_css_desktop": "top: -40px;\n\n* {\nfont-size: 96px !important;\n}",
+                            "custom_css_mobile": "left: 38%;\ntop: -35px;\npadding-left: 10px;\n\n* {\nfont-size: 65px !important;\n}"
                           },
                           "blocks": {}
                         }
