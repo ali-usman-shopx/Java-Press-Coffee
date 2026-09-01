@@ -1480,6 +1480,7 @@
       > .menu-list__trigger
       > .menu-list__link {
       color: var(--dropdown-hover-text-color);
+      font-weight: {{ section.settings.dropdown_hover_text_weight | default: 700 }}
     }
 
     /* #header-component
@@ -1510,6 +1511,7 @@
       > .menu-list__trigger
       > .menu-list__link {
       color: var(--dropdown-hover-text-color);
+      font-weight: {{ section.settings.dropdown_hover_text_weight | default: 700 }}
     }
 
     #header-component
@@ -1565,6 +1567,12 @@
   "tag": "header",
   "class": "header-section",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_right_aligned_menu",
+      "label": "Align menu to the right",
+      "default": false
+    },
     {
       "type": "checkbox",
       "id": "enable_independent_dropdowns",
@@ -1658,6 +1666,12 @@
       "id": "dropdown_hover_text_color",
       "label": "Dropdown hover text color",
       "placeholder": "t:settings.default",
+      "visible_if": "{{ section.settings.enable_menu_hover_customization }}"
+    },
+    {
+      "type": "text",
+      "id": "dropdown_hover_text_weight",
+      "label": "Dropdown hover text weight",
       "visible_if": "{{ section.settings.enable_menu_hover_customization }}"
     },
     {

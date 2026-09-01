@@ -155,7 +155,7 @@
             "menu": "main-menu",
             "background_color": "{{ settings.color_palette.background }}",
             "text_color": "",
-            "type_font_primary_size": "0.875rem",
+            "type_font_primary_size": "1rem",
             "menu_font_style": "inverse",
             "type_font_primary_link": "body",
             "type_case_primary_link": "none",
@@ -185,6 +185,7 @@
         }
       },
       "settings": {
+        "enable_right_aligned_menu": true,
         "enable_independent_dropdowns": true,
         "enable_dropdown_background": true,
         "dropdown_background_color": "{{ settings.color_palette.background }}",
@@ -197,6 +198,7 @@
         "dropdown_hover_dot_offset": 4,
         "dropdown_hover_dot_color": "{{ settings.color_palette.color3 }}",
         "dropdown_hover_text_color": "{{ settings.color_palette.color3 }}",
+        "dropdown_hover_text_weight": "bold",
         "enable_submenu_customization": true,
         "submenu_item_padding_horizontal": 10,
         "submenu_item_padding_vertical": 8,
@@ -207,7 +209,7 @@
         "custom_header_button_background": "{{ settings.color_palette.color3 }}",
         "custom_header_button_text_color": "#ffffff",
         "custom_header_button_font_weight": "700",
-        "custom_header_button_css": "text-align: center;\nwidth: 240px;\ndisplay: flex;\nflex-direction: column;\njustify-content: center;\nborder-radius: 5px;\nmargin-right: 20px;",
+        "custom_header_button_css": "text-align: center;\nwidth: 240px;\ndisplay: flex;\nflex-direction: column;\njustify-content: center;\nborder-radius: 5px;\nmargin-right: 20px;\nmargin-left: 10px;",
         "enable_mobile_custom_header_button": true,
         "mobile_custom_header_button_text": "SHOP",
         "mobile_custom_header_button_css": "width: 68px;\nmargin-right: 10px;",
