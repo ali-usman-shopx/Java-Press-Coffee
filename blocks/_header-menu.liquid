@@ -1161,6 +1161,34 @@
     "id": "arrows_show_base_menu_items",
     "label": "Show arrows on base menu items",
     "default": true
+    },
+    {
+      "type": "header",
+      "content": "Custom drawer header"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_drawer_header",
+      "label": "Enable custom drawer header",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "drawer_header_sticky",
+      "label": "Sticky drawer header",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_custom_drawer_header }}"
+    },
+    {
+      "type": "range",
+      "id": "drawer_close_icon_size",
+      "label": "Close icon size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "visible_if": "{{ block.settings.enable_custom_drawer_header }}"
     }
   ]
 }

@@ -176,7 +176,10 @@
             "arrows_size": 24,
             "arrows_color": "#424242",
             "arrows_show_last_submenu_item": false,
-            "arrows_show_base_menu_items": false
+            "arrows_show_base_menu_items": false,
+            "enable_custom_drawer_header": true,
+            "drawer_header_sticky": true,
+            "drawer_close_icon_size": 24
           },
           "blocks": {}
         }
