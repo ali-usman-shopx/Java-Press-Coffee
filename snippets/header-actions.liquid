@@ -31,12 +31,35 @@
       class="svg-wrapper {% if display_style != 'icon' %}desktop:hidden{% endif %}"
       aria-hidden="true"
     >
-      {{ 'icon-cart.svg' | inline_asset_content }}
+      {% if section.settings.enable_custom_cart_icon and section.settings.custom_cart_icon != blank %}
+        {{
+          section.settings.custom_cart_icon
+          | image_url: width: 48
+          | image_tag:
+            loading: 'eager',
+            widths: '24, 32, 48',
+            sizes: '24px',
+            alt: ''
+        }}
+      {% else %}
+        {{ 'icon-cart.svg' | inline_asset_content }}
+      {% endif %}
     </span>
 
     {% render 'cart-bubble', limit: 100 %}
   </cart-icon>
 {% endcapture %}
+
+{% if section.settings.enable_custom_cart_icon %}
+  {% style %}
+    .header-actions__cart-icon .svg-wrapper img {
+      width: 24px;
+      height: 24px;
+      display: block;
+      object-fit: contain;
+    }
+  {% endstyle %}
+{% endif %}
 
 {% capture account_icon %}
   <svg
@@ -63,7 +86,7 @@
   {% endif %}
   {{- block.shopify_attributes -}}
 >
-  {% if shop.customer_accounts_enabled %}
+  {% if shop.customer_accounts_enabled and section.settings.enable_account_icon %}
     {% liquid
       assign account_actions_style = ''
       if display_style == 'text' and section
@@ -135,6 +158,58 @@
     >
       {{ cart_icon }}
     </a>
+  {% endif %}
+
+  {% if section.settings.enable_custom_header_button %}
+    <a
+      href="{{ section.settings.custom_header_button_url | default: '#' }}"
+      class="header-actions__custom-button"
+    >
+      {{ section.settings.custom_header_button_text }}
+    </a>
+
+    <style>
+      .header-actions__custom-button {
+        background-color: {{ section.settings.custom_header_button_background }};
+        color: {{ section.settings.custom_header_button_text_color }};
+        font-weight: {{ section.settings.custom_header_button_font_weight }};
+
+        {{ section.settings.custom_header_button_css }}
+      }
+    </style>
+  {% endif %}
+
+  {% if section.settings.enable_mobile_custom_header_button %}
+    <a
+      href="{{ section.settings.custom_header_button_url | default: '#' }}"
+      class="header-actions__custom-button header-actions__custom-button--mobile"
+    >
+      {{ section.settings.mobile_custom_header_button_text }}
+    </a>
+
+    <style>
+      .header-actions__custom-button--mobile {
+        background-color: {{ section.settings.custom_header_button_background }};
+        color: {{ section.settings.custom_header_button_text_color }};
+        font-weight: {{ section.settings.custom_header_button_font_weight }};
+
+        {{ section.settings.mobile_custom_header_button_css }}
+      }
+
+      .header-actions__custom-button--mobile {
+        display: none;
+      }
+
+      @media screen and (max-width: 749px) {
+        .header-actions__custom-button {
+          display: none;
+        }
+
+        .header-actions__custom-button--mobile {
+          display: flex;
+        }
+      }
+    </style>
   {% endif %}
 
   <span

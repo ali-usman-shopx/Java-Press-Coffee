@@ -764,7 +764,7 @@
         "blurred_reflection": false,
         "reflection_opacity": 75,
         "padding-block-start": 100,
-        "padding-block-end": 100
+        "padding-block-end": 25
       }
     },
     "1787563482df4d2da6": {
@@ -1882,7 +1882,7 @@
             "media_fit": "contain",
             "media_radius": 0,
             "enable_media_background": true,
-            "media_background_color": "#D9D9D9",
+            "media_background_color": "#d9d9d9",
             "extend_media": false,
             "zoom": true,
             "video_loop": false,
@@ -2233,13 +2233,13 @@
                 "buy_button_features_icon_size": 13,
                 "buy_button_feature_1_enabled": true,
                 "buy_button_feature_1_icon": "shopify://shop_images/checkmark.png",
-                "buy_button_feature_1_text": "Fast Shipping",
+                "buy_button_feature_1_text": "Secure Checkout",
                 "buy_button_feature_2_enabled": true,
                 "buy_button_feature_2_icon": "shopify://shop_images/checkmark.png",
-                "buy_button_feature_2_text": "Secure Payment",
+                "buy_button_feature_2_text": "Secure Shipping",
                 "buy_button_feature_3_enabled": true,
                 "buy_button_feature_3_icon": "shopify://shop_images/checkmark.png",
-                "buy_button_feature_3_text": "Quality Guaranteed",
+                "buy_button_feature_3_text": "Satisfaction Guaranteed",
                 "show_pickup_availability": true,
                 "gift_card_form": true,
                 "recipient_button_style": "default",
