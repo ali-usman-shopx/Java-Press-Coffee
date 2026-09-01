@@ -153,6 +153,8 @@
           "static": true,
           "settings": {
             "menu": "main-menu",
+            "enable_menu_item_gap": true,
+            "menu_item_gap": 25,
             "background_color": "{{ settings.color_palette.background }}",
             "text_color": "",
             "type_font_primary_size": "1rem",

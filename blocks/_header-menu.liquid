@@ -195,9 +195,15 @@
     >
       <div class="header-menu__inner">
         <nav
-          class="menu-list"
+          class="menu-list{% if block_settings.enable_menu_item_gap %} menu-list--custom-gap{% endif %}"
           aria-label="{{ 'accessibility.header_navigation_label' | t }}"
-          style="{% render 'menu-font-styles', settings: block_settings, menu_type: 'mega_menu' %}"
+          {% comment %} style="{% render 'menu-font-styles', settings: block_settings, menu_type: 'mega_menu' %}" {% endcomment %}
+          style="
+            {% render 'menu-font-styles', settings: block_settings, menu_type: 'mega_menu' %}
+            {% if block_settings.enable_menu_item_gap %}
+              --menu-item-gap: {{ block_settings.menu_item_gap }}px;
+            {% endif %}
+          "
         >
           {% assign class = 'overflow-menu' | append: background_color_classes %}
           {% render 'overflow-list',
@@ -223,7 +229,16 @@
   .header__underlay {
     --color-submenu: rgb({{effective_submenu_color.rgb}});
   }
+
+  .menu-list--custom-gap .menu-list__list-item {
+    margin-inline-end: var(--menu-item-gap);
+  }
+
+  .menu-list--custom-gap .menu-list__list-item:last-child {
+    margin-inline-end: 0;
+  }
 {% endstyle %}
+
 {% stylesheet %}
   .header__drawer {
     --header-drawer-min-height: 60px;
@@ -822,6 +837,23 @@
       "id": "menu",
       "label": "t:settings.menu",
       "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_menu_item_gap",
+      "label": "Enable custom menu item gap",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "menu_item_gap",
+      "label": "Menu item gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ block.settings.enable_menu_item_gap }}"
     },
     {
       "type": "header",
