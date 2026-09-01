@@ -156,6 +156,39 @@
     </style>
   {% endif %}
 
+  {% if section.settings.enable_mobile_custom_header_button %}
+    <a
+      href="{{ section.settings.custom_header_button_url | default: '#' }}"
+      class="header-actions__custom-button header-actions__custom-button--mobile"
+    >
+      {{ section.settings.mobile_custom_header_button_text }}
+    </a>
+
+    <style>
+      .header-actions__custom-button--mobile {
+        background-color: {{ section.settings.custom_header_button_background }};
+        color: {{ section.settings.custom_header_button_text_color }};
+        font-weight: {{ section.settings.custom_header_button_font_weight }};
+
+        {{ section.settings.mobile_custom_header_button_css }}
+      }
+
+      .header-actions__custom-button--mobile {
+        display: none;
+      }
+
+      @media screen and (max-width: 749px) {
+        .header-actions__custom-button {
+          display: none;
+        }
+
+        .header-actions__custom-button--mobile {
+          display: flex;
+        }
+      }
+    </style>
+  {% endif %}
+
   <span
     ref="liveRegion"
     class="visually-hidden"

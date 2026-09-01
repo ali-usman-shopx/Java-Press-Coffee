@@ -1771,6 +1771,31 @@
     },
     {
       "type": "header",
+      "content": "Mobile custom header button"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_custom_header_button",
+      "label": "Enable mobile custom header button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "mobile_custom_header_button_text",
+      "label": "Mobile button text",
+      "default": "Shop Now",
+      "visible_if": "{{ section.settings.enable_mobile_custom_header_button }}"
+    },
+    {
+      "type": "html",
+      "id": "mobile_custom_header_button_css",
+      "label": "Mobile custom CSS",
+      "info": "Add CSS declarations and nested states such as &:hover.",
+      "default": ";",
+      "visible_if": "{{ section.settings.enable_mobile_custom_header_button }}"
+    },
+    {
+      "type": "header",
       "content": "Account Icon Button"
     },
     {
