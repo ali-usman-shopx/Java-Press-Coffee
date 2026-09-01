@@ -32,6 +32,7 @@
     {{ class }}
     {% if background_color != blank %} color-custom-{{ block_id }}{% endif %}
     {% if settings.enable_relative_positioning %}group-block--relative{% endif %}
+    group-block--{{ block_id }}
   "
   style="
     {% render 'border-override', settings: settings %}
@@ -133,3 +134,11 @@
     }
   }
 {% endstylesheet %}
+
+<style>
+  @media screen and (max-width: 768px) {
+    .group-block--{{ block_id }} {
+      {{ settings.mobile_css }}
+    }
+  }
+</style>

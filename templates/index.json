@@ -52,7 +52,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "mobile_css": ";"
           },
           "blocks": {
             "group_FBKRct": {
@@ -95,7 +96,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "mobile_css": ";"
               },
               "blocks": {
                 "group_kGRax7": {
@@ -138,7 +140,8 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "mobile_css": ";"
                   },
                   "blocks": {
                     "group_6NnD8T": {
@@ -181,7 +184,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "mobile_css": ";"
                       },
                       "blocks": {
                         "text_Xzja4J": {
@@ -219,8 +223,8 @@
                             "padding-inline-start": 0,
                             "padding-inline-end": 0,
                             "enable_custom_css": true,
-                            "custom_css_desktop": "",
-                            "custom_css_mobile": "* {\nfont-size: 42px !important;\n}"
+                            "custom_css_desktop": "* {\nline-height: 25px !important;\n}",
+                            "custom_css_mobile": "padding-left: 13%;\n\n* {\nfont-size: 42px !important;\nline-height: 0px !important;\n}"
                           },
                           "blocks": {}
                         },
@@ -247,7 +251,7 @@
                             "case": "none",
                             "wrap": "nowrap",
                             "enable_rotation": true,
-                            "rotation_z": "-7",
+                            "rotation_z": "-5",
                             "enable_scale": true,
                             "scale": 1.3,
                             "text_color": "{{ settings.color_palette.color6 }}",
@@ -259,8 +263,8 @@
                             "padding-inline-start": 36,
                             "padding-inline-end": 0,
                             "enable_custom_css": true,
-                            "custom_css_desktop": "",
-                            "custom_css_mobile": "left: 23%;\n\n* {\nfont-size: 42px !important;\n}"
+                            "custom_css_desktop": "top: -25px;",
+                            "custom_css_mobile": "left: 38%;\ntop: -25px;\n\n* {\nfont-size: 42px !important;\n}"
                           },
                           "blocks": {}
                         }
@@ -310,7 +314,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "mobile_css": ";"
                       },
                       "blocks": {
                         "text_6nLhpw": {
@@ -349,7 +354,7 @@
                             "padding-inline-end": 0,
                             "enable_custom_css": true,
                             "custom_css_desktop": "",
-                            "custom_css_mobile": "* {\nfont-size: 42px !important;\n}"
+                            "custom_css_mobile": "text-align: center;\nalign-self: center;\n* {\nfont-size: 42px !important;\n}"
                           },
                           "blocks": {}
                         }
@@ -398,7 +403,8 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "mobile_css": ";"
                       },
                       "blocks": {
                         "text_J4xMp4": {
@@ -539,7 +545,8 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "mobile_css": "padding: 0% 2%;"
                   },
                   "blocks": {
                     "reviews_score_NdEeTE": {
@@ -673,7 +680,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "mobile_css": ";"
               },
               "blocks": {
                 "image_xy9LkX": {
@@ -810,7 +818,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "mobile_css": ";"
           },
           "blocks": {
             "text_YtWHLp": {
@@ -995,7 +1004,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "mobile_css": ";"
           },
           "blocks": {}
         },
@@ -1169,7 +1179,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "mobile_css": ";"
               },
               "blocks": {
                 "text_bhW6kn": {
@@ -1724,7 +1735,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "mobile_css": ";"
           },
           "blocks": {
             "ai_gen_block_ae9daef_t366Gt": {
@@ -1798,7 +1810,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "mobile_css": ";"
           },
           "blocks": {
             "ai_gen_block_99a393f_3AzN3i": {
@@ -1970,7 +1983,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "mobile_css": ";"
               },
               "blocks": {
                 "tag_badge_6EMXBR": {
@@ -2053,7 +2067,8 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "mobile_css": ";"
               },
               "blocks": {
                 "product_title_Hd7NDc": {
@@ -2395,7 +2410,8 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "mobile_css": ";"
           },
           "blocks": {
             "text_NMz9Dz": {
