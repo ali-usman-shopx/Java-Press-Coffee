@@ -44,7 +44,7 @@
     padding-right: {{ block.settings.tab_padding }};
     {% comment %} background-color: {{ block.settings.tab_background }}; {% endcomment %}
     background-color: transparent;
-    color: {{ block.settings.tab_text_color }};
+    color: {{ block.settings.inactive_tab_text_color }};
     {% comment %} border: {{ block.settings.tab_border_width }}px solid {{ block.settings.tab_border_color }}; {% endcomment %}
     border: none;
     border-bottom: 1px solid transparent;
@@ -52,7 +52,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 400;
     {% comment %} margin-bottom: -1px; {% endcomment %}
     {% comment %} ^ for border collapse {% endcomment %}
     flex-shrink: 0;
@@ -69,8 +69,9 @@
 
   .ai-product-carousel__tab-{{ ai_gen_id }}.active {
     {% comment %} background-color: {{ block.settings.tab_active_background }};
-    color: {{ block.settings.tab_active_text_color }};
     border-color: {{ block.settings.tab_active_border_color }}; {% endcomment %}
+    color: {{ block.settings.tab_active_text_color }};
+    font-weight: 500;
     border-bottom: 1px solid #EF4444;
   }
 
@@ -245,7 +246,11 @@
   .ai-product-carousel__nav-{{ ai_gen_id }} {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    {% if block.settings.enable_offset_tuning %}
+      transform: translateY({{ block.settings.offset_tuning }});
+    {% else %}
+      transform: translateY(-50%);
+    {% endif %}
     width: 40px;
     height: 40px;
     {% comment %} background-color: {{ block.settings.nav_background }}; {% endcomment %}
@@ -1013,9 +1018,9 @@
     },
     {
       "type": "color",
-      "id": "tab_text_color",
-      "label": "Text color",
-      "default": "#000000"
+      "id": "inactive_tab_text_color",
+      "label": "Inactive Text color",
+      "default": "#6c6c6c"
     },
     {
       "type": "color",
@@ -1064,7 +1069,7 @@
     {
       "type": "color",
       "id": "tab_active_text_color",
-      "label": "Active text color",
+      "label": "Active Tab Text color",
       "default": "#ffffff"
     },
     {
@@ -1262,6 +1267,18 @@
     {
       "type": "header",
       "content": "Navigation arrows"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_offset_tuning",
+      "label": "Enable offset tuning",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "offset_tuning",
+      "label": "Offset tuning",
+      "default": "0%"
     },
     {
       "type": "color",
