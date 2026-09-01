@@ -1697,6 +1697,90 @@
     },
     {
       "type": "header",
+      "content": "Custom header button"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_header_button",
+      "label": "Enable custom header button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "custom_header_button_text",
+      "label": "Button text",
+      "default": "Shop Now",
+      "visible_if": "{{ section.settings.enable_custom_header_button }}"
+    },
+    {
+      "type": "url",
+      "id": "custom_header_button_url",
+      "label": "Button link",
+      "visible_if": "{{ section.settings.enable_custom_header_button }}"
+    },
+    {
+      "type": "color",
+      "id": "custom_header_button_background",
+      "label": "Background color",
+      "default": "#000000",
+      "visible_if": "{{ section.settings.enable_custom_header_button }}"
+    },
+    {
+      "type": "color",
+      "id": "custom_header_button_text_color",
+      "label": "Text color",
+      "default": "#FFFFFF",
+      "visible_if": "{{ section.settings.enable_custom_header_button }}"
+    },
+    {
+      "type": "select",
+      "id": "custom_header_button_font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra bold"
+        }
+      ],
+      "default": "600",
+      "visible_if": "{{ section.settings.enable_custom_header_button }}"
+    },
+    {
+      "type": "html",
+      "id": "custom_header_button_css",
+      "label": "Custom CSS",
+      "info": "Add additional CSS declarations, for example: padding: 10px 20px; border-radius: 999px;",
+      "default": ";",
+      "visible_if": "{{ section.settings.enable_custom_header_button }}"
+    },
+    {
+      "type": "header",
+      "content": "Account Icon Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_account_icon",
+      "label": "Enable account icon",
+      "default": true
+    },
+    {
+      "type": "header",
       "content": "t:content.logo"
     },
     {

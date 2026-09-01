@@ -63,7 +63,7 @@
   {% endif %}
   {{- block.shopify_attributes -}}
 >
-  {% if shop.customer_accounts_enabled %}
+  {% if shop.customer_accounts_enabled and section.settings.enable_account_icon %}
     {% liquid
       assign account_actions_style = ''
       if display_style == 'text' and section
@@ -135,6 +135,25 @@
     >
       {{ cart_icon }}
     </a>
+  {% endif %}
+
+  {% if section.settings.enable_custom_header_button %}
+    <a
+      href="{{ section.settings.custom_header_button_url | default: '#' }}"
+      class="header-actions__custom-button"
+    >
+      {{ section.settings.custom_header_button_text }}
+    </a>
+
+    <style>
+      .header-actions__custom-button {
+        background-color: {{ section.settings.custom_header_button_background }};
+        color: {{ section.settings.custom_header_button_text_color }};
+        font-weight: {{ section.settings.custom_header_button_font_weight }};
+
+        {{ section.settings.custom_header_button_css }}
+      }
+    </style>
   {% endif %}
 
   <span
