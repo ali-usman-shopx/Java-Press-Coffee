@@ -214,7 +214,7 @@
         "custom_header_button_css": "text-align: center;\nwidth: 240px;\ndisplay: flex;\nflex-direction: column;\njustify-content: center;\nborder-radius: 5px;\nmargin-right: 20px;\nmargin-left: 10px;",
         "enable_mobile_custom_header_button": true,
         "mobile_custom_header_button_text": "SHOP",
-        "mobile_custom_header_button_css": "width: 68px;\nmargin-right: 10px;",
+        "mobile_custom_header_button_css": "width: 68px;\nmargin-right: 10px;\nmargin-left: 0px !important;",
         "enable_custom_cart_icon": true,
         "custom_cart_icon": "shopify://shop_images/iconoir_simple-cart.svg",
         "enable_account_icon": false,
