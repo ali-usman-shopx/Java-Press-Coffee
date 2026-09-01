@@ -168,7 +168,15 @@
             "text_color_navigation_bar": "",
             "drawer_accordion": false,
             "drawer_accordion_expand_first": false,
-            "drawer_dividers": true
+            "drawer_dividers": true,
+            "enable_arrows_template": true,
+            "arrows_font_size": "1.125rem",
+            "arrows_font_weight": "400",
+            "arrows_text_color": "#424242",
+            "arrows_size": 24,
+            "arrows_color": "#424242",
+            "arrows_show_last_submenu_item": false,
+            "arrows_show_base_menu_items": false
           },
           "blocks": {}
         }

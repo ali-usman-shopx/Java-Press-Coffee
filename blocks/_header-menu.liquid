@@ -1058,6 +1058,109 @@
       "id": "drawer_dividers",
       "label": "t:settings.dividers",
       "default": false
+    },
+    {
+      "type": "header",
+      "content": "Arrows template"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_arrows_template",
+      "label": "Enable Arrows template",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "arrows_font_size",
+      "label": "Font size",
+      "options": [
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ block.settings.enable_arrows_template }}"
+    },
+    {
+      "type": "select",
+      "id": "arrows_font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_arrows_template }}"
+    },
+    {
+      "type": "color",
+      "id": "arrows_text_color",
+      "label": "Text color",
+      "default": "{{ settings.color_palette.text }}",
+      "visible_if": "{{ block.settings.enable_arrows_template }}"
+    },
+    {
+    "type": "range",
+    "id": "arrows_size",
+    "label": "Arrow size",
+    "min": 10,
+    "max": 40,
+    "step": 1,
+    "unit": "px",
+    "default": 18
+    },
+    {
+    "type": "color",
+    "id": "arrows_color",
+    "label": "Arrow color",
+    "default": "#000000"
+    },
+    {
+    "type": "checkbox",
+    "id": "arrows_show_last_submenu_item",
+    "label": "Show arrow on last submenu item",
+    "default": true
+    },
+    {
+    "type": "checkbox",
+    "id": "arrows_show_base_menu_items",
+    "label": "Show arrows on base menu items",
+    "default": true
     }
   ]
 }
