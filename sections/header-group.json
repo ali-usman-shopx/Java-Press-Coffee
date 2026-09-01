@@ -200,6 +200,8 @@
         "enable_mobile_custom_header_button": true,
         "mobile_custom_header_button_text": "SHOP",
         "mobile_custom_header_button_css": "width: 68px;\nmargin-right: 10px;",
+        "enable_custom_cart_icon": true,
+        "custom_cart_icon": "shopify://shop_images/iconoir_simple-cart.svg",
         "enable_account_icon": false,
         "logo_position": "left",
         "menu_position": "center",
