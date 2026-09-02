@@ -29,18 +29,118 @@
   endif
 %}
 
+{% assign products_per_page = 24 %}
+{% assign use_infinite_scroll = section.settings.enable_infinite_scroll %}
+
+{% if section.settings.enable_pagination %}
+  {% assign products_per_page = section.settings.pagination_items_per_page %}
+  {% assign use_infinite_scroll = false %}
+{% elsif section.settings.enable_infinite_scroll == false %}
+  {% assign products_per_page = section.settings.products_per_page %}
+{% endif %}
+
 {% render 'collection-wrapper-styles' %}
+
+<style>
+  {% if section.settings.enable_desktop_column_limit %}
+    #ResultsList-{{ section.id }} .product-grid {
+      grid-template-columns: repeat({{ section.settings.desktop_column_limit }}, minmax(0, 1fr));
+    }
+  {% endif %}
+
+  {% if section.settings.enable_tablet_column_limit %}
+    @media screen and (min-width: 750px) and (max-width: 989px) {
+      #ResultsList-{{ section.id }} .product-grid {
+        grid-template-columns: repeat({{ section.settings.tablet_column_limit }}, minmax(0, 1fr));
+      }
+    }
+  {% endif %}
+
+  {% if section.settings.enable_mobile_column_limit %}
+    @media screen and (max-width: 749px) {
+      #ResultsList-{{ section.id }} .product-grid {
+        grid-template-columns: repeat({{ section.settings.mobile_column_limit }}, minmax(0, 1fr));
+      }
+    }
+  {% endif %}
+
+  {% if section.settings.enable_pagination %}
+    #CollectionPagination-{{ section.id }} {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: {{ section.settings.pagination_arrow_gap }}px;
+      width: 100%;
+      margin-top: 32px;
+    }
+
+    #CollectionPagination-{{ section.id }} .collection-pagination__button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: var(--color-foreground);
+      color: var(--color-background);
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    #CollectionPagination-{{ section.id }} .collection-pagination__button:hover {
+      opacity: 0.8;
+    }
+
+    #CollectionPagination-{{ section.id }} .collection-pagination__button[aria-disabled='true'] {
+      opacity: 0.75;
+      pointer-events: none;
+    }
+
+    #CollectionPagination-{{ section.id }} .collection-pagination__button svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+      fill: none !important;
+    }
+
+    #CollectionPagination-{{ section.id }} .collection-pagination__button svg path {
+      fill: none !important;
+    }
+
+    #CollectionPagination-{{ section.id }} .collection-pagination__button--previous svg {
+      transform: rotate(180deg);
+    }
+
+    #CollectionPagination-{{ section.id }} .collection-pagination__button--next svg {
+      transform: none;
+    }
+
+    {% comment %} #CollectionPagination-{{ section.id }} .collection-pagination__button--previous svg {
+      transform: rotate(90deg);
+    }
+
+    #CollectionPagination-{{ section.id }} .collection-pagination__button--next svg {
+      transform: rotate(-90deg);
+    } {% endcomment %}
+  {% endif %}
+</style>
 
 <div
   class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
 ></div>
+
 {% # theme-check-disable-next-line UnknownFilter %}
 <collection-component view-event-payload="{{ collection | standard_event_data: 'view' | escape }}">
   <results-list
+    id="ResultsList-{{ section.id }}"
     class="section product-grid-container{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
     style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
     section-id="{{ section.id }}"
-    infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
+    infinite-scroll="{{ use_infinite_scroll }}"
   >
     {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
 
@@ -56,7 +156,9 @@
 
       {% assign products_per_page = 24 %}
 
-      {% if section.settings.enable_infinite_scroll == false %}
+      {% if section.settings.enable_pagination %}
+        {% assign products_per_page = section.settings.pagination_items_per_page %}
+      {% elsif section.settings.enable_infinite_scroll == false %}
         {% assign products_per_page = section.settings.products_per_page %}
       {% endif %}
 
@@ -85,8 +187,67 @@
           children: children,
           products: collection.products,
           paginate: paginate,
-          enable_infinite_scroll: section.settings.enable_infinite_scroll
+          enable_infinite_scroll: use_infinite_scroll,
+          hide_pagination_controls: section.settings.enable_pagination
         %}
+
+        {% if section.settings.enable_pagination and paginate.pages > 1 %}
+          <nav
+            id="CollectionPagination-{{ section.id }}"
+            class="collection-pagination"
+            aria-label="Collection pagination"
+          >
+            <a
+              href="{{ paginate.previous.url | default: '#' }}"
+              class="collection-pagination__button collection-pagination__button--previous"
+              aria-label="Previous page"
+              {% unless paginate.previous %}
+                aria-disabled="true"
+                tabindex="-1"
+              {% endunless %}
+            >
+              <svg
+                viewBox="0 0 10 10"
+                aria-hidden="true"
+                focusable="false"
+                fill="none"
+              >
+                <path
+                  d="M3 1.5L7.5 5L3 8.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+
+            <a
+              href="{{ paginate.next.url | default: '#' }}"
+              class="collection-pagination__button collection-pagination__button--next"
+              aria-label="Next page"
+              {% unless paginate.next %}
+                aria-disabled="true"
+                tabindex="-1"
+              {% endunless %}
+            >
+              <svg
+                viewBox="0 0 10 10"
+                aria-hidden="true"
+                focusable="false"
+                fill="none"
+              >
+                <path
+                  d="M3 1.5L7.5 5L3 8.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </nav>
+        {% endif %}
       {% endpaginate %}
     </div>
   </results-list>
@@ -156,11 +317,97 @@
       ],
       "default": "small"
     },
+
+    {
+      "type": "header",
+      "content": "Column Limits"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_desktop_column_limit",
+      "label": "Enable desktop column limit",
+      "default": false,
+      "visible_if": "{{ section.settings.layout_type == 'grid' }}"
+    },
+    {
+      "type": "range",
+      "id": "desktop_column_limit",
+      "label": "Desktop columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "visible_if": "{{ section.settings.enable_desktop_column_limit and section.settings.layout_type == 'grid' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tablet_column_limit",
+      "label": "Enable tablet column limit",
+      "default": false,
+      "visible_if": "{{ section.settings.layout_type == 'grid' }}"
+    },
+    {
+      "type": "range",
+      "id": "tablet_column_limit",
+      "label": "Tablet columns",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ section.settings.enable_tablet_column_limit and section.settings.layout_type == 'grid' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_column_limit",
+      "label": "Enable mobile column limit",
+      "default": false,
+      "visible_if": "{{ section.settings.layout_type == 'grid' }}"
+    },
+    {
+      "type": "number",
+      "id": "mobile_column_limit",
+      "label": "Mobile columns",
+      "visible_if": "{{ section.settings.enable_mobile_column_limit and section.settings.layout_type == 'grid' }}"
+    },
+
+    {
+      "type": "header",
+      "content": "Pagination"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_pagination",
+      "label": "Enable pagination",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pagination_items_per_page",
+      "label": "Items per page",
+      "min": 4,
+      "max": 48,
+      "step": 4,
+      "default": 24,
+      "visible_if": "{{ section.settings.enable_pagination }}"
+    },
+    {
+      "type": "range",
+      "id": "pagination_arrow_gap",
+      "label": "Pagination arrow gap",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "visible_if": "{{ section.settings.enable_pagination }}"
+    },
+
     {
       "type": "checkbox",
       "id": "enable_infinite_scroll",
       "label": "t:settings.auto_load_products",
-      "default": true
+      "default": true,
+      "visible_if": "{{ section.settings.enable_pagination == false }}"
     },
     {
       "type": "range",
@@ -170,8 +417,9 @@
       "max": 36,
       "step": 4,
       "default": 24,
-      "visible_if": "{{ section.settings.enable_infinite_scroll == false }}"
+      "visible_if": "{{ section.settings.enable_infinite_scroll == false and section.settings.enable_pagination == false }}"
     },
+
     {
       "type": "header",
       "content": "t:content.layout"
