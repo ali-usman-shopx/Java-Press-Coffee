@@ -344,6 +344,34 @@
       "default": "cover"
     },
     {
+      "type": "checkbox",
+      "id": "enable_image_container_padding",
+      "label": "Enable image container padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "image_container_padding_x",
+      "label": "Image container horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_image_container_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "image_container_padding_y",
+      "label": "Image container vertical padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_image_container_padding }}"
+    },
+    {
       "type": "range",
       "id": "media_radius",
       "label": "t:settings.border_radius",

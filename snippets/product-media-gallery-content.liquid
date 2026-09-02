@@ -399,6 +399,11 @@
       {% if block_settings.enable_slide_background %}
         --slide-background-color: {{ block_settings.slide_background_color }};
       {% endif %}
+
+      {% if block_settings.enable_image_container_padding %}
+        --image-container-padding-x: {{ block_settings.image_container_padding_x }}px;
+        --image-container-padding-y: {{ block_settings.image_container_padding_y }}px;
+      {% endif %}
     "
     data-presentation="{{ media_presentation }}"
     {{ block_shopify_attributes }}
@@ -1167,5 +1172,9 @@
 {% endstylesheet %}
 
 {% style %}
-  
+  {% if block_settings.enable_image_container_padding %}
+    .media-gallery--carousel[style*='--image-container-padding-x'] .product-media {
+      padding: var(--image-container-padding-y) var(--image-container-padding-x);
+    }
+  {% endif %}
 {% endstyle %}
