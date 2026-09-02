@@ -226,20 +226,25 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      gap: {{ block_settings.buy_button_features_gap }}px;
+      /* gap: {{ block_settings.buy_button_features_gap }}px; */
       margin-top: {{ block_settings.buy_button_features_margin_top }}px;
+      margin-left: 0px !important;
+      padding-left: 0px !important;
     }
 
     .buy-buttons-block--{{ block.id }} .buy-button-feature {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 2px;
       min-width: 0;
-      flex: 1 1 0;
+      /* flex: 1 1 0; */
       color: {{ block_settings.buy_button_features_text_color }};
       font-size: {{ block_settings.buy_button_features_font_size }}px;
       font-weight: {{ block_settings.buy_button_features_font_weight }};
+      white-space: nowrap;
+      width: fit-content;
+      /* width: max-content; */
       /* text-align: center; */
     }
 
