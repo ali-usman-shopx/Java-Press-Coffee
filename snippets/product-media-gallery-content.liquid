@@ -400,6 +400,8 @@
         --slide-background-color: {{ block_settings.slide_background_color }};
       {% endif %}
 
+      --slide-background-radius: {{ block_settings.slide_background_border_radius }}px;
+
       {% if block_settings.enable_image_container_padding %}
         --image-container-padding-x: {{ block_settings.image_container_padding_x }}px;
         --image-container-padding-y: {{ block_settings.image_container_padding_y }}px;
@@ -1141,6 +1143,7 @@
 
   .media-gallery--slide-background slideshow-slide {
     background-color: var(--slide-background-color) !important;
+    border-radius: var(--slide-background-radius) !important;
   }
 
   .product-media__image {

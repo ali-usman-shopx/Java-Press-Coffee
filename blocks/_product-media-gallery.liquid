@@ -246,6 +246,16 @@
       "visible_if": "{{ block.settings.enable_slide_background }}"
     },
     {
+      "type": "range",
+      "id": "slide_background_border_radius",
+      "label": "Slideshow border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
       "type": "header",
       "content": "t:content.thumbnails",
       "visible_if": "{{ block.settings.slideshow_controls_style == 'thumbnails' or block.settings.slideshow_mobile_controls_style == 'thumbnails' }}"
