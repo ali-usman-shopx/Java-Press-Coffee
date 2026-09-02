@@ -136,6 +136,10 @@
 {% endstylesheet %}
 
 <style>
+  .group-block--{{ block_id }} {
+    {{ settings.desktop_css }}
+  }
+
   @media screen and (max-width: 768px) {
     .group-block--{{ block_id }} {
       {{ settings.mobile_css }}

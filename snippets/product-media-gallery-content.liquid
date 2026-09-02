@@ -152,7 +152,7 @@
     assign product_media_container_class = product_media_container_class | append: ' constrain-height'
   endif
   if block_settings.aspect_ratio != 'adapt'
-    assign product_media_container_class = product_media_container_class | append: ' media-fit-cover'
+    assign product_media_container_class = product_media_container_class | append: ' media-fit-' | append: block_settings.media_fit
   elsif block_settings.constrain_to_viewport
     assign product_media_container_class = product_media_container_class | append: ' media-fit-' | append: block_settings.media_fit
   else
@@ -233,7 +233,7 @@
     .product-media-container:not(.dialog-zoomed-gallery *) .product-media deferred-media iframe {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: {{ block_settings.media_fit }};
     }
 
     /* 3D models need special handling since they don't support object-fit */
@@ -268,13 +268,13 @@
   {% endif %}
 
   {% unless block_settings.aspect_ratio == 'adapt' and block_settings.constrain_to_viewport %}
-    .media-fit-cover {
-      --product-media-fit: cover;
+    .media-fit-{{ block_settings.media_fit }} {
+      --product-media-fit: {{ block_settings.media_fit }};
     }
 
     /* Media fit for all media elements - default to cover */
     .media-fit-cover :is(img, video, iframe, .deferred-media__poster-image) {
-      object-fit: cover;
+      object-fit: {{ block_settings.media_fit }};
       width: 100%;
       height: 100%;
     }
@@ -399,6 +399,13 @@
       {% if block_settings.enable_slide_background %}
         --slide-background-color: {{ block_settings.slide_background_color }};
       {% endif %}
+
+      --slide-background-radius: {{ block_settings.slide_background_border_radius }}px;
+
+      {% if block_settings.enable_image_container_padding %}
+        --image-container-padding-x: {{ block_settings.image_container_padding_x }}px;
+        --image-container-padding-y: {{ block_settings.image_container_padding_y }}px;
+      {% endif %}
     "
     data-presentation="{{ media_presentation }}"
     {{ block_shopify_attributes }}
@@ -479,7 +486,12 @@
 
     {% if render_slideshow_arrows %}
       {% capture slideshow_arrows %}
-        {% render 'slideshow-arrows', class: 'mobile:hidden', icon_style: block_settings.icons_style %}
+        {%
+          render 'slideshow-arrows',
+          class: 'mobile:hidden',
+          icon_style: block_settings.icons_style,
+          enable_arrow_background: block_settings.enable_arrow_background
+        %}
       {% endcapture %}
     {% endif %}
 
@@ -1084,7 +1096,7 @@
   * All variables are defined on the individual media-gallery block,
   * so multiple product media galleries can have independent settings.
   */
-  .media-gallery--carousel[style*='--arrow-background-color'] slideshow-arrows .slideshow-control {
+  /* .media-gallery--carousel[style*='--arrow-background-color'] slideshow-arrows .slideshow-control {
     --color: var(--arrow-indicator-color);
     --color-active: var(--arrow-indicator-color);
     --color-hover: var(--arrow-indicator-color);
@@ -1104,7 +1116,7 @@
     );
 
     border-radius: var(--arrow-background-radius);
-  }
+  } */
 
   .media-gallery--carousel[style*='--arrow-background-color'] slideshow-arrows .slideshow-control {
     --color: var(--arrow-indicator-color);
@@ -1119,17 +1131,19 @@
 
     color: var(--arrow-indicator-color);
 
-    background-color: color-mix(
+    /* background-color: color-mix(
       in srgb,
       var(--arrow-background-color) calc(var(--arrow-background-opacity) * 100%),
       transparent
-    );
+    ); */
+    background-color: var(--arrow-background-color);
 
     border-radius: var(--arrow-background-radius);
   }
 
   .media-gallery--slide-background slideshow-slide {
     background-color: var(--slide-background-color) !important;
+    border-radius: var(--slide-background-radius) !important;
   }
 
   .product-media__image {
@@ -1159,3 +1173,11 @@
     content-visibility: visible;
   }
 {% endstylesheet %}
+
+{% style %}
+  {% if block_settings.enable_image_container_padding %}
+    .media-gallery--carousel[style*='--image-container-padding-x'] .product-media {
+      padding: var(--image-container-padding-y) var(--image-container-padding-x);
+    }
+  {% endif %}
+{% endstyle %}

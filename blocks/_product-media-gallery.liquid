@@ -155,15 +155,15 @@
     {
       "type": "color",
       "id": "arrow_background_color",
-      "label": "Background color Inverted",
-      "default": "#FFFFFF",
+      "label": "Background color",
+      "default": "#000000",
       "visible_if": "{{ block.settings.enable_arrow_background }}"
     },
     {
       "type": "color",
       "id": "arrow_indicator_color",
-      "label": "Arrow color Inverted",
-      "default": "#000000",
+      "label": "Arrow color",
+      "default": "#FFFFFF",
       "visible_if": "{{ block.settings.enable_arrow_background }}"
     },
     {
@@ -244,6 +244,16 @@
       "label": "Background color",
       "default": "#FFFFFF",
       "visible_if": "{{ block.settings.enable_slide_background }}"
+    },
+    {
+      "type": "range",
+      "id": "slide_background_border_radius",
+      "label": "Slideshow border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
     },
     {
       "type": "header",
@@ -341,8 +351,35 @@
           "label": "t:options.contain"
         }
       ],
-      "default": "cover",
-      "visible_if": "{{ block.settings.aspect_ratio == 'adapt' and block.settings.constrain_to_viewport == true }}"
+      "default": "cover"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_container_padding",
+      "label": "Enable image container padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "image_container_padding_x",
+      "label": "Image container horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_image_container_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "image_container_padding_y",
+      "label": "Image container vertical padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_image_container_padding }}"
     },
     {
       "type": "range",
