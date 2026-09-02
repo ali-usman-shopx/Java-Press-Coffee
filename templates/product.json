@@ -139,7 +139,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "desktop_css": ";",
+                "mobile_css": ";"
               },
               "blocks": {
                 "tag_badge_TC68gH": {
@@ -222,7 +224,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "desktop_css": ";",
+                "mobile_css": ";"
               },
               "blocks": {
                 "text_xrnftG": {
@@ -258,7 +262,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 5,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 },
@@ -403,11 +410,11 @@
                 "add_to_cart_text_transform": "uppercase",
                 "enable_buy_button_features": true,
                 "buy_button_features_text_color": "{{ settings.color_palette.color5 }}",
-                "buy_button_features_font_size": 8,
+                "buy_button_features_font_size": 10,
                 "buy_button_features_font_weight": "700",
                 "buy_button_features_gap": 0,
-                "buy_button_features_margin_top": 5,
-                "buy_button_features_icon_size": 10,
+                "buy_button_features_margin_top": 8,
+                "buy_button_features_icon_size": 13,
                 "buy_button_feature_1_enabled": true,
                 "buy_button_feature_1_icon": "shopify://shop_images/checkmark_aa7d84e9-cecc-424c-b1bd-c9fc13b05169.png",
                 "buy_button_feature_1_text": "Secure Checkout",
@@ -458,8 +465,9 @@
                   "settings": {
                     "style_class": "button-custom",
                     "custom_button_background": "{{ settings.color_palette.color3 }}",
-                    "custom_button_text": "{{ settings.color_palette.background }}",
-                    "custom_button_border": "{{ settings.color_palette.color3 }}"
+                    "custom_button_text": "",
+                    "custom_button_border": "{{ settings.color_palette.color3 }}",
+                    "mobile_css_override": "padding-top: 20px;"
                   },
                   "blocks": {}
                 },
@@ -563,7 +571,10 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "enable_custom_css": false,
+                        "custom_css_desktop": "",
+                        "custom_css_mobile": ""
                       },
                       "blocks": {}
                     }
@@ -613,7 +624,10 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "enable_custom_css": false,
+                        "custom_css_desktop": "",
+                        "custom_css_mobile": ""
                       },
                       "blocks": {}
                     }
@@ -663,7 +677,10 @@
                         "padding-block-start": 0,
                         "padding-block-end": 0,
                         "padding-inline-start": 0,
-                        "padding-inline-end": 0
+                        "padding-inline-end": 0,
+                        "enable_custom_css": false,
+                        "custom_css_desktop": "",
+                        "custom_css_mobile": ""
                       },
                       "blocks": {}
                     }
@@ -713,7 +730,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             }
@@ -782,7 +802,10 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "enable_custom_css": false,
+            "custom_css_desktop": "",
+            "custom_css_mobile": ""
           },
           "blocks": {}
         },
@@ -884,7 +907,9 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "desktop_css": ";",
+            "mobile_css": ";"
           },
           "blocks": {
             "icon_KN9h8q": {
@@ -938,7 +963,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "desktop_css": ";",
+                "mobile_css": ";"
               },
               "blocks": {
                 "text_jftYFJ": {
@@ -973,7 +1000,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 },
@@ -1009,7 +1039,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 }
@@ -1064,7 +1097,9 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "desktop_css": ";",
+            "mobile_css": ";"
           },
           "blocks": {
             "icon_cedEVR": {
@@ -1118,7 +1153,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "desktop_css": ";",
+                "mobile_css": ";"
               },
               "blocks": {
                 "text_byVcwg": {
@@ -1153,7 +1190,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 },
@@ -1189,7 +1229,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 }
@@ -1244,7 +1287,9 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "desktop_css": ";",
+            "mobile_css": ";"
           },
           "blocks": {
             "icon_TaYBnq": {
@@ -1298,7 +1343,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "desktop_css": ";",
+                "mobile_css": ";"
               },
               "blocks": {
                 "text_zEGDKx": {
@@ -1333,7 +1380,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 },
@@ -1369,7 +1419,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 }
@@ -1424,7 +1477,9 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "desktop_css": ";",
+            "mobile_css": ";"
           },
           "blocks": {
             "icon_b8gzGU": {
@@ -1478,7 +1533,9 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "desktop_css": ";",
+                "mobile_css": ";"
               },
               "blocks": {
                 "text_zhMPja": {
@@ -1513,7 +1570,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 },
@@ -1549,7 +1609,10 @@
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "enable_custom_css": false,
+                    "custom_css_desktop": "",
+                    "custom_css_mobile": ""
                   },
                   "blocks": {}
                 }
@@ -1691,7 +1754,9 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "desktop_css": ";",
+            "mobile_css": ";"
           },
           "blocks": {
             "text_4x9G44": {
@@ -1727,7 +1792,10 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "enable_custom_css": false,
+                "custom_css_desktop": "",
+                "custom_css_mobile": ""
               },
               "blocks": {}
             }
@@ -1936,7 +2004,10 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "enable_custom_css": false,
+            "custom_css_desktop": "",
+            "custom_css_mobile": ""
           },
           "blocks": {}
         },
@@ -1972,7 +2043,10 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "enable_custom_css": false,
+            "custom_css_desktop": "",
+            "custom_css_mobile": ""
           },
           "blocks": {}
         },
@@ -2007,9 +2081,20 @@
             "display_type": "arrow",
             "label": "Sign up",
             "integrated_button": true,
+            "override_hover_css": false,
+            "hover_css": "",
             "button_type_preset": "paragraph",
             "enable_button_font_weight_override": false,
             "button_font_weight": "400",
+            "enable_mobile_button_customizations": false,
+            "enable_mobile_button_text": false,
+            "mobile_button_label": "Sign up",
+            "enable_mobile_button_padding": false,
+            "mobile_button_padding_left": 24,
+            "mobile_button_padding_right": 24,
+            "enable_mobile_button_margin": false,
+            "mobile_button_margin_left": 0,
+            "mobile_button_margin_right": 0,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
