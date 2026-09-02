@@ -479,7 +479,12 @@
 
     {% if render_slideshow_arrows %}
       {% capture slideshow_arrows %}
-        {% render 'slideshow-arrows', class: 'mobile:hidden', icon_style: block_settings.icons_style %}
+        {%
+          render 'slideshow-arrows',
+          class: 'mobile:hidden',
+          icon_style: block_settings.icons_style,
+          enable_arrow_background: block_settings.enable_arrow_background
+        %}
       {% endcapture %}
     {% endif %}
 
@@ -1084,7 +1089,7 @@
   * All variables are defined on the individual media-gallery block,
   * so multiple product media galleries can have independent settings.
   */
-  .media-gallery--carousel[style*='--arrow-background-color'] slideshow-arrows .slideshow-control {
+  /* .media-gallery--carousel[style*='--arrow-background-color'] slideshow-arrows .slideshow-control {
     --color: var(--arrow-indicator-color);
     --color-active: var(--arrow-indicator-color);
     --color-hover: var(--arrow-indicator-color);
@@ -1104,7 +1109,7 @@
     );
 
     border-radius: var(--arrow-background-radius);
-  }
+  } */
 
   .media-gallery--carousel[style*='--arrow-background-color'] slideshow-arrows .slideshow-control {
     --color: var(--arrow-indicator-color);
@@ -1119,11 +1124,12 @@
 
     color: var(--arrow-indicator-color);
 
-    background-color: color-mix(
+    /* background-color: color-mix(
       in srgb,
       var(--arrow-background-color) calc(var(--arrow-background-opacity) * 100%),
       transparent
-    );
+    ); */
+    background-color: var(--arrow-background-color);
 
     border-radius: var(--arrow-background-radius);
   }
