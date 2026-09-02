@@ -152,7 +152,7 @@
     assign product_media_container_class = product_media_container_class | append: ' constrain-height'
   endif
   if block_settings.aspect_ratio != 'adapt'
-    assign product_media_container_class = product_media_container_class | append: ' media-fit-cover'
+    assign product_media_container_class = product_media_container_class | append: ' media-fit-' | append: block_settings.media_fit
   elsif block_settings.constrain_to_viewport
     assign product_media_container_class = product_media_container_class | append: ' media-fit-' | append: block_settings.media_fit
   else
@@ -233,7 +233,7 @@
     .product-media-container:not(.dialog-zoomed-gallery *) .product-media deferred-media iframe {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: {{ block_settings.media_fit }};
     }
 
     /* 3D models need special handling since they don't support object-fit */
@@ -268,13 +268,13 @@
   {% endif %}
 
   {% unless block_settings.aspect_ratio == 'adapt' and block_settings.constrain_to_viewport %}
-    .media-fit-cover {
-      --product-media-fit: cover;
+    .media-fit-{{ block_settings.media_fit }} {
+      --product-media-fit: {{ block_settings.media_fit }};
     }
 
     /* Media fit for all media elements - default to cover */
     .media-fit-cover :is(img, video, iframe, .deferred-media__poster-image) {
-      object-fit: cover;
+      object-fit: {{ block_settings.media_fit }};
       width: 100%;
       height: 100%;
     }
@@ -1159,3 +1159,7 @@
     content-visibility: visible;
   }
 {% endstylesheet %}
+
+{% style %}
+  
+{% endstyle %}
