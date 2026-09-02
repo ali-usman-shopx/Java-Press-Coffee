@@ -45,7 +45,10 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "enable_custom_css": false,
+            "custom_css_desktop": "",
+            "custom_css_mobile": ""
           },
           "blocks": {}
         },
@@ -82,7 +85,10 @@
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "enable_custom_css": false,
+            "custom_css_desktop": "",
+            "custom_css_mobile": ""
           },
           "blocks": {}
         }
@@ -290,6 +296,15 @@
         "layout_type": "grid",
         "product_card_size": "medium",
         "mobile_product_card_size": "small",
+        "enable_desktop_column_limit": true,
+        "desktop_column_limit": 4,
+        "enable_tablet_column_limit": true,
+        "tablet_column_limit": 2,
+        "enable_mobile_column_limit": true,
+        "mobile_column_limit": 2,
+        "enable_pagination": true,
+        "pagination_items_per_page": 4,
+        "pagination_arrow_gap": 12,
         "enable_infinite_scroll": true,
         "products_per_page": 24,
         "product_grid_width": "centered",

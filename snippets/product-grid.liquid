@@ -7,6 +7,7 @@
   @param {string} [title] - Header of the collection or search results
   @param {string} children - List or grid of product cards
   @param {boolean} [enable_infinite_scroll] - Whether to enable infinite scroll (default: true)
+  @param {boolean} [hide_pagination_controls] - Whether to hide the default pagination controls
 {%- enddoc -%}
 
 {%- liquid
@@ -171,7 +172,7 @@
       </ul>
       {% if enable_infinite_scroll != false %}
         <span ref="viewMoreNext"></span>
-      {% else %}
+      {% elsif hide_pagination_controls != true %}
         {% render 'pagination-controls', paginate: paginate %}
       {% endif %}
     {% endif %}
