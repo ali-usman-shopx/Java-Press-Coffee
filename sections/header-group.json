@@ -53,7 +53,7 @@
           "type": "_announcement",
           "name": "t:names.announcement",
           "settings": {
-            "text": "We are here to help as your coffee concierge!",
+            "text": "We are here to help as your coffee concierge!&nbsp;",
             "enable_link": true,
             "link": "#",
             "link_text": "Take The Survey",
@@ -87,7 +87,7 @@
           "type": "_announcement",
           "name": "t:names.announcement",
           "settings": {
-            "text": "We are here to help as your coffee concierge!",
+            "text": "We are here to help as your coffee concierge!&nbsp;",
             "enable_link": true,
             "link": "#",
             "link_text": "Take The Survey",
