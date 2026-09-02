@@ -38,6 +38,25 @@
           is_main_product_media: true
         -%}
       </div>
+      
+      {% if block.settings.enable_stamp and block.settings.stamp_image %}
+        <img
+          src="{{ block.settings.stamp_image | image_url: width: 1000 }}"
+          alt=""
+          class="product-media-stamp"
+          width="{{ block.settings.stamp_width }}";
+          height="{{ block.settings.stamp_height }}";
+          style="
+            position: absolute;
+            z-index: 999;
+            object-fit: contain;
+            width: {{ block.settings.stamp_width }};
+            height: {{ block.settings.stamp_height }};
+            right: {{ block.settings.stamp_offset_x }};
+            top: {{ block.settings.stamp_offset_y }};
+          "
+        >
+      {% endif %}
     </div>
   {% endif %}
 {% else %}
@@ -164,7 +183,48 @@
       "label": "Disable carousel",
       "default": false
     },
-
+    {
+      "type": "checkbox",
+      "id": "enable_stamp",
+      "label": "Enable stamp",
+      "default": false,
+      "visible_if": "{{ block.settings.disable_carousel == true }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "stamp_image",
+      "label": "Stamp image",
+      "visible_if": "{{ block.settings.disable_carousel == true and block.settings.enable_stamp == true }}"
+    },
+    {
+      "type": "text",
+      "id": "stamp_width",
+      "label": "Stamp width",
+      "default": "100px",
+      "visible_if": "{{ block.settings.disable_carousel == true and block.settings.enable_stamp == true }}"
+    },
+    {
+      "type": "text",
+      "id": "stamp_height",
+      "label": "Stamp height",
+      "default": "100px",
+      "visible_if": "{{ block.settings.disable_carousel == true and block.settings.enable_stamp == true }}"
+    },
+    {
+      "type": "text",
+      "id": "stamp_offset_x",
+      "label": "Stamp horizontal offset",
+      "default": "20px",
+      "visible_if": "{{ block.settings.disable_carousel == true and block.settings.enable_stamp == true }}"
+    },
+    {
+      "type": "text",
+      "id": "stamp_offset_y",
+      "label": "Stamp vertical offset",
+      "default": "20px",
+      "visible_if": "{{ block.settings.disable_carousel == true and block.settings.enable_stamp == true }}"
+    },
+    
     {
       "type": "header",
       "content": "t:content.carousel"
