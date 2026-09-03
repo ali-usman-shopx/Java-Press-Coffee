@@ -147,11 +147,13 @@
                   {% render 'cart-products', context: 'drawer' %}
                 </scroll-hint>
 
-                <div class="cart-drawer__summary">
+                <div
+                  class="cart-drawer__summary"
+                  style="{{ settings.custom_cart_checkout_wrapper_css }}"
+                >
                   {% if settings.enable_custom_cart_drawer %}
                     <div
                       class="custom-cart-checkout"
-                      style="{{ settings.custom_cart_checkout_wrapper_css }}"
                     >
                       <div class="custom-cart-checkout__date">
                         <label
@@ -173,7 +175,7 @@
                             class="custom-cart-checkout__date-icon"
                             aria-hidden="true"
                           >
-                            {{- 'icon-calendar.svg' | inline_asset_content -}}
+                            {{ settings.custom_cart_date_icon | image_url: width: 100 | image_tag }}
                           </span>
                         </div>
                       </div>
@@ -449,6 +451,11 @@
 
     .custom-cart-checkout__date-input {
       {{ settings.custom_cart_date_css }}
+    }
+    .custom-cart-checkout__date-input::-webkit-calendar-picker-indicator {
+      opacity: 0;
+      display: none;
+      -webkit-appearance: none;
     }
     .custom-cart-checkout__date-input::-webkit-calendar-picker-indicator {
       {{ settings.custom_cart_date_calendar_css }}

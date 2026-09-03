@@ -1718,6 +1718,11 @@
         "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
       },
       {
+        "type": "image_picker",
+        "id": "custom_cart_date_icon",
+        "label": "Date picker icon"
+      },
+      {
         "type": "text",
         "id": "custom_cart_date_placeholder",
         "label": "Date picker placeholder",
