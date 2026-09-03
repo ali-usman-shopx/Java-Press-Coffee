@@ -1309,4 +1309,74 @@
     aspect-ratio: 1 / 1;
     object-fit: contain;
   }
+
+    /* =========================================================
+    CUSTOM CART DRAWER - PRODUCT TITLE / PRICE
+    ========================================================= */
+
+  .cart-items__table-row--custom-drawer {
+    /*
+      Reserve space on the right for the product price.
+      The price itself is capped at this same percentage.
+    */
+    --custom-cart-price-space: 40%;
+  }
+
+  .cart-items__table-row--custom-drawer .cart-items__product-info {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+
+    /*
+      The price is positioned in the same grid cell as
+      product-info, so reserve its space manually.
+    */
+    padding-inline-end: var(--custom-cart-price-space);
+  }
+
+  .cart-items__table-row--custom-drawer .cart-items__title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gap-xs);
+
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .cart-items__table-row--custom-drawer .cart-items__title {
+    display: block;
+
+    min-width: 0;
+    max-width: 100%;
+
+    flex: 1 1 auto;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .cart-items__table-row--custom-drawer .cart-disclosure-tooltip {
+    flex: 0 0 auto;
+  }
+
+  /*
+    Product price sits on the right side of the same
+    grid cell as the product information.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__price {
+    grid-column: 2;
+    grid-row: 1;
+
+    justify-self: end;
+    align-self: start;
+
+    width: max-content;
+    max-width: var(--custom-cart-price-space);
+
+    white-space: nowrap;
+    overflow: hidden;
+  }
 {% endstyle %}
