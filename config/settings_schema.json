@@ -1671,6 +1671,226 @@
         "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
       },
       {
+        "type": "header",
+        "content": "Custom cart checkout footer"
+      },
+      {
+        "type": "text",
+        "id": "custom_cart_date_label",
+        "label": "Date picker label",
+        "default": "Select delivery date",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "text",
+        "id": "custom_cart_date_placeholder",
+        "label": "Date picker placeholder",
+        "default": "dd/mm/yyyy",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "color",
+        "id": "custom_cart_date_text_color",
+        "label": "Date picker text color",
+        "default": "{{ settings.color_palette.foreground }}",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "range",
+        "id": "custom_cart_date_font_size",
+        "label": "Date picker font size",
+        "min": 10,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 14,
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "select",
+        "id": "custom_cart_date_font_weight",
+        "label": "Date picker font weight",
+        "options": [
+          {
+            "value": "400",
+            "label": "Regular"
+          },
+          {
+            "value": "500",
+            "label": "Medium"
+          },
+          {
+            "value": "600",
+            "label": "Semibold"
+          },
+          {
+            "value": "700",
+            "label": "Bold"
+          },
+          {
+            "value": "800",
+            "label": "Extra bold"
+          }
+        ],
+        "default": "400",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "range",
+        "id": "custom_cart_date_icon_size",
+        "label": "Date picker icon size",
+        "min": 12,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 18,
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "select",
+        "id": "custom_cart_estimated_total_font_weight",
+        "label": "Estimated total font weight",
+        "options": [
+          {
+            "value": "400",
+            "label": "Regular"
+          },
+          {
+            "value": "500",
+            "label": "Medium"
+          },
+          {
+            "value": "600",
+            "label": "Semibold"
+          },
+          {
+            "value": "700",
+            "label": "Bold"
+          },
+          {
+            "value": "800",
+            "label": "Extra bold"
+          }
+        ],
+        "default": "400",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "range",
+        "id": "custom_cart_estimated_total_font_size",
+        "label": "Estimated total font size",
+        "min": 10,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 16,
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "color",
+        "id": "custom_cart_estimated_total_color",
+        "label": "Estimated total color",
+        "default": "{{ settings.color_palette.foreground }}",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "text",
+        "id": "custom_cart_estimated_total_label",
+        "label": "Estimated total label",
+        "default": "Estimated total",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "text",
+        "id": "custom_cart_checkout_label",
+        "label": "Checkout button label",
+        "default": "Checkout",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "color",
+        "id": "custom_cart_checkout_background",
+        "label": "Checkout button background",
+        "default": "{{ settings.color_palette.foreground }}",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "color",
+        "id": "custom_cart_checkout_text_color",
+        "label": "Checkout button text color",
+        "default": "{{ settings.color_palette.background }}",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "select",
+        "id": "custom_cart_checkout_font_weight",
+        "label": "Checkout button font weight",
+        "options": [
+          {
+            "value": "400",
+            "label": "Regular"
+          },
+          {
+            "value": "500",
+            "label": "Medium"
+          },
+          {
+            "value": "600",
+            "label": "Semibold"
+          },
+          {
+            "value": "700",
+            "label": "Bold"
+          },
+          {
+            "value": "800",
+            "label": "Extra bold"
+          }
+        ],
+        "default": "600",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "textarea",
+        "id": "custom_cart_date_css",
+        "label": "Date picker CSS",
+        "default": ";",
+        "info": "CSS declarations used to completely customize the date picker input.",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "textarea",
+        "id": "custom_cart_date_calendar_css",
+        "label": "Date picker calendar CSS",
+        "default": ";",
+        "info": "CSS declarations used to customize the calendar popup opened by the date picker. Browser support varies.",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "textarea",
+        "id": "custom_cart_checkout_css",
+        "label": "Checkout button CSS",
+        "default": ";",
+        "info": "CSS declarations used to completely customize the checkout button.",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "textarea",
+        "id": "custom_cart_checkout_hover_css",
+        "label": "Checkout button hover CSS",
+        "default": ";",
+        "info": "Enter CSS declarations to completely customize the checkout button hover state.",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
+        "type": "textarea",
+        "id": "custom_cart_checkout_wrapper_css",
+        "label": "Checkout section wrapper CSS",
+        "default": ";",
+        "info": "CSS declarations applied directly to the custom cart checkout section wrapper.",
+        "visible_if": "{{ settings.enable_custom_cart_drawer == true }}"
+      },
+      {
         "type": "select",
         "id": "cart_type",
         "label": "t:settings.cart_type",

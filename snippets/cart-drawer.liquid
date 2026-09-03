@@ -115,7 +115,71 @@
                 </scroll-hint>
 
                 <div class="cart-drawer__summary">
-                  {% render 'cart-summary', section_id: 'cart-drawer-section' %}
+                  {% if settings.enable_custom_cart_drawer %}
+                    <div
+                      class="custom-cart-checkout"
+                      style="{{ settings.custom_cart_checkout_wrapper_css }}"
+                    >
+                      <div class="custom-cart-checkout__date">
+                        <label
+                          class="custom-cart-checkout__date-label"
+                          for="CustomCartDeliveryDate"
+                        >
+                          {{ settings.custom_cart_date_label }}
+                        </label>
+
+                        <div class="custom-cart-checkout__date-input-wrapper">
+                          <input
+                            id="CustomCartDeliveryDate"
+                            class="custom-cart-checkout__date-input"
+                            type="date"
+                            aria-label="{{ settings.custom_cart_date_label | escape }}"
+                          >
+
+                          <span
+                            class="custom-cart-checkout__date-icon"
+                            aria-hidden="true"
+                          >
+                            {{- 'icon-calendar.svg' | inline_asset_content -}}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="custom-cart-checkout__estimated-total">
+                        <span class="custom-cart-checkout__estimated-total-label">
+                          {{ settings.custom_cart_estimated_total_label }}
+                        </span>
+
+                        <span class="custom-cart-checkout__estimated-total-value">
+                          {{ cart.total_price | money }}
+                        </span>
+                      </div>
+
+                      <button
+                        type="submit"
+                        id="checkout"
+                        class="custom-cart-checkout__button"
+                        name="checkout"
+                        {% if cart == empty %}
+                          disabled
+                        {% endif %}
+                        form="cart-form"
+                      >
+                        <span class="button-text">
+                          {{ settings.custom_cart_checkout_label }}
+                        </span>
+                      </button>
+
+                      <p
+                        class="custom-cart-checkout__disclaimer"
+                        style="margin: 0; width: 100%; text-align: center; font-size: 12px; font-weight: 500; color: #424242; line-height: 1.4;"
+                      >
+                        Taxes, discounts and shipping calculated at checkout
+                      </p>
+                    </div>
+                  {% else %}
+                    {% render 'cart-summary', section_id: 'cart-drawer-section' %}
+                  {% endif %}
                 </div>
               </scroll-hint>
             {%- endif -%}
@@ -276,3 +340,131 @@
     }
   }
 {% endstylesheet %}
+
+{% style %}
+  {% if settings.enable_custom_cart_drawer %}
+    /* =========================================================
+      CUSTOM CART CHECKOUT
+      ========================================================= */
+    .custom-cart-checkout {
+      {{ settings.custom_cart_checkout_wrapper_css }}
+
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-md);
+      width: 100%;
+    }
+
+    /* =========================================================
+      DATE PICKER
+      ========================================================= */
+    .custom-cart-checkout__date {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-xs);
+      width: 100%;
+    }
+
+    .custom-cart-checkout__date-label {
+      font-size: {{ settings.custom_cart_date_font_size }}px;
+      font-weight: {{ settings.custom_cart_date_font_weight }};
+      color: {{ settings.custom_cart_date_text_color }};
+    }
+
+    .custom-cart-checkout__date-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .custom-cart-checkout__date-input {
+      width: 100%;
+      min-height: 44px;
+
+      padding-inline-end: calc(
+        {{ settings.custom_cart_date_icon_size }}px + var(--padding-md)
+      );
+
+      font-size: {{ settings.custom_cart_date_font_size }}px;
+      font-weight: {{ settings.custom_cart_date_font_weight }};
+      color: {{ settings.custom_cart_date_text_color }};
+
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .custom-cart-checkout__date-icon {
+      position: absolute;
+      top: 50%;
+      right: var(--padding-md);
+
+      width: {{ settings.custom_cart_date_icon_size }}px;
+      height: {{ settings.custom_cart_date_icon_size }}px;
+
+      transform: translateY(-50%);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      pointer-events: none;
+    }
+
+    .custom-cart-checkout__date-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .custom-cart-checkout__date-input {
+      {{ settings.custom_cart_date_css }}
+    }
+    .custom-cart-checkout__date-input::-webkit-calendar-picker-indicator {
+      {{ settings.custom_cart_date_calendar_css }}
+    }
+
+    /* =========================================================
+      ESTIMATED TOTAL
+      ========================================================= */
+
+    .custom-cart-checkout__estimated-total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--gap-md);
+
+      width: 100%;
+
+      font-size: {{ settings.custom_cart_estimated_total_font_size }}px;
+      font-weight: {{ settings.custom_cart_estimated_total_font_weight }};
+      color: {{ settings.custom_cart_estimated_total_color }};
+    }
+
+    .custom-cart-checkout__estimated-total-label,
+    .custom-cart-checkout__estimated-total-value {
+      font-size: inherit;
+      font-weight: inherit;
+      color: inherit;
+    }
+
+
+    /* =========================================================
+      CHECKOUT BUTTON
+      ========================================================= */
+    .custom-cart-checkout__button {
+      width: 100%;
+
+      background-color: {{ settings.custom_cart_checkout_background }};
+      color: {{ settings.custom_cart_checkout_text_color }};
+
+      font-weight: {{ settings.custom_cart_checkout_font_weight }};
+
+      border: 0;
+      cursor: pointer;
+
+      {{ settings.custom_cart_checkout_css }}
+    }
+
+    .custom-cart-checkout__button:hover {
+      {{ settings.custom_cart_checkout_hover_css }}
+    }
+  {% endif %}
+{% endstyle %}
