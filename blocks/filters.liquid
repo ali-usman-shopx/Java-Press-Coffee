@@ -97,6 +97,12 @@
   if block_settings.background_color != blank or block_settings.text_color != blank
     assign has_custom_color = true
   endif
+
+  assign sorting_additional_classes = ''
+
+  if block_settings.show_items_count_before_sort_order == false
+    assign sorting_additional_classes = 'margin-left-auto'
+  endif
 -%}
 
 {% render 'contrast-override',
@@ -112,6 +118,12 @@
       class="facets facets--horizontal facets-controls-wrapper spacing-style{% if has_custom_color %} color-custom-{{ block.id }}{% endif %}"
       style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}"
     >
+      {% if block_settings.show_filters_group_label %}
+        <span>
+          {{ block_settings.filters_group_label }}
+        </span>
+      {% endif %}
+
       {% if block_settings.enable_filtering %}
         <h4 class="facets--filters-title">{{ 'content.filters' | t }}</h4>
       {% endif %}
@@ -137,7 +149,8 @@
           suffix: 'desktop',
           sort_position: 'desktop',
           should_use_select_on_mobile: false,
-          section_id: section.id
+          section_id: section.id,
+          use_select_style: block_settings.enable_sorting_select_style
         %}
       {% endif %}
 
@@ -190,6 +203,13 @@
           class="facets__form"
           ref="facetsForm"
         >
+          {% if block_settings.show_filters_group_label %}
+            <span
+              style="align-self: center;"
+            >
+              {{ block_settings.filters_group_label }}
+            </span>
+          {% endif %}
           {% if should_show_pane %}
             {% render 'filter-remove-buttons',
               filters: filters,
@@ -278,18 +298,20 @@
               {% endif %}
             {% endif %}
             {% if block_settings.filter_style == 'horizontal' %}
-              <div
-                class="products-count-wrapper"
-                data-testid="products-count"
-              >
-                <span role="status">
-                  {% if products_count > 25000 %}
-                    {{- 'content.item_count_cutoff' | t: count: 25000 -}}
-                  {% else %}
-                    {{- 'content.item_count' | t: count: products_count -}}
-                  {% endif %}
-                </span>
-              </div>
+              {% if block_settings.show_items_count_before_sort_order %}
+                <div
+                  class="products-count-wrapper margin-left-auto"
+                  data-testid="products-count"
+                >
+                  <span role="status">
+                    {% if products_count > 25000 %}
+                      {{- 'content.item_count_cutoff' | t: count: 25000 -}}
+                    {% else %}
+                      {{- 'content.item_count' | t: count: products_count -}}
+                    {% endif %}
+                  </span>
+                </div>
+              {% endif %}
 
               {% if block_settings.enable_sorting %}
                 {% render 'sorting',
@@ -299,8 +321,25 @@
                   suffix: 'desktop',
                   sort_position: 'desktop',
                   should_use_select_on_mobile: false,
-                  section_id: section.id
+                  section_id: section.id,
+                  additional_classes: sorting_additional_classes,
+                  use_select_style: block_settings.enable_sorting_select_style
                 %}
+              {% endif %}
+
+              {% if block_settings.show_items_count_before_sort_order == false %}
+                <div
+                  class="products-count-wrapper"
+                  data-testid="products-count"
+                >
+                  <span role="status">
+                    {% if products_count > 25000 %}
+                      {{- 'content.item_count_cutoff' | t: count: 25000 -}}
+                    {% else %}
+                      {{- 'content.item_count' | t: count: products_count -}}
+                    {% endif %}
+                  </span>
+                </div>
               {% endif %}
 
               {% if block_settings.enable_grid_density %}
@@ -1146,12 +1185,24 @@
   .facets--horizontal .products-count-wrapper {
     @media screen and (min-width: 750px) {
       display: flex;
-      margin-left: auto;
+      /* margin-left: auto; */
       flex-shrink: 0;
       align-items: center;
       height: var(--minimum-touch-target);
     }
   }
+
+  .facets--horizontal .margin-left-auto {
+    @media screen and (min-width: 750px) {
+      margin-left: auto !important;
+    }
+  }
+
+  /* .facets--horizontal .margin-left-none {
+    @media screen and (min-width: 750px) {
+      margin-left: 0;
+    }
+  } */
 
   /* Mobile specific components */
   .facets__title-wrapper {
@@ -1296,6 +1347,64 @@
   }
 {% endstylesheet %}
 
+{% if block_settings.override_block_font_size %}
+  <style>
+    .facets-block-wrapper,
+    .facets-block-wrapper .facets__label,
+    .facets-block-wrapper .facets__status,
+    .facets-block-wrapper .facets__summary,
+    .facets-block-wrapper .facets--filters-title,
+    .facets-block-wrapper .products-count-wrapper,
+    .facets-block-wrapper .sorting-filter,
+    .facets-block-wrapper .sorting-filter__select-label,
+    .facets-block-wrapper .sorting-filter__select-value,
+    .facets-block-wrapper .sorting-filter__select-summary,
+    .facets-block-wrapper .sorting-filter__option,
+    .facets-block-wrapper .facets__item,
+    .facets-block-wrapper button {
+      font-size: {{ block_settings.block_font_size }}px;
+    }
+  </style>
+{% endif %}
+
+{% if block_settings.enable_triangle_carets %}
+  <style>
+    .facets-block-wrapper .icon-caret,
+    .facets-block-wrapper .icon-animated,
+    .facets-block-wrapper .sorting-filter__select-caret {
+      color: {{ block_settings.triangle_caret_color }};
+    }
+
+    .facets-block-wrapper .icon-caret svg,
+    .facets-block-wrapper .icon-animated svg,
+    .facets-block-wrapper .sorting-filter__select-caret svg {
+      display: none;
+    }
+
+    .facets-block-wrapper .icon-caret::before,
+    .facets-block-wrapper .icon-animated::before,
+    .facets-block-wrapper .sorting-filter__select-caret::before {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid currentColor;
+    }
+  </style>
+{% endif %}
+
+{% if block_settings.enable_sorting_select_style %}
+  <style>
+    .facets-block-wrapper .sorting-filter--select-style .sorting-filter__select-value {
+      font-size: {{ block_settings.selected_sort_font_size }}px;
+      font-weight: {{ block_settings.selected_sort_font_weight }};
+      color: {{ block_settings.selected_sort_text_color }};
+    }
+  </style>
+{% endif %}
+
 {% schema %}
 {
   "name": "t:names.filters",
@@ -1375,9 +1484,36 @@
     },
     {
       "type": "checkbox",
+      "id": "show_filters_group_label",
+      "label": "Show Filters Label",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "filters_group_label",
+      "label": "Filters Label",
+      "default": "Filters:&nbsp;",
+      "visible_if": "{{ block.settings.show_filters_group_label }}"
+    },
+    {
+      "type": "checkbox",
       "id": "enable_sorting",
       "label": "t:settings.enable_sorting",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting_select_style",
+      "label": "Use Select Style for Sorting",
+      "default": false,
+      "visible_if": "{{ block.settings.enable_sorting }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_items_count_before_sort_order",
+      "label": "On Horizontal Show Items Count Before Sort Order",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_sorting }}"
     },
     {
       "type": "checkbox",
@@ -1400,6 +1536,79 @@
       "id": "text_color",
       "label": "t:settings.text_color",
       "placeholder": "t:settings.default"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_triangle_carets",
+      "label": "Use Triangle Carets",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "triangle_caret_color",
+      "label": "Triangle Caret Color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.enable_triangle_carets }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "override_block_font_size",
+      "label": "Override Font Size",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "block_font_size",
+      "label": "Block Font Size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.override_block_font_size }}"
+    },
+    {
+      "type": "range",
+      "id": "selected_sort_font_size",
+      "label": "Selected Sort Font Size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.enable_sorting and block.settings.enable_sorting_select_style }}"
+    },
+    {
+      "type": "select",
+      "id": "selected_sort_font_weight",
+      "label": "Selected Sort Font Weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_sorting and block.settings.enable_sorting_select_style }}"
+    },
+    {
+      "type": "color",
+      "id": "selected_sort_text_color",
+      "label": "Selected Sort Text Color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.enable_sorting and block.settings.enable_sorting_select_style }}"
     },
     {
       "type": "header",
