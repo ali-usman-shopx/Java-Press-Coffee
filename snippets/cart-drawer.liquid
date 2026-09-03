@@ -175,7 +175,7 @@
                             class="custom-cart-checkout__date-icon"
                             aria-hidden="true"
                           >
-                            {{ settings.custom_cart_date_icon | image_url: width: 100 | image_tag }}
+                            {% comment %} {{ settings.custom_cart_date_icon | image_url: width: 100 | image_tag }} {% endcomment %}
                           </span>
                         </div>
                       </div>
@@ -452,11 +452,11 @@
     .custom-cart-checkout__date-input {
       {{ settings.custom_cart_date_css }}
     }
-    .custom-cart-checkout__date-input::-webkit-calendar-picker-indicator {
+    /* .custom-cart-checkout__date-input::-webkit-calendar-picker-indicator {
       opacity: 0;
       display: none;
       -webkit-appearance: none;
-    }
+    } */
     .custom-cart-checkout__date-input::-webkit-calendar-picker-indicator {
       {{ settings.custom_cart_date_calendar_css }}
     }
