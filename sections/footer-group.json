@@ -288,7 +288,7 @@
             "input_style": "custom",
             "border_width": 1,
             "border_radius": 5,
-            "input_background_color": "#D9D9D9",
+            "input_background_color": "#d9d9d9",
             "input_text_color": "#898a8c",
             "input_border_color": "",
             "input_type_preset": "paragraph",
@@ -635,7 +635,7 @@
                           "name": "t:names.icon",
                           "settings": {
                             "icon": "price_tag",
-                            "image_upload": "shopify://shop_images/facebook_logo_mobile.png",
+                            "image_upload": "shopify://shop_images/facebook_vector.svg",
                             "width": 12,
                             "link": "",
                             "open_in_new_tab": false,
@@ -698,7 +698,7 @@
                           "name": "t:names.icon",
                           "settings": {
                             "icon": "price_tag",
-                            "image_upload": "shopify://shop_images/linked_in_logo_mobile.png",
+                            "image_upload": "shopify://shop_images/linkedin_vector.svg",
                             "width": 14,
                             "link": "",
                             "open_in_new_tab": false,
@@ -761,7 +761,7 @@
                           "name": "t:names.icon",
                           "settings": {
                             "icon": "price_tag",
-                            "image_upload": "shopify://shop_images/twitter_logo_mobile.png",
+                            "image_upload": "shopify://shop_images/twitter_vector.svg",
                             "width": 14,
                             "link": "",
                             "open_in_new_tab": false,
