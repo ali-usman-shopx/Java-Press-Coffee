@@ -489,12 +489,63 @@
             {% endif %}
           {% endcapture %}
           {% assign filters_drawer_title = 'blocks.filter' | t %}
-          {% render 'theme-drawer-header',
+          {% comment %} {% render 'theme-drawer-header',
             title: filters_drawer_title,
             drawer_id: 'filters-drawer',
             heading_id: 'filters-drawer-heading',
             title_append: filter_bubble_html
-          %}
+          %} {% endcomment %}
+
+          {% if block_settings.enable_custom_filter_drawer_header %}
+            <div class="facets-subdrawer__main-header">
+              <div class="facets-subdrawer__main-header-content">
+                <h2
+                  id="filters-drawer-heading"
+                  class="facets-subdrawer__main-header-title"
+                >
+                  {{ 'actions.show_filters' | t }}
+                </h2>
+
+                <span class="facets-subdrawer__main-header-count">
+                  {{ products_count }}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                class="facets-subdrawer__main-header-close"
+                data-filter-subdrawer-close
+                on:click="#filters-drawer/close"
+                aria-label="{{ 'actions.close' | t }}"
+              >
+                <span aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    focusable="false"
+                  >
+                    <path
+                      d="M5 5L19 19M19 5L5 19"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
+
+          {% else %}
+
+            {% render 'theme-drawer-header',
+              title: filters_drawer_title,
+              drawer_id: 'filters-drawer',
+              heading_id: 'filters-drawer-heading',
+              title_append: filter_bubble_html
+            %}
+
+          {% endif %}
 
           {% comment %} <scroll-hint
             class="facets-drawer__filters"
@@ -708,6 +759,7 @@
                       type="button"
                       class="facets-subdrawer__close"
                       data-filter-subdrawer-close
+                      on:click="#filters-drawer/close"
                       aria-label="Close"
                     >
                       <span class="facets-subdrawer__close-icon" aria-hidden="true">
@@ -793,6 +845,7 @@
                       type="button"
                       class="facets-subdrawer__close"
                       data-filter-subdrawer-close
+                      on:click="#filters-drawer/close"
                       aria-label="Close"
                     >
                       <span class="facets-subdrawer__close-icon" aria-hidden="true">
@@ -901,30 +954,60 @@
       <div
         class="facets__drawer-actions"
       >
-        <facet-remove-component
-          data-url="{{ results_url }}"
-          active-class="facets__clear-all--active"
-        >
-          <button
-            type="button"
-            class="button-secondary facets__clear-all{% if is_active %} facets__clear-all--active{% endif %}"
-            ref="clearButton"
-            on:click="/removeFilter?form={{ form_component }}"
-            on:keydown="/removeFilter?form={{ form_component }}"
+        {% if block_settings.enable_custom_filter_drawer_buttons %}
+          <facet-remove-component
+            data-url="{{ results_url }}"
+            active-class="facets__clear-all--active"
           >
-            {{- 'actions.clear_all' | t -}}
-          </button>
-        </facet-remove-component>
+            <button
+              type="button"
+              class="facets__drawer-button facets__drawer-button--remove-all"
+              ref="clearButton"
+              on:click="/removeFilter?form={{ form_component }}"
+              on:keydown="/removeFilter?form={{ form_component }}"
+              style="background-color: {{ block_settings.filter_drawer_remove_all_color }};"
+            >
+              {{ block_settings.filter_drawer_remove_all_label }}
+            </button>
+          </facet-remove-component>
 
-        {% if products_count > 0 %}
-          <button
-            class="button facets__see-results"
-            type="button"
-            on:click="#filters-drawer/close"
+          {% if products_count > 0 %}
+            <button
+              type="button"
+              class="facets__drawer-button facets__drawer-button--apply"
+              on:click="#filters-drawer/close"
+              style="background-color: {{ block_settings.filter_drawer_apply_color }};"
+            >
+              {{ block_settings.filter_drawer_apply_label | upcase }}
+            </button>
+          {% endif %}
+
+        {% else %}
+          <facet-remove-component
+            data-url="{{ results_url }}"
+            active-class="facets__clear-all--active"
           >
-            {{- 'actions.see_items' | t: count: products_count -}}
-          </button>
-        {% endif %}
+            <button
+              type="button"
+              class="button-secondary facets__clear-all{% if is_active %} facets__clear-all--active{% endif %}"
+              ref="clearButton"
+              on:click="/removeFilter?form={{ form_component }}"
+              on:keydown="/removeFilter?form={{ form_component }}"
+            >
+              {{- 'actions.clear_all' | t -}}
+            </button>
+          </facet-remove-component>
+
+          {% if products_count > 0 %}
+            <button
+              class="button facets__see-results"
+              type="button"
+              on:click="#filters-drawer/close"
+            >
+              {{- 'actions.see_items' | t: count: products_count -}}
+            </button>
+          {% endif %}
+        {% endif %}  
       </div>
     </dialog>
   </theme-drawer>
@@ -1964,6 +2047,116 @@
 
 {% endif %}
 
+{% if block_settings.enable_custom_filter_drawer_buttons %}
+
+  {% style %}
+
+    .facets-block-wrapper .facets__drawer-actions {
+      display: flex;
+      gap: var(--gap-sm);
+    }
+
+    .facets-block-wrapper .facets__drawer-button {
+      flex: 1 1 0;
+      min-height: var(--minimum-touch-target);
+      padding: var(--padding-sm) var(--padding-md);
+      border: 0;
+      cursor: pointer;
+      text-align: center;
+      font: inherit;
+    }
+
+    .facets-block-wrapper .facets__drawer-button--remove-all {
+      background-color: {{ block_settings.filter_drawer_remove_all_color }};
+      {{ block.settings.filter_drawer_remove_all_css }}
+    }
+
+    .facets-block-wrapper .facets__drawer-button--apply {
+      background-color: {{ block_settings.filter_drawer_apply_color }};
+      {{ block.settings.filter_drawer_apply_css }}
+    }
+
+    .facets-block-wrapper .facets__drawer-actions {
+      {{ block_settings.filter_drawer_buttons_container_css }}
+    }
+
+    .facets-block-wrapper .facets__drawer-button--remove-all {
+      {{ block_settings.filter_drawer_remove_all_css }}
+    }
+
+    .facets-block-wrapper .facets__drawer-button--apply {
+      {{ block_settings.filter_drawer_apply_css }}
+    }
+
+  {% endstyle %}
+
+{% endif %}
+
+{% if block_settings.enable_custom_filter_drawer_header %}
+
+  {% style %}
+
+    .facets-block-wrapper .facets-subdrawer__main-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--minimum-touch-target);
+      padding: var(--theme-drawer-padding);
+      background: var(--color-background);
+      color: var(--color-foreground);
+      border: 0;
+      box-shadow: none;
+    }
+
+    .facets-block-wrapper .facets-subdrawer__main-header-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: {{ block_settings.filter_drawer_header_text_gap }}px;
+      text-align: center;
+    }
+
+    .facets-block-wrapper .facets-subdrawer__main-header-title {
+      margin: 0;
+      color: {{ block_settings.filter_drawer_header_heading_color }};
+      font-size: {{ block_settings.filter_drawer_header_heading_font_size }}px;
+    }
+
+    .facets-block-wrapper .facets-subdrawer__main-header-count {
+      color: {{ block_settings.filter_drawer_header_subheading_color }};
+      font-size: {{ block_settings.filter_drawer_header_subheading_font_size }}px;
+    }
+
+    .facets-block-wrapper .facets-subdrawer__main-header-close {
+      position: absolute;
+      top: 50%;
+      right: var(--theme-drawer-padding);
+      display: grid;
+      place-items: center;
+      width: var(--minimum-touch-target);
+      height: var(--minimum-touch-target);
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      color: var(--color-foreground);
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    .facets-block-wrapper .facets-subdrawer__main-header-close span,
+    .facets-block-wrapper .facets-subdrawer__main-header-close svg {
+      display: block;
+      width: 24px;
+      height: 24px;
+    }
+
+  {% endstyle %}
+
+{% endif %}
+
 {% if block_settings.enable_filter_sub_drawers %}
   <script>
     (() => {
@@ -2089,6 +2282,114 @@
       "unit": "px",
       "default": 0,
       "visible_if": "{{ block.settings.enable_filter_sub_drawers }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_filter_drawer_buttons",
+      "label": "Use Custom Drawer Buttons",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "filter_drawer_remove_all_label",
+      "label": "'Remove' All Button Label",
+      "default": "Remove All",
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_buttons }}"
+    },
+    {
+      "type": "color",
+      "id": "filter_drawer_remove_all_color",
+      "label": "'Remove All' Button Color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_buttons }}"
+    },
+    {
+      "type": "textarea",
+      "id": "filter_drawer_remove_all_css",
+      "label": "'Remove All' Button Custom CSS",
+      "default": ";",
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_buttons }}"
+    },
+    {
+      "type": "text",
+      "id": "filter_drawer_apply_label",
+      "label": "'Apply' Button Label",
+      "default": "Apply",
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_buttons }}"
+    },
+    {
+      "type": "color",
+      "id": "filter_drawer_apply_color",
+      "label": "'Apply' Button Color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_buttons }}"
+    },
+    {
+      "type": "textarea",
+      "id": "filter_drawer_apply_css",
+      "label": "'Apply' Button Custom CSS",
+      "default": ";",
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_buttons }}"
+    },
+    {
+      "type": "textarea",
+      "id": "filter_drawer_buttons_container_css",
+      "label": "Drawer Buttons Container Custom CSS",
+      "default": ";",
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_buttons }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_filter_drawer_header",
+      "label": "Use Custom Filter Drawer Header",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "filter_drawer_header_heading_font_size",
+      "label": "Header Heading Font Size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 18,
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_header }}"
+    },
+    {
+      "type": "color",
+      "id": "filter_drawer_header_heading_color",
+      "label": "Header Heading Color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_header }}"
+    },
+    {
+      "type": "range",
+      "id": "filter_drawer_header_subheading_font_size",
+      "label": "Header Subheading Font Size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 13,
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_header }}"
+    },
+    {
+      "type": "color",
+      "id": "filter_drawer_header_subheading_color",
+      "label": "Header Subheading Color",
+      "default": "#666666",
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_header }}"
+    },
+    {
+      "type": "range",
+      "id": "filter_drawer_header_text_gap",
+      "label": "Header Text Gap",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 4,
+      "visible_if": "{{ block.settings.enable_custom_filter_drawer_header }}"
     },
     {
       "type": "checkbox",
