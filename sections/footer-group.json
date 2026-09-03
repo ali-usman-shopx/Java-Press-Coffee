@@ -2048,7 +2048,7 @@
                           "type": "text",
                           "name": "t:names.description",
                           "settings": {
-                            "text": "<p>Contact Us</p>",
+                            "text": "<p><a href=\"#\" title=\"#\">Contact Us</a></p>",
                             "enable_absolute_positioning": false,
                             "absolute_top": "0px",
                             "absolute_right": "0px",
@@ -2078,9 +2078,9 @@
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
                             "padding-inline-end": 0,
-                            "enable_custom_css": false,
-                            "custom_css_desktop": "",
-                            "custom_css_mobile": ""
+                            "enable_custom_css": true,
+                            "custom_css_desktop": "* {\ntext-decoration: none;\n}",
+                            "custom_css_mobile": "* {\ntext-decoration: none;\n}"
                           },
                           "blocks": {}
                         }
@@ -2138,7 +2138,7 @@
                           "type": "text",
                           "name": "t:names.description",
                           "settings": {
-                            "text": "<p>Phone: (+971 1234 567)</p>",
+                            "text": "<p><a href=\"tel:+9711234567\" title=\"tel:+9711234567\">Phone: (+971 1234 567)</a></p>",
                             "enable_absolute_positioning": false,
                             "absolute_top": "0px",
                             "absolute_right": "0px",
@@ -2168,9 +2168,9 @@
                             "padding-block-end": 0,
                             "padding-inline-start": 0,
                             "padding-inline-end": 0,
-                            "enable_custom_css": false,
-                            "custom_css_desktop": "",
-                            "custom_css_mobile": ""
+                            "enable_custom_css": true,
+                            "custom_css_desktop": "* {\ntext-decoration: none;\n}",
+                            "custom_css_mobile": "* {\ntext-decoration: none;\n}"
                           },
                           "blocks": {}
                         }
