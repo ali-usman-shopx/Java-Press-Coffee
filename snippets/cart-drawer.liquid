@@ -93,13 +93,46 @@
                 </span>
               {% endif %}
             {% endcapture %}
-            {% assign cart_drawer_title = 'content.cart_title' | t %}
-            {% render 'theme-drawer-header',
-              title: cart_drawer_title,
-              drawer_id: 'cart-drawer',
-              heading_id: 'cart-drawer-heading',
-              title_append: cart_badge_html
-            %}
+            {% if settings.enable_custom_cart_drawer %}
+              <div class="custom-cart-drawer__header">
+                <button
+                  on:click="#cart-drawer/close"
+                  class="custom-cart-drawer__close-button"
+                  type="button"
+                  aria-label="{{ 'actions.close' | t }}"
+                >
+                  <span class="svg-wrapper">
+                    {{- 'icon-close.svg' | inline_asset_content -}}
+                  </span>
+                </button>
+
+                <div class="custom-cart-drawer__header-content">
+                  <h2
+                    id="cart-drawer-heading"
+                    class="custom-cart-drawer__heading"
+                  >
+                    {{ 'content.cart_title' | t }}
+                  </h2>
+
+                  <span class="custom-cart-drawer__subheading">
+                    {{ cart.item_count }}
+                    {% if cart.item_count == 1 %}
+                      product
+                    {% else %}
+                      products
+                    {% endif %}
+                  </span>
+                </div>
+              </div>
+            {% else %}
+              {% assign cart_drawer_title = 'content.cart_title' | t %}
+              {% render 'theme-drawer-header',
+                title: cart_drawer_title,
+                drawer_id: 'cart-drawer',
+                heading_id: 'cart-drawer-heading',
+                title_append: cart_badge_html
+              %}
+            {% endif %}
           {%- endif -%}
 
           {% capture cart_items_children %}
@@ -468,3 +501,69 @@
     }
   {% endif %}
 {% endstyle %}
+
+{% if settings.enable_custom_cart_drawer %}
+  {% style %}
+    .custom-cart-drawer__header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: var(--padding-lg) var(--cart-drawer-padding);
+      border-bottom: 1px dashed #EFEFEF;
+      margin-bottom: 5px;
+    }
+
+    .custom-cart-drawer__header-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .custom-cart-drawer__heading {
+      margin: 0;
+      font-size: {{ settings.custom_cart_header_font_size }}px;
+      color: {{ settings.custom_cart_header_color }};
+      line-height: 1.2;
+    }
+
+    .custom-cart-drawer__subheading {
+      margin-block-start: 4px;
+      font-size: {{ settings.custom_cart_header_subheading_font_size }}px;
+      color: {{ settings.custom_cart_header_subheading_color }};
+      line-height: 1.2;
+    }
+
+    .custom-cart-drawer__close-button {
+      position: absolute;
+      inset-inline-end: var(--cart-drawer-padding);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--minimum-touch-target);
+      height: var(--minimum-touch-target);
+      padding: 0;
+      margin: 0;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .custom-cart-drawer__close-button:hover {
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .custom-cart-drawer__close-button .svg-wrapper,
+    .custom-cart-drawer__close-button svg {
+      width: 20px;
+      height: 20px;
+    }
+  {% endstyle %}
+{% endif %}
