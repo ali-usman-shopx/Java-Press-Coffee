@@ -135,6 +135,11 @@
           "type": "filters",
           "static": true,
           "settings": {
+            "enable_filter_sub_drawers": true,
+            "filter_drawer_font_size": 18,
+            "filter_subdrawer_padding": 16,
+            "filter_drawer_show_dividers": false,
+            "filter_drawer_element_gap": 12,
             "enable_filtering": true,
             "filter_style": "horizontal",
             "filter_width": "centered",

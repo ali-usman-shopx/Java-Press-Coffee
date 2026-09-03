@@ -496,7 +496,7 @@
             title_append: filter_bubble_html
           %}
 
-          <scroll-hint
+          {% comment %} <scroll-hint
             class="facets-drawer__filters"
           >
             {% if block_settings.enable_filtering %}
@@ -547,7 +547,354 @@
                 section_id: section.id
               %}
             {% endif %}
-          </scroll-hint>
+          </scroll-hint> {% endcomment %}
+
+          {% if block_settings.enable_filter_sub_drawers %}
+            {%- comment -%}
+              ============================================================
+              ALTERNATIVE MOBILE FILTER NAVIGATION
+              Feature flag: enable_filter_sub_drawers
+              ============================================================
+            {%- endcomment -%}
+
+            <div class="facets-subdrawer__main">
+
+              {% if block_settings.enable_filtering %}
+
+                {% render 'filter-remove-buttons',
+                  filters: filters,
+                  results_url: results_url,
+                  show_filter_label: block_settings.show_filter_label,
+                  should_show_clear_all: false
+                %}
+
+                <div class="facets-subdrawer__list">
+
+                  {%- for filter in filters -%}
+
+                    {% liquid
+                      assign active_value_count = filter.active_values.size
+                      assign filter_is_active = false
+
+                      if filter.type == 'price_range'
+                        if filter.min_value.value != null or filter.max_value.value != null
+                          assign filter_is_active = true
+                        endif
+                      elsif active_value_count > 0
+                        assign filter_is_active = true
+                      endif
+                    %}
+
+                    <button
+                      type="button"
+                      class="facets-subdrawer__row{% if filter_is_active %} facets-subdrawer__row--active{% endif %}"
+                      data-filter-subdrawer-trigger
+                      data-filter-index="{{ forloop.index0 }}"
+                      aria-haspopup="dialog"
+                      aria-controls="filter-subdrawer-{{ section.id }}-{{ forloop.index0 }}"
+                    >
+                      <span class="facets-subdrawer__row-label">
+                        {{ filter.label | escape }}
+                      </span>
+
+                      {% if filter_is_active %}
+                        <span class="facets-subdrawer__row-count">
+                          {% if filter.type == 'price_range' %}
+                            1
+                          {% else %}
+                            {{ active_value_count }}
+                          {% endif %}
+                        </span>
+                      {% endif %}
+
+                      <span class="facets-subdrawer__arrow" aria-hidden="true">
+                        <svg
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          focusable="false"
+                        >
+                          <path
+                            d="M3 12H20M14 6L20 12L14 18"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+
+                  {%- endfor -%}
+
+                  {% if block_settings.enable_sorting %}
+
+                    <button
+                      type="button"
+                      class="facets-subdrawer__row facets-subdrawer__sort-row"
+                      data-filter-subdrawer-trigger
+                      data-filter-index="sort"
+                      aria-haspopup="dialog"
+                      aria-controls="filter-subdrawer-sort-{{ section.id }}"
+                    >
+                      <span class="facets-subdrawer__row-label">
+                        {{ 'actions.sort' | t }}
+                      </span>
+
+                      <span class="facets-subdrawer__row-value">
+                        {{ sort_by }}
+                      </span>
+
+                      <span class="facets-subdrawer__arrow" aria-hidden="true">
+                        <svg
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          focusable="false"
+                        >
+                          <path
+                            d="M3 12H20M14 6L20 12L14 18"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+
+                  {% endif %}
+
+                </div>
+
+              {% endif %}
+
+            </div>
+
+            {%- comment -%}
+              ============================================================
+              INDIVIDUAL FILTER SUB-DRAWERS
+              ============================================================
+            {%- endcomment -%}
+
+            <div class="facets-subdrawer__panels">
+
+              {%- for filter in filters -%}
+
+                <div
+                  id="filter-subdrawer-{{ section.id }}-{{ forloop.index0 }}"
+                  class="facets-subdrawer__panel"
+                  data-filter-subdrawer-panel
+                  data-filter-index="{{ forloop.index0 }}"
+                  hidden
+                >
+
+                  <div class="facets-subdrawer__panel-header">
+
+                    <button
+                      type="button"
+                      class="facets-subdrawer__back"
+                      data-filter-subdrawer-back
+                      aria-label="Back to filters"
+                    >
+                      <span class="facets-subdrawer__back-arrow" aria-hidden="true"></span>
+                    </button>
+
+                    <h2 class="facets-subdrawer__panel-title">
+                      {{ filter.label | escape }}
+                    </h2>
+
+                    <button
+                      type="button"
+                      class="facets-subdrawer__close"
+                      data-filter-subdrawer-close
+                      aria-label="Close"
+                    >
+                      <span class="facets-subdrawer__close-icon" aria-hidden="true">
+                        <svg
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          focusable="false"
+                        >
+                          <path
+                            d="M5 5L19 19M19 5L5 19"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.75"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+
+                  </div>
+
+                  <div class="facets-subdrawer__panel-content">
+
+                    {% case filter.type %}
+
+                      {% when 'price_range' %}
+
+                        {% render 'price-filter',
+                          filter: filter,
+                          filter_style: 'vertical',
+                          should_render_clear: false,
+                          id_prefix: 'subdrawer',
+                          subdrawer: true
+                        %}
+
+                      {% else %}
+
+                        {% render 'list-filter',
+                          filter: filter,
+                          filter_style: 'vertical',
+                          active_value_count: filter.active_values.size,
+                          should_render_clear: false,
+                          show_swatch_label: block_settings.show_swatch_label,
+                          in_drawer: true,
+                          sectionId: section.id,
+                          subdrawer: true
+                        %}
+
+                    {% endcase %}
+
+                  </div>
+
+                </div>
+
+              {%- endfor -%}
+
+              {% if block_settings.enable_sorting %}
+
+                <div
+                  id="filter-subdrawer-sort-{{ section.id }}"
+                  class="facets-subdrawer__panel"
+                  data-filter-subdrawer-panel
+                  data-filter-index="sort"
+                  hidden
+                >
+
+                  <div class="facets-subdrawer__panel-header">
+
+                    <button
+                      type="button"
+                      class="facets-subdrawer__back"
+                      data-filter-subdrawer-back
+                      aria-label="Back"
+                    >
+                      <span class="facets-subdrawer__back-arrow" aria-hidden="true"></span>
+                    </button>
+
+                    <h2 class="facets-subdrawer__panel-title">
+                      {{ 'actions.sort' | t }}
+                    </h2>
+
+                   <button
+                      type="button"
+                      class="facets-subdrawer__close"
+                      data-filter-subdrawer-close
+                      aria-label="Close"
+                    >
+                      <span class="facets-subdrawer__close-icon" aria-hidden="true">
+                        <svg
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          focusable="false"
+                        >
+                          <path
+                            d="M5 5L19 19M19 5L5 19"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.75"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+
+                  </div>
+
+                  <div class="facets-subdrawer__panel-content">
+
+                    {% render 'sorting',
+                      results: results,
+                      sort_by: sort_by,
+                      filter_style: 'vertical',
+                      suffix: 'subdrawer',
+                      should_use_select_on_mobile: false,
+                      section_id: section.id
+                    %}
+
+                  </div>
+
+                </div>
+
+              {% endif %}
+
+            </div>
+
+          {% else %}
+
+            {%- comment -%}
+              ============================================================
+              EXISTING / DEFAULT DRAWER
+              DO NOT MODIFY
+              ============================================================
+            {%- endcomment -%}
+
+            <scroll-hint
+              class="facets-drawer__filters"
+            >
+              {% if block_settings.enable_filtering %}
+                {% render 'filter-remove-buttons',
+                  filters: filters,
+                  results_url: results_url,
+                  show_filter_label: block_settings.show_filter_label,
+                  should_show_clear_all: false
+                %}
+
+                <div class="facets__filters-wrapper">
+                  {% assign total_active_values = 0 %}
+                  {% assign is_active = false %}
+
+                  {%- for filter in filters -%}
+                    {% case filter.type %}
+                      {% when 'price_range' %}
+                        {%- liquid
+                          if filter.min_value.value != null or filter.max_value.value != null
+                            assign total_active_values = total_active_values | plus: 1
+                            assign is_active = true
+                          endif
+
+                          render 'price-filter', filter: filter, filter_style: 'vertical', should_render_clear: false, id_prefix: 'dialog'
+                        -%}
+                      {% else %}
+                        {% liquid
+                          if filter.active_values.size > 0
+                            assign is_active = true
+                          endif
+
+                          assign active_value_count = filter.active_values | size
+                          assign total_active_values = total_active_values | plus: active_value_count
+                          render 'list-filter', filter: filter, filter_style: 'vertical', active_value_count: active_value_count, should_render_clear: false, in_drawer: true, sectionId: section.id
+                        %}
+                    {% endcase %}
+                  {%- endfor -%}
+                </div>
+              {% endif %}
+
+              {% if block_settings.enable_sorting %}
+                {% render 'sorting',
+                  results: results,
+                  sort_by: sort_by,
+                  filter_style: block_settings.filter_style,
+                  suffix: 'overflow',
+                  should_use_select_on_mobile: should_use_select_on_mobile,
+                  section_id: section.id
+                %}
+              {% endif %}
+            </scroll-hint>
+          {% endif %}
         </form>
       </facets-form-component>
 
@@ -1405,11 +1752,344 @@
   </style>
 {% endif %}
 
+{% if block_settings.enable_filter_sub_drawers %}
+
+  {% style %}
+
+    /* Main drawer */
+    .facets-block-wrapper .facets-subdrawer__main {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+      font-size: {{ block_settings.filter_drawer_font_size }}px;
+    }
+
+    /* Main drawer list */
+    .facets-block-wrapper .facets-subdrawer__list {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      gap: {{ block_settings.filter_drawer_element_gap }}px;
+    }
+
+    /* Main drawer rows */
+    .facets-block-wrapper .facets-subdrawer__row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-height: var(--minimum-touch-target);
+      padding: var(--padding-sm) var(--theme-drawer-padding);
+      margin: 0;
+      border: 0;
+      border-bottom: var(--style-border-width) solid
+        rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+      background: transparent;
+      color: var(--color-foreground);
+      font-size: {{ block_settings.filter_drawer_font_size }}px;
+      text-align: start;
+      cursor: pointer;
+    }
+
+    /* Row label */
+    .facets-block-wrapper .facets-subdrawer__row-label {
+      flex: 1 1 auto;
+    }
+
+    /* Selected value */
+    .facets-block-wrapper .facets-subdrawer__row-value {
+      margin-inline-start: auto;
+      margin-inline-end: var(--gap-sm);
+      color: var(--color-foreground-muted);
+    }
+
+    /* Active count */
+    .facets-block-wrapper .facets-subdrawer__row-count {
+      display: inline-grid;
+      place-items: center;
+      min-width: 20px;
+      min-height: 20px;
+      margin-inline-end: var(--gap-sm);
+      padding-inline: 5px;
+      border-radius: var(--style-border-radius-50);
+      background: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
+      font-size: var(--font-size--xs);
+    }
+
+    /* Main drawer arrow */
+    .facets-block-wrapper .facets-subdrawer__arrow {
+      display: block;
+      width: 24px;
+      height: 24px;
+      flex: 0 0 24px;
+      color: var(--color-foreground);
+    }
+
+    .facets-block-wrapper .facets-subdrawer__arrow svg {
+      display: block;
+      width: 24px;
+      height: 24px;
+      overflow: visible;
+    }
+
+    /* Main drawer dividers */
+    .facets-block-wrapper .facets-subdrawer__row {
+      border-bottom: {% if block_settings.filter_drawer_show_dividers %}
+        var(--style-border-width) solid
+        rgb(var(--color-foreground-rgb) / var(--opacity-10-25))
+      {% else %}
+        none
+      {% endif %};
+    }
+
+    /* Sub-drawer container */
+    .facets-block-wrapper .facets-subdrawer__panels {
+      position: absolute;
+      inset: 0;
+      z-index: var(--facets-open-z-index);
+      pointer-events: none;
+    }
+
+    /* Sub-drawer panel */
+    .facets-block-wrapper .facets-subdrawer__panel {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-background);
+      color: var(--color-foreground);
+      font-size: {{ block_settings.filter_drawer_font_size }}px;
+      pointer-events: auto;
+    }
+
+    .facets-block-wrapper .facets-subdrawer__sort-row .facets-subdrawer__row-label {
+      flex: 0 0 auto;
+    }
+
+    .facets-block-wrapper .facets-subdrawer__sort-row .facets-subdrawer__row-value {
+      margin-inline-start: var(--gap-sm);
+      margin-inline-end: auto;
+    }
+
+    /* Hidden panel */
+    .facets-block-wrapper .facets-subdrawer__panel[hidden] {
+      display: none;
+    }
+
+    /* Sub-drawer header */
+    .facets-block-wrapper .facets-subdrawer__panel-header {
+      flex: 0 0 auto;
+      display: grid;
+      grid-template-columns: 44px 1fr 44px;
+      align-items: center;
+      min-height: var(--minimum-touch-target);
+      padding-inline: {{ block_settings.filter_subdrawer_padding }}px;
+      background: var(--color-background);
+      color: var(--color-foreground);
+      border-bottom: {% if block_settings.filter_drawer_show_dividers %}
+        var(--style-border-width) solid
+        rgb(var(--color-foreground-rgb) / var(--opacity-10-25))
+      {% else %}
+        none
+      {% endif %};
+    }
+
+    /* Sub-drawer title */
+    .facets-block-wrapper .facets-subdrawer__panel-title {
+      margin: 0;
+      text-align: center;
+    }
+
+    /* Back and close buttons */
+    .facets-block-wrapper .facets-subdrawer__back,
+    .facets-block-wrapper .facets-subdrawer__close {
+      display: grid;
+      place-items: center;
+      width: var(--minimum-touch-target);
+      height: var(--minimum-touch-target);
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--color-foreground);
+      cursor: pointer;
+    }
+
+    /* Back arrow */
+    .facets-block-wrapper .facets-subdrawer__back-arrow {
+      width: 9px;
+      height: 9px;
+      border-inline-start: 1.5px solid currentColor;
+      border-block-end: 1.5px solid currentColor;
+      transform: rotate(45deg);
+    }
+
+    /* Sub-drawer close icon */
+    .facets-block-wrapper .facets-subdrawer__close-icon {
+      display: block;
+      width: 24px;
+      height: 24px;
+      color: var(--color-foreground);
+    }
+
+    .facets-block-wrapper .facets-subdrawer__close-icon svg {
+      display: block;
+      width: 24px;
+      height: 24px;
+      overflow: visible;
+    }
+
+    /* Sub-drawer content */
+    .facets-block-wrapper .facets-subdrawer__panel-content {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: {{ block_settings.filter_subdrawer_padding }}px;
+      font-size: {{ block_settings.filter_drawer_font_size }}px;
+    }
+
+    /* Filter panel spacing */
+    .facets-block-wrapper
+      .facets-subdrawer__panel-content
+      .facets__panel {
+      padding-inline: var(--theme-drawer-padding);
+    }
+
+  {% endstyle %}
+
+{% endif %}
+
+{% if block_settings.enable_filter_sub_drawers %}
+  <script>
+    (() => {
+      const initFilterSubDrawers = () => {
+        const drawer = document.querySelector('#filters-drawer');
+
+        if (!drawer || drawer.dataset.subdrawersInitialized === 'true') {
+          return;
+        }
+
+        const mainView = drawer.querySelector('.facets-subdrawer__main');
+        const panels = drawer.querySelectorAll('[data-filter-subdrawer-panel]');
+        const triggers = drawer.querySelectorAll('[data-filter-subdrawer-trigger]');
+
+        if (!mainView || !panels.length || !triggers.length) {
+          return;
+        }
+
+        drawer.dataset.subdrawersInitialized = 'true';
+
+        const showMainView = () => {
+          panels.forEach((panel) => {
+            panel.hidden = true;
+          });
+
+          mainView.hidden = false;
+          delete drawer.dataset.subdrawerActive;
+        };
+
+        const showPanel = (index) => {
+          const panel = drawer.querySelector(
+            `[data-filter-subdrawer-panel][data-filter-index="${index}"]`
+          );
+
+          if (!panel) {
+            return;
+          }
+
+          mainView.hidden = true;
+
+          panels.forEach((item) => {
+            item.hidden = item !== panel;
+          });
+
+          drawer.dataset.subdrawerActive = index;
+        };
+
+        triggers.forEach((trigger) => {
+          trigger.addEventListener('click', () => {
+            showPanel(trigger.dataset.filterIndex);
+          });
+        });
+
+        drawer.addEventListener('click', (event) => {
+          const backButton = event.target.closest('[data-filter-subdrawer-back]');
+
+          if (backButton) {
+            showMainView();
+          }
+        });
+
+        drawer.addEventListener('close', showMainView);
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFilterSubDrawers);
+      } else {
+        initFilterSubDrawers();
+      }
+
+      document.addEventListener('shopify:section:load', initFilterSubDrawers);
+    })();
+  </script>
+{% endif %}
+
 {% schema %}
 {
   "name": "t:names.filters",
   "tag": null,
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_filter_sub_drawers",
+      "label": "Use Filter Sub Drawers",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "filter_drawer_font_size",
+      "label": "Drawer Font Size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.enable_filter_sub_drawers }}"
+    },
+    {
+      "type": "range",
+      "id": "filter_subdrawer_padding",
+      "label": "Sub Drawer Padding",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.enable_filter_sub_drawers }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "filter_drawer_show_dividers",
+      "label": "Show Drawer Dividers",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_filter_sub_drawers }}"
+    },
+    {
+      "type": "range",
+      "id": "filter_drawer_element_gap",
+      "label": "Main Drawer Element Gap",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_filter_sub_drawers }}"
+    },
     {
       "type": "checkbox",
       "id": "enable_filtering",
