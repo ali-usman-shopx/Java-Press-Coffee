@@ -1,0 +1,419 @@
+{%- doc -%}
+  Custom product card.
+
+  This snippet intentionally contains the complete markup and behavior for
+  the custom product card. Its settings are supplied by the calling block.
+
+  @param {object} product - The product object.
+  @param {object} settings - The custom product card settings.
+  @param {string} id - A unique ID used to scope styles and JavaScript.
+{%- enddoc -%}
+
+{% liquid
+  assign custom_product = product
+  assign card_id = id
+  assign card_settings = settings
+
+  assign raw_score = custom_product.metafields.custom.reviews_score.value | default: 5
+  assign total_stars = raw_score | plus: 0 | round
+  assign review_count = custom_product.metafields.custom.reviews_count.value | default: 0
+%}
+
+{% style %}
+  .custom-product-card-{{ card_id }} {
+    width: 100%;
+    background: transparent;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Image
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card-{{ card_id }}__image-container {
+    position: relative;
+    background-color: {{ card_settings.image_background }};
+    border-radius: {{ card_settings.image_border_radius }}px;
+    padding: {{ card_settings.image_padding }}px;
+    margin-bottom: {{ card_settings.image_margin_bottom }}px;
+    overflow: hidden;
+  }
+
+  .custom-product-card-{{ card_id }}__image-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .custom-product-card-{{ card_id }}__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+  }
+
+  .custom-product-card-{{ card_id }}__image-placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Stamp
+   * ------------------------------------------------------------
+   */
+
+  {% if card_settings.stamp_image != blank %}
+    .custom-product-card-{{ card_id }}__stamp {
+      position: absolute;
+      top: {{ card_settings.stamp_position_top }}px;
+      right: {{ card_settings.stamp_position_right }}px;
+      width: {{ card_settings.stamp_size }}px;
+      height: {{ card_settings.stamp_size }}px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .custom-product-card-{{ card_id }}__stamp img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  {% endif %}
+
+  /*
+   * ------------------------------------------------------------
+   * Product information
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card-{{ card_id }}__info {
+    padding-inline: {{ card_settings.info_padding_inline }}px;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Title
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card-{{ card_id }}__title {
+    font-size: {{ card_settings.title_font_size }}px;
+    font-weight: {{ card_settings.title_font_weight }};
+    line-height: {{ card_settings.title_line_height }};
+    margin: 0 0 {{ card_settings.title_margin_bottom }}px;
+    color: {{ card_settings.title_color }};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    min-height: 2lh;
+  }
+
+  .custom-product-card-{{ card_id }}__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Reviews
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card-{{ card_id }}__reviews {
+    display: flex;
+    align-items: center;
+    gap: {{ card_settings.review_gap }}px;
+    margin-bottom: {{ card_settings.review_margin_bottom }}px;
+  }
+
+  .custom-product-card-{{ card_id }}__stars {
+    display: flex;
+    gap: {{ card_settings.star_gap }}px;
+    color: {{ card_settings.star_color }};
+  }
+
+  .custom-product-card-{{ card_id }}__star {
+    width: {{ card_settings.star_size }}px;
+    height: {{ card_settings.star_size }}px;
+    flex: 0 0 {{ card_settings.star_size }}px;
+  }
+
+  .custom-product-card-{{ card_id }}__review-count {
+    font-size: {{ card_settings.review_count_font_size }}px;
+    font-weight: {{ card_settings.review_count_font_weight }};
+    color: {{ card_settings.review_count_color }};
+    line-height: 1;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Price
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card-{{ card_id }}__price {
+    display: flex;
+    align-items: center;
+    gap: {{ card_settings.price_gap }}px;
+    margin-bottom: {{ card_settings.price_margin_bottom }}px;
+  }
+
+  .custom-product-card-{{ card_id }}__current-price {
+    font-size: {{ card_settings.price_font_size }}px;
+    font-weight: {{ card_settings.price_font_weight }};
+    color: {{ card_settings.price_color }};
+  }
+
+  .custom-product-card-{{ card_id }}__compare-price {
+    font-size: {{ card_settings.compare_price_font_size }}px;
+    font-weight: {{ card_settings.compare_price_font_weight }};
+    color: {{ card_settings.compare_price_color }};
+    text-decoration: line-through;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Add to cart
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card-{{ card_id }}__add-to-cart {
+    width: 100%;
+    padding:
+      {{ card_settings.button_padding_vertical }}px
+      {{ card_settings.button_padding_horizontal }}px;
+    background-color: {{ card_settings.button_background }};
+    color: {{ card_settings.button_text_color }};
+    border: none;
+    border-radius: {{ card_settings.button_border_radius }}px;
+    font-size: {{ card_settings.button_font_size }}px;
+    font-weight: {{ card_settings.button_font_weight }};
+    line-height: {{ card_settings.button_line_height }};
+    cursor: pointer;
+    transition: opacity {{ card_settings.button_transition_duration }}ms ease;
+  }
+
+  .custom-product-card-{{ card_id }}__add-to-cart:hover {
+    opacity: {{ card_settings.button_hover_opacity | divided_by: 100.0 }};
+  }
+
+  .custom-product-card-{{ card_id }}__add-to-cart:disabled {
+    cursor: default;
+  }
+
+  .custom-product-card-{{ card_id }}__form {
+    width: 100%;
+  }
+{% endstyle %}
+
+<div class="custom-product-card-{{ card_id }}">
+
+  <div class="custom-product-card-{{ card_id }}__image-container">
+
+    {% if card_settings.stamp_image != blank %}
+      <div class="custom-product-card-{{ card_id }}__stamp">
+        <img
+          src="{{ card_settings.stamp_image | image_url: width: 200 }}"
+          alt="{{ card_settings.stamp_image.alt | escape }}"
+          loading="lazy"
+          width="200"
+          height="auto"
+        >
+      </div>
+    {% endif %}
+
+    <a
+      href="{{ custom_product.url }}"
+      class="custom-product-card-{{ card_id }}__image-link"
+    >
+      {% if custom_product.featured_image %}
+        <img
+          src="{{ custom_product.featured_image | image_url: width: 600 }}"
+          alt="{{ custom_product.featured_image.alt | escape }}"
+          class="custom-product-card-{{ card_id }}__image"
+          loading="lazy"
+          width="600"
+          height="600"
+        >
+      {% else %}
+        <div class="custom-product-card-{{ card_id }}__image-placeholder">
+          {{ 'product-1' | placeholder_svg_tag }}
+        </div>
+      {% endif %}
+    </a>
+
+  </div>
+
+  <div class="custom-product-card-{{ card_id }}__info">
+
+    <h3 class="custom-product-card-{{ card_id }}__title">
+      <a href="{{ custom_product.url }}">
+        {{ custom_product.title }}
+      </a>
+    </h3>
+
+    {% if card_settings.show_reviews %}
+      <div class="custom-product-card-{{ card_id }}__reviews">
+
+        <div class="custom-product-card-{{ card_id }}__stars">
+          {% for star in (1..total_stars) %}
+            <svg
+              class="custom-product-card-{{ card_id }}__star"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          {% endfor %}
+        </div>
+
+        <span class="custom-product-card-{{ card_id }}__review-count">
+          ({{ review_count }})
+        </span>
+
+      </div>
+    {% endif %}
+
+    <div class="custom-product-card-{{ card_id }}__price">
+
+      <span class="custom-product-card-{{ card_id }}__current-price">
+        {{ custom_product.price | money }}
+      </span>
+
+      {% if custom_product.compare_at_price > custom_product.price %}
+        <span class="custom-product-card-{{ card_id }}__compare-price">
+          {{ custom_product.compare_at_price | money }}
+        </span>
+      {% endif %}
+
+    </div>
+
+    <product-form-component
+        data-section-id="{{ section.id }}"
+        data-product-id="{{ custom_product.id }}"
+        data-product-url="{{ custom_product.url }}"
+        on:submit="/handleSubmit"
+        data-quantity-default="1"
+        data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+    >
+    <div
+        class="visually-hidden"
+        aria-live="assertive"
+        role="status"
+        aria-atomic="true"
+        ref="liveRegion"
+    ></div>
+
+    {% assign custom_form_id = 'CustomProductForm-' | append: card_id %}
+
+    {% form 'product',
+        custom_product,
+        id: custom_form_id,
+        class: custom_form_class,
+        data-type: 'add-to-cart-form'
+    %}
+
+        <input
+        type="hidden"
+        name="id"
+        ref="variantId"
+        value="{{ custom_product.selected_or_first_available_variant.id }}"
+        >
+
+        <input
+        type="hidden"
+        name="quantity"
+        value="1"
+        >
+
+        <add-to-cart-component>
+        <button
+            type="submit"
+            name="add"
+            class="custom-product-card-{{ card_id }}__add-to-cart"
+            ref="addToCartButton"
+            {% unless custom_product.available %}
+            disabled
+            {% endunless %}
+        >
+            {{ card_settings.button_text }}
+        </button>
+        </add-to-cart-component>
+
+    {% endform %}
+    </product-form-component>
+
+  </div>
+</div>
+
+{% comment %} <script>
+  (() => {
+    const card = document.querySelector(
+      '.custom-product-card-{{ card_id }}'
+    );
+
+    if (!card) return;
+
+    const button = card.querySelector(
+      '.custom-product-card-{{ card_id }}__add-to-cart'
+    );
+
+    if (!button) return;
+
+    button.addEventListener('click', () => {
+      const variantId = button.dataset.variantId;
+      const originalText = button.textContent;
+
+      button.textContent = 'Adding...';
+      button.disabled = true;
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: variantId,
+          quantity: 1
+        })
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Unable to add product to cart.');
+          }
+
+          return response.json();
+        })
+        .then(() => {
+          button.textContent = 'Added!';
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.disabled = false;
+          }, 2000);
+
+          if (window.theme && window.theme.cart) {
+            window.theme.cart.refresh();
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+
+          button.textContent = 'Error';
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.disabled = false;
+          }, 2000);
+        });
+    });
+  })();
+</script> {% endcomment %}

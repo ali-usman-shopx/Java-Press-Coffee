@@ -1,5 +1,5 @@
 
-{% render 'button', link: block.settings.link %}
+{% render 'button', link: block.settings.link, block: block %}
 
 {% schema %}
 {
@@ -85,6 +85,41 @@
       "visible_if": "{{ block.settings.style_class == 'button-unstyled' }}"
     },
     {
+      "type": "checkbox",
+      "id": "enable_button_font_weight_override",
+      "label": "Override Button Font Weight",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra-bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_button_font_weight_override }}"
+    },
+    {
       "type": "header",
       "content": "t:content.size"
     },
@@ -141,6 +176,23 @@
       "unit": "%",
       "default": 100,
       "visible_if": "{{ block.settings.width_mobile == \"custom\" }}"
+    },
+    {
+      "type": "header",
+      "content": "Hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "override_hover_css",
+      "label": "Override On Hover CSS",
+      "default": false
+    },
+    {
+      "type": "html",
+      "id": "hover_css",
+      "label": "On Hover CSS",
+      "placeholder": "opacity: 0.8; color: white;",
+      "visible_if": "{{ block.settings.override_hover_css }}"
     }
   ],
   "presets": [

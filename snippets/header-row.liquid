@@ -35,6 +35,16 @@
         assign item_column = 'right'
     endcase
 
+      #Feature flag:
+      #Force the header menu into the right column on the top row.
+      #
+      #When disabled, the menu continues to use its configured
+      #menu_position setting exactly as before.
+
+    if item == 'menu' and row == 'top' and settings.enable_right_aligned_menu
+      assign item_column = 'right'
+    endif
+
     if item_row == row
       case item_column
         when 'left'

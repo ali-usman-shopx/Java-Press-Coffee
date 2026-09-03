@@ -1,6 +1,21 @@
-
-
 {% render 'text-block-styles' %}
+
+{% style %}
+  {% if block.settings.enable_price_style_override %}
+    .product-price-block-{{ block.id }} .price {
+      color: {{ block.settings.price_color }};
+      font-size: {{ block.settings.price_font_size }}px;
+      font-weight: {{ block.settings.price_font_weight }};
+    }
+
+    .product-price-block-{{ block.id }} .compare-at-price {
+      color: {{ block.settings.compare_price_color }};
+      font-size: {{ block.settings.compare_price_font_size }}px;
+      font-weight: {{ block.settings.compare_price_font_weight }};
+      text-decoration: line-through;
+    }
+  {% endif %}
+{% endstyle %}
 
 {%- liquid
   assign block_settings = block.settings
@@ -20,18 +35,23 @@
         echo ' text-block--full-width'
       endif
     endif
+
     if block_settings.type_preset == 'custom'
       echo ' custom-typography'
+
       if block_settings.font_size != ''
         echo ' custom-font-size'
       endif
+
       if block_settings.color != ''
         echo ' custom-color'
       endif
     endif
+
     if block_settings.background
       echo ' text-block--background'
     endif
+
     if is_rte
       echo ' rte'
     endif
@@ -39,16 +59,18 @@
 %}
 
 <product-price
-  class="text-block {{ text_block_classes }} text-{{ block_settings.alignment }} {{ block_settings.type_preset | default: 'paragraph' }} spacing-style"
+  class="product-price-block-{{ block.id }} text-block {{ text_block_classes }} text-{{ block_settings.alignment }} {{ block_settings.type_preset | default: 'paragraph' }} spacing-style"
   data-block-id="{{ block.id }}"
   data-product-id="{{ product_resource.id }}"
   style="
     {% render 'typography-style', settings: block_settings %}
     {% render 'spacing-style', settings: block_settings %}
+
     {% if block_settings.text_color != blank %}
       --color: {{ block_settings.text_color }};
       --color-rgb: {{ block_settings.text_color.rgb }};
     {% endif %}
+
     --width: {{ block_settings.width }};
   "
   {{ block.shopify_attributes }}
@@ -78,12 +100,18 @@
   {%- if selected_variant != blank and block_settings.show_installments -%}
     <div class="installments">
       {%- assign product_form_installment_id = 'product-form-installment-' | append: block.id -%}
-      {%- form 'product', product_resource, id: product_form_installment_id, class: 'payment-terms' -%}
+
+      {%- form 'product',
+        product_resource,
+        id: product_form_installment_id,
+        class: 'payment-terms'
+      -%}
         <input
           type="hidden"
           name="id"
           value="{{ selected_variant.id }}"
         >
+
         {{ form | payment_terms }}
       {%- endform -%}
     </div>
@@ -354,6 +382,110 @@
       ],
       "default": "none",
       "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Price Styling"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_price_style_override",
+      "label": "Override default price styling",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Price color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.enable_price_style_override }}"
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Compare price color",
+      "default": "#888888",
+      "visible_if": "{{ block.settings.enable_price_style_override }}"
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "label": "Price font size",
+      "min": 8,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.enable_price_style_override }}"
+    },
+    {
+      "type": "range",
+      "id": "compare_price_font_size",
+      "label": "Compare price font size",
+      "min": 8,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.enable_price_style_override }}"
+    },
+    {
+      "type": "select",
+      "id": "price_font_weight",
+      "label": "Price font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_price_style_override }}"
+    },
+    {
+      "type": "select",
+      "id": "compare_price_font_weight",
+      "label": "Compare price font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_price_style_override }}"
     },
     {
       "type": "header",

@@ -146,7 +146,7 @@
               <tr
                 id="CartItem-{{ item.key }}"
                 role="row"
-                class="cart-items__table-row{% if item.parent_relationship.parent != null %} cart-items__nested-line{% endif %}{% if context == 'drawer' %}{% unless item.unit_price_measurement %} cart-items__table-row--full-width-variants{% endunless %}{% endif %}"
+                class="cart-items__table-row{% if item.parent_relationship.parent != null %} cart-items__nested-line{% endif %}{% if context == 'drawer' %}{% unless item.unit_price_measurement %} cart-items__table-row--full-width-variants{% endunless %}{% if settings.enable_custom_cart_drawer %} cart-items__table-row--custom-drawer{% endif %}{% endif %}"
                 ref="cartItemRows[]"
                 data-parent-key="{{ item.parent_relationship.parent.key }}"
                 data-key="{{ item.key }}"
@@ -239,10 +239,12 @@
                         <dl class="cart-items__variants">
                           {%- for option in item.options_with_values -%}
                             <div class="cart-items__variant">
-                              <dt class="visually-hidden">{{ option.name }}:</dt>
+                              {% unless settings.enable_custom_cart_drawer %}
+                                <dt class="visually-hidden">{{ option.name }}:</dt>
+                              {% endunless %}
                               <dd>
                                 {{- option.value -}}
-                                {%- if forloop.last != true %},&nbsp;{% endif -%}
+                                {%- unless forloop.last or settings.enable_custom_cart_drawer -%},&nbsp;{% endunless -%}
                               </dd>
                             </div>
                           {%- endfor -%}
@@ -357,11 +359,20 @@
                       aria-label="{{ 'accessibility.remove_item' | t: title: item.title | escape }}"
                       on:click="/onLineItemRemove/{{ item.index | plus: 1 }}"
                       {% assign can_remove = item.instructions.can_remove | default: true, allow_false: true %}
-                      {% if can_remove == false %}
-                        hidden
-                      {% endif %}
+                      {% if can_remove == false %} hidden {% endif %}
                     >
-                      {{- 'icon-delete.svg' | inline_asset_content -}}
+                      {% if settings.enable_custom_cart_drawer and settings.custom_cart_remove_icon != blank %}
+                        <img
+                          src="{{ settings.custom_cart_remove_icon | image_url: width: 96 }}"
+                          alt=""
+                          width="{{ settings.custom_cart_remove_icon_size }}"
+                          height="{{ settings.custom_cart_remove_icon_size }}"
+                          loading="lazy"
+                        >
+                      {% else %}
+                        {{- 'icon-delete.svg' | inline_asset_content -}}
+                      {% endif %}
+
                       <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
                     </button>
                   </div>
@@ -1003,3 +1014,369 @@
     }
   }
 {% endstylesheet %}
+
+{% style %}
+  /* =========================================================
+    CUSTOM CART DRAWER
+    ========================================================= */
+
+  .cart-items__table-row--custom-drawer {
+    --custom-cart-quantity-size: {{ settings.custom_cart_quantity_size }}px;
+    --custom-cart-quantity-background: {{ settings.custom_cart_quantity_background }};
+    --custom-cart-quantity-text: {{ settings.custom_cart_quantity_text_color }};
+    --custom-cart-quantity-radius: {{ settings.custom_cart_quantity_radius }}px;
+    --custom-cart-image-size: {{ settings.custom_cart_product_image_size }};
+
+    /*
+      Custom drawer layout:
+
+      media    details
+      media    unit price
+      media    variants
+      media    quantity
+      media    error
+    */
+
+    grid-template-columns:
+      var(--custom-cart-image-size)
+      minmax(0, 1fr);
+
+    grid-template-rows: repeat(5, min-content) 1fr;
+
+    grid-template-areas:
+      'media details'
+      'media variants'
+      'media unit_price'
+      'media quantity'
+      'media error';
+  }
+
+  /*
+    Let the details contents participate directly
+    in the cart item's grid.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__details {
+    display: contents;
+  }
+
+  /* Product title / vendor / bundle information */
+  .cart-items__table-row--custom-drawer .cart-items__product-info {
+    grid-area: details;
+  }
+
+  /* Price comes BEFORE the variants */
+  .cart-items__table-row--custom-drawer .cart-items__unit-price-wrapper {
+    grid-area: unit_price;
+    margin-block-start: var(--margin-2xs);
+    font-size: var(--font-size--sm);
+  }
+
+  /* Variant information */
+  .cart-items__table-row--custom-drawer .cart-items__variants-wrapper {
+    grid-area: variants;
+    margin-block-start: var(--margin-2xs);
+  }
+
+  /*
+    Make each variant its own row.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__variants {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+  }
+
+  /*
+    Each variant gets its own line.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__variant {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin: 0;
+  }
+
+  /*
+    Override the visually-hidden dt only inside
+    the custom cart drawer.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__variant dt {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+  }
+
+  /*
+    Remove the commas that were originally inserted
+    between variants.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__variant dd {
+    display: block;
+    margin: 0;
+  }
+
+  /*
+    The original Liquid adds a comma to every variant
+    except the last one. Hide that generated spacing/text
+    by making each dd a clean block.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__variant dd {
+    font-size: inherit;
+  }
+
+  /* Quantity area */
+  .cart-items__table-row--custom-drawer .cart-items__quantity {
+    grid-area: quantity;
+    margin-block-start: var(--margin-xs);
+    width: fit-content;
+  }
+
+  /*
+    Keep the quantity controls and remove button together
+    vertically.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__quantity-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--gap-xs);
+    width: fit-content;
+  }
+
+  /*
+    Quantity selector sizing.
+  */
+  .cart-items__table-row--custom-drawer .quantity-selector {
+    width: calc(var(--custom-cart-quantity-size) * 3);
+    height: var(--custom-cart-quantity-size);
+    min-height: var(--custom-cart-quantity-size);
+
+    border: 1px solid currentColor;
+    border-radius: var(--custom-cart-quantity-radius);
+    overflow: hidden;
+  }
+
+  /*
+    Quantity +/- buttons.
+  */
+  .cart-items__table-row--custom-drawer .quantity-selector button {
+    width: var(--custom-cart-quantity-size);
+    height: var(--custom-cart-quantity-size);
+    min-width: var(--custom-cart-quantity-size);
+    min-height: var(--custom-cart-quantity-size);
+
+    background-color: var(--custom-cart-quantity-background);
+    color: var(--custom-cart-quantity-text);
+    border-radius: var(--custom-cart-quantity-radius);
+  }
+
+  /*
+    Quantity input.
+  */
+  .cart-items__table-row--custom-drawer .quantity-selector input {
+    height: var(--custom-cart-quantity-size);
+    min-height: var(--custom-cart-quantity-size);
+
+    /* background-color: var(--custom-cart-quantity-background); */
+    color: var(--custom-cart-quantity-text);
+  }
+
+  /*
+    Remove button goes UNDER the quantity selector.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__remove {
+    width: var(--custom-cart-quantity-size);
+    height: var(--custom-cart-quantity-size);
+    min-width: var(--custom-cart-quantity-size);
+    min-height: var(--custom-cart-quantity-size);
+
+    
+    background-color: transparent;
+    color: var(--color-foreground);
+    
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    margin: 0;
+    padding: 0;
+    margin-left: -4px;
+
+    box-shadow: none;
+  }
+
+  /*
+    Custom remove image.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__remove img {
+    width: {{ settings.custom_cart_remove_icon_size }}px;
+    height: {{ settings.custom_cart_remove_icon_size }}px;
+    object-fit: contain;
+    display: block;
+  }
+
+  /*
+    Make the default SVG icon fit correctly too.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__remove .svg-wrapper,
+  .cart-items__table-row--custom-drawer .cart-items__remove svg {
+    width: {{ settings.custom_cart_remove_icon_size }}px;
+    height: {{ settings.custom_cart_remove_icon_size }}px;
+  }
+
+  /*
+    Hide the line-item total on the right side of the
+    custom drawer card. The product price shown above
+    the variants is the visible price.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__price {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    align-self: start;
+  }
+
+  /*
+    Error area remains functional.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__error {
+    grid-area: error;
+  }
+
+  /* Font Overrides */
+  .cart-items__table-row--custom-drawer .cart-items__title {
+    font-size: {{ settings.custom_cart_title_font_size }}px;
+    font-weight: {{ settings.custom_cart_title_font_weight }};
+    color: {{ settings.custom_cart_title_color }};
+  }
+
+  .cart-items__table-row--custom-drawer .cart-items__price {
+    font-size: {{ settings.custom_cart_price_font_size }}px;
+    font-weight: {{ settings.custom_cart_price_font_weight }};
+    color: {{ settings.custom_cart_price_color }};
+  }
+
+  /* Custom cart drawer - quantity icons and input */
+  .cart-items__table-row--custom-drawer .quantity-selector button {
+    font-size: {{ settings.custom_cart_quantity_icon_size }}px;
+  }
+
+  .cart-items__table-row--custom-drawer .quantity-selector button svg,
+  .cart-items__table-row--custom-drawer .quantity-selector button .svg-wrapper {
+    width: {{ settings.custom_cart_quantity_icon_size }}px;
+    height: {{ settings.custom_cart_quantity_icon_size }}px;
+  }
+
+  .cart-items__table-row--custom-drawer .quantity-selector input {
+    font-size: {{ settings.custom_cart_quantity_font_size }}px;
+  }
+
+
+  /* Custom cart drawer - product image */
+  .cart-items__table-row--custom-drawer .cart-items__media {
+    grid-area: media;
+    width: var(--custom-cart-image-size);
+    min-width: 0;
+  }
+
+  .cart-items__table-row--custom-drawer .cart-items__media-container {
+    width: var(--custom-cart-image-size);
+    height: var(--custom-cart-image-size);
+    aspect-ratio: 1 / 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: {{ settings.custom_cart_product_image_background }};
+    overflow: hidden;
+
+    padding: {{ settings.custom_cart_product_image_padding }};
+    border-radius: {{ settings.custom_cart_product_image_radius }};
+  }
+
+  .cart-items__table-row--custom-drawer .cart-items__media-image {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+  }
+
+    /* =========================================================
+    CUSTOM CART DRAWER - PRODUCT TITLE / PRICE
+    ========================================================= */
+
+  .cart-items__table-row--custom-drawer {
+    /*
+      Reserve space on the right for the product price.
+      The price itself is capped at this same percentage.
+    */
+    --custom-cart-price-space: 40%;
+  }
+
+  .cart-items__table-row--custom-drawer .cart-items__product-info {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+
+    /*
+      The price is positioned in the same grid cell as
+      product-info, so reserve its space manually.
+    */
+    padding-inline-end: var(--custom-cart-price-space);
+  }
+
+  .cart-items__table-row--custom-drawer .cart-items__title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gap-xs);
+
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .cart-items__table-row--custom-drawer .cart-items__title {
+    display: block;
+
+    min-width: 0;
+    max-width: 100%;
+
+    flex: 1 1 auto;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .cart-items__table-row--custom-drawer .cart-disclosure-tooltip {
+    flex: 0 0 auto;
+  }
+
+  /*
+    Product price sits on the right side of the same
+    grid cell as the product information.
+  */
+  .cart-items__table-row--custom-drawer .cart-items__price {
+    grid-column: 2;
+    grid-row: 1;
+
+    justify-self: end;
+    align-self: start;
+
+    width: max-content;
+    max-width: var(--custom-cart-price-space);
+
+    white-space: nowrap;
+    overflow: hidden;
+  }
+{% endstyle %}

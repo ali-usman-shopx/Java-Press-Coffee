@@ -33,6 +33,12 @@
       "content": "t:content.layout"
     },
     {
+      "type": "checkbox",
+      "id": "enable_relative_positioning",
+      "label": "Enable relative positioning",
+      "default": false
+    },
+    {
       "type": "select",
       "id": "content_direction",
       "label": "t:settings.direction",
@@ -54,6 +60,18 @@
       "label": "t:settings.vertical_on_mobile",
       "default": true,
       "visible_if": "{{ block.settings.content_direction == 'row' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "order_reversed_desktop",
+      "label": "Reverse child order on desktop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "order_reversed_mobile",
+      "label": "Reverse child order on mobile",
+      "default": false
     },
     {
       "type": "select",
@@ -508,6 +526,20 @@
       "step": 1,
       "unit": "px",
       "default": 0
+    },
+    {
+      "type": "textarea",
+      "id": "desktop_css",
+      "label": "Desktop CSS",
+      "default": ";",
+      "info": "CSS entered here applies only on mobile."
+    },
+    {
+      "type": "textarea",
+      "id": "mobile_css",
+      "label": "Mobile CSS",
+      "default": ";",
+      "info": "CSS entered here applies only on mobile."
     }
   ],
   "presets": [

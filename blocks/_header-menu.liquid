@@ -195,9 +195,15 @@
     >
       <div class="header-menu__inner">
         <nav
-          class="menu-list"
+          class="menu-list{% if block_settings.enable_menu_item_gap %} menu-list--custom-gap{% endif %}"
           aria-label="{{ 'accessibility.header_navigation_label' | t }}"
-          style="{% render 'menu-font-styles', settings: block_settings, menu_type: 'mega_menu' %}"
+          {% comment %} style="{% render 'menu-font-styles', settings: block_settings, menu_type: 'mega_menu' %}" {% endcomment %}
+          style="
+            {% render 'menu-font-styles', settings: block_settings, menu_type: 'mega_menu' %}
+            {% if block_settings.enable_menu_item_gap %}
+              --menu-item-gap: {{ block_settings.menu_item_gap }}px;
+            {% endif %}
+          "
         >
           {% assign class = 'overflow-menu' | append: background_color_classes %}
           {% render 'overflow-list',
@@ -223,7 +229,16 @@
   .header__underlay {
     --color-submenu: rgb({{effective_submenu_color.rgb}});
   }
+
+  .menu-list--custom-gap .menu-list__list-item {
+    margin-inline-end: var(--menu-item-gap);
+  }
+
+  .menu-list--custom-gap .menu-list__list-item:last-child {
+    margin-inline-end: 0;
+  }
 {% endstyle %}
+
 {% stylesheet %}
   .header__drawer {
     --header-drawer-min-height: 60px;
@@ -824,6 +839,23 @@
       "default": "main-menu"
     },
     {
+      "type": "checkbox",
+      "id": "enable_menu_item_gap",
+      "label": "Enable custom menu item gap",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "menu_item_gap",
+      "label": "Menu item gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ block.settings.enable_menu_item_gap }}"
+    },
+    {
       "type": "header",
       "content": "t:content.appearance"
     },
@@ -1058,6 +1090,137 @@
       "id": "drawer_dividers",
       "label": "t:settings.dividers",
       "default": false
+    },
+    {
+      "type": "header",
+      "content": "Arrows template"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_arrows_template",
+      "label": "Enable Arrows template",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "arrows_font_size",
+      "label": "Font size",
+      "options": [
+        {
+          "value": "0.875rem",
+          "label": "14px"
+        },
+        {
+          "value": "1rem",
+          "label": "16px"
+        },
+        {
+          "value": "1.125rem",
+          "label": "18px"
+        },
+        {
+          "value": "1.25rem",
+          "label": "20px"
+        },
+        {
+          "value": "1.5rem",
+          "label": "24px"
+        }
+      ],
+      "default": "1rem",
+      "visible_if": "{{ block.settings.enable_arrows_template }}"
+    },
+    {
+      "type": "select",
+      "id": "arrows_font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra bold"
+        }
+      ],
+      "default": "400",
+      "visible_if": "{{ block.settings.enable_arrows_template }}"
+    },
+    {
+      "type": "color",
+      "id": "arrows_text_color",
+      "label": "Text color",
+      "default": "{{ settings.color_palette.text }}",
+      "visible_if": "{{ block.settings.enable_arrows_template }}"
+    },
+    {
+    "type": "range",
+    "id": "arrows_size",
+    "label": "Arrow size",
+    "min": 10,
+    "max": 40,
+    "step": 1,
+    "unit": "px",
+    "default": 18
+    },
+    {
+    "type": "color",
+    "id": "arrows_color",
+    "label": "Arrow color",
+    "default": "#000000"
+    },
+    {
+    "type": "checkbox",
+    "id": "arrows_show_last_submenu_item",
+    "label": "Show arrow on last submenu item",
+    "default": true
+    },
+    {
+    "type": "checkbox",
+    "id": "arrows_show_base_menu_items",
+    "label": "Show arrows on base menu items",
+    "default": true
+    },
+    {
+      "type": "header",
+      "content": "Custom drawer header"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_drawer_header",
+      "label": "Enable custom drawer header",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "drawer_header_sticky",
+      "label": "Sticky drawer header",
+      "default": true,
+      "visible_if": "{{ block.settings.enable_custom_drawer_header }}"
+    },
+    {
+      "type": "range",
+      "id": "drawer_close_icon_size",
+      "label": "Close icon size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "visible_if": "{{ block.settings.enable_custom_drawer_header }}"
     }
   ]
 }
