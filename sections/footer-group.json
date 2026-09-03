@@ -626,7 +626,7 @@
                         "padding-block-end": 11,
                         "padding-inline-start": 15,
                         "padding-inline-end": 14,
-                        "desktop_css": ";",
+                        "desktop_css": "cursor: pointer;",
                         "mobile_css": ";"
                       },
                       "blocks": {
@@ -636,7 +636,7 @@
                           "settings": {
                             "icon": "price_tag",
                             "image_upload": "shopify://shop_images/facebook_vector.svg",
-                            "width": 12,
+                            "width": 7,
                             "link": "",
                             "open_in_new_tab": false,
                             "icon_color": ""
@@ -685,11 +685,11 @@
                         "link": "",
                         "open_in_new_tab": false,
                         "placeholder": "",
-                        "padding-block-start": 17,
-                        "padding-block-end": 17,
-                        "padding-inline-start": 15,
-                        "padding-inline-end": 14,
-                        "desktop_css": ";",
+                        "padding-block-start": 12,
+                        "padding-block-end": 11,
+                        "padding-inline-start": 12,
+                        "padding-inline-end": 11,
+                        "desktop_css": "cursor: pointer;",
                         "mobile_css": ";"
                       },
                       "blocks": {
@@ -748,11 +748,11 @@
                         "link": "",
                         "open_in_new_tab": false,
                         "placeholder": "",
-                        "padding-block-start": 18,
-                        "padding-block-end": 18,
-                        "padding-inline-start": 15,
-                        "padding-inline-end": 14,
-                        "desktop_css": ";",
+                        "padding-block-start": 13,
+                        "padding-block-end": 12,
+                        "padding-inline-start": 12,
+                        "padding-inline-end": 11,
+                        "desktop_css": "cursor: pointer;",
                         "mobile_css": ";"
                       },
                       "blocks": {
