@@ -1475,30 +1475,6 @@
       --dropdown-hover-text-color: {{ section.settings.dropdown_hover_text_color | default: 'inherit' }};
     }
 
-    #header-component
-      .menu-list__list-item:has(> .menu-list__trigger):hover
-      > .menu-list__trigger
-      > .menu-list__link {
-      color: var(--dropdown-hover-text-color);
-      font-weight: {{ section.settings.dropdown_hover_text_weight | default: 700 }}
-    }
-
-    /* #header-component
-      .menu-list__list-item:has(> .menu-list__trigger):hover
-      > .menu-list__trigger
-      > .menu-list__link::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      bottom: 0;
-      width: var(--dropdown-hover-dot-size);
-      height: var(--dropdown-hover-dot-size);
-      border-radius: 50%;
-      background-color: var(--dropdown-hover-dot-color);
-      transform: translateX(-50%);
-      display: block;
-    } */
-
     #header-component .menu-list__list-item:has(> .menu-list__trigger) {
       --dropdown-hover-dot-size: {{ section.settings.dropdown_hover_dot_size }}px;
       --dropdown-hover-dot-color: {{ section.settings.dropdown_hover_dot_color }};
@@ -1511,7 +1487,7 @@
       > .menu-list__trigger
       > .menu-list__link {
       color: var(--dropdown-hover-text-color);
-      font-weight: {{ section.settings.dropdown_hover_text_weight | default: 700 }}
+      /* font-weight: {{ section.settings.dropdown_hover_text_weight | default: 700 }} */
     }
 
     #header-component

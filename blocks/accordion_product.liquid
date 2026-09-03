@@ -40,6 +40,12 @@
       overflow: hidden;
     }
 
+    .accordion__toggle {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .accordion__summary {
       display: flex;
       align-items: center;
@@ -47,14 +53,9 @@
       width: 100%;
       padding: {{ block.settings.padding }}px;
       cursor: pointer;
-      list-style: none;
       font-size: {{ block.settings.title_size }}px;
       font-weight: {{ block.settings.title_weight }};
       color: {{ block.settings.title_color }};
-    }
-
-    .accordion__summary::-webkit-details-marker {
-      display: none;
     }
 
     .accordion__icon {
@@ -68,9 +69,18 @@
       content: '+';
     }
 
-    .accordion__item[open]
-      .accordion__icon::before {
+    .accordion__toggle:checked ~ .accordion__summary .accordion__icon::before {
       content: '×';
+    }
+
+    .accordion__content-wrapper {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height {{ block.settings.transition_duration }}ms {{ block.settings.transition_easing }};
+    }
+
+    .accordion__toggle:checked ~ .accordion__content-wrapper {
+      max-height: 1000px;
     }
 
     .accordion__content {
@@ -84,33 +94,52 @@
   <div class="accordion">
 
     {% if about_product != blank %}
-      <details class="accordion__item">
-        <summary class="accordion__summary">
+      <div class="accordion__item">
+        <input
+          type="checkbox"
+          id="accordion-about-{{ block.id }}"
+          class="accordion__toggle"
+          {% if block.settings.open_first_by_default %}
+            checked
+          {% endif %}
+        >
+
+        <label for="accordion-about-{{ block.id }}" class="accordion__summary">
           <span>{{ block.settings.about_product_title }}</span>
           <span class="accordion__icon"></span>
-        </summary>
+        </label>
 
-        <div class="accordion__content">
-          {{ about_product.value }}
+        <div class="accordion__content-wrapper">
+          <div class="accordion__content">
+            {{ about_product.value }}
+          </div>
         </div>
-      </details>
+      </div>
     {% endif %}
 
     {% if ingredients != blank %}
-      <details class="accordion__item">
-        <summary class="accordion__summary">
+      <div class="accordion__item">
+        <input
+          type="checkbox"
+          id="accordion-ingredients-{{ block.id }}"
+          class="accordion__toggle"
+        >
+
+        <label for="accordion-ingredients-{{ block.id }}" class="accordion__summary">
           <span>{{ block.settings.ingredients_title }}</span>
           <span class="accordion__icon"></span>
-        </summary>
+        </label>
 
-        <div class="accordion__content">
-          {% if ingredients.type contains 'list' %}
-            {{ ingredients.value | join: ', ' }}
-          {% else %}
-            {{ ingredients.value }}
-          {% endif %}
+        <div class="accordion__content-wrapper">
+          <div class="accordion__content">
+            {% if ingredients.type contains 'list' %}
+              {{ ingredients.value | join: ', ' }}
+            {% else %}
+              {{ ingredients.value }}
+            {% endif %}
+          </div>
         </div>
-      </details>
+      </div>
     {% endif %}
 
   </div>
@@ -161,6 +190,54 @@
       "default": "custom.ingredients",
       "info": "Enter the full metafield ID, e.g. custom.ingredients",
       "visible_if": "{{ block.settings.enable_ingredients }}"
+    },
+    {
+      "type": "header",
+      "content": "Accordion Behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first_by_default",
+      "label": "Open first item by default",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "transition_duration",
+      "label": "Opening/closing duration",
+      "min": 0,
+      "max": 1000,
+      "step": 50,
+      "unit": "ms",
+      "default": 300
+    },
+    {
+      "type": "select",
+      "id": "transition_easing",
+      "label": "Opening/closing easing",
+      "options": [
+        {
+          "value": "ease-in",
+          "label": "Ease in"
+        },
+        {
+          "value": "ease-out",
+          "label": "Ease out"
+        },
+        {
+          "value": "ease-in-out",
+          "label": "Ease in/out"
+        },
+        {
+          "value": "ease",
+          "label": "Ease"
+        },
+        {
+          "value": "linear",
+          "label": "Linear"
+        }
+      ],
+      "default": "ease"
     },
     {
       "type": "header",

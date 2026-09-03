@@ -495,6 +495,9 @@
                 "enable_ingredients": true,
                 "ingredients_title": "Ingredients",
                 "ingredients_metafield": "custom.ingredients_list",
+                "open_first_by_default": true,
+                "transition_duration": 300,
+                "transition_easing": "ease",
                 "background_color": "#f3f3f3",
                 "title_color": "#000000",
                 "content_color": "#333333",
@@ -1712,7 +1715,9 @@
         "border_color": "",
         "border_radius": 0,
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "padding-inline-start": 15,
+        "padding-inline-end": 15
       }
     },
     "product_recommendations_qggXJq": {
