@@ -93,13 +93,46 @@
                 </span>
               {% endif %}
             {% endcapture %}
-            {% assign cart_drawer_title = 'content.cart_title' | t %}
-            {% render 'theme-drawer-header',
-              title: cart_drawer_title,
-              drawer_id: 'cart-drawer',
-              heading_id: 'cart-drawer-heading',
-              title_append: cart_badge_html
-            %}
+            {% if settings.enable_custom_cart_drawer %}
+              <div class="custom-cart-drawer__header">
+                <button
+                  on:click="#cart-drawer/close"
+                  class="custom-cart-drawer__close-button"
+                  type="button"
+                  aria-label="{{ 'actions.close' | t }}"
+                >
+                  <span class="svg-wrapper">
+                    {{- 'icon-close.svg' | inline_asset_content -}}
+                  </span>
+                </button>
+
+                <div class="custom-cart-drawer__header-content">
+                  <h2
+                    id="cart-drawer-heading"
+                    class="custom-cart-drawer__heading"
+                  >
+                    {{ 'content.cart_title' | t }}
+                  </h2>
+
+                  <span class="custom-cart-drawer__subheading">
+                    {{ cart.item_count }}
+                    {% if cart.item_count == 1 %}
+                      product
+                    {% else %}
+                      products
+                    {% endif %}
+                  </span>
+                </div>
+              </div>
+            {% else %}
+              {% assign cart_drawer_title = 'content.cart_title' | t %}
+              {% render 'theme-drawer-header',
+                title: cart_drawer_title,
+                drawer_id: 'cart-drawer',
+                heading_id: 'cart-drawer-heading',
+                title_append: cart_badge_html
+              %}
+            {% endif %}
           {%- endif -%}
 
           {% capture cart_items_children %}
@@ -114,8 +147,74 @@
                   {% render 'cart-products', context: 'drawer' %}
                 </scroll-hint>
 
-                <div class="cart-drawer__summary">
-                  {% render 'cart-summary', section_id: 'cart-drawer-section' %}
+                <div
+                  class="cart-drawer__summary"
+                  style="{{ settings.custom_cart_checkout_wrapper_css }}"
+                >
+                  {% if settings.enable_custom_cart_drawer %}
+                    <div
+                      class="custom-cart-checkout"
+                    >
+                      <div class="custom-cart-checkout__date">
+                        <label
+                          class="custom-cart-checkout__date-label"
+                          for="CustomCartDeliveryDate"
+                        >
+                          {{ settings.custom_cart_date_label }}
+                        </label>
+
+                        <div class="custom-cart-checkout__date-input-wrapper">
+                          <input
+                            id="CustomCartDeliveryDate"
+                            class="custom-cart-checkout__date-input"
+                            type="date"
+                            aria-label="{{ settings.custom_cart_date_label | escape }}"
+                          >
+
+                          <span
+                            class="custom-cart-checkout__date-icon"
+                            aria-hidden="true"
+                          >
+                            {{ settings.custom_cart_date_icon | image_url: width: 100 | image_tag }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="custom-cart-checkout__estimated-total">
+                        <span class="custom-cart-checkout__estimated-total-label">
+                          {{ settings.custom_cart_estimated_total_label }}
+                        </span>
+
+                        <span class="custom-cart-checkout__estimated-total-value">
+                          {{ cart.total_price | money }}
+                        </span>
+                      </div>
+
+                      <button
+                        type="submit"
+                        id="checkout"
+                        class="custom-cart-checkout__button"
+                        name="checkout"
+                        {% if cart == empty %}
+                          disabled
+                        {% endif %}
+                        form="cart-form"
+                      >
+                        <span class="button-text">
+                          {{ settings.custom_cart_checkout_label }}
+                        </span>
+                      </button>
+
+                      <p
+                        class="custom-cart-checkout__disclaimer"
+                        style="margin: 0; width: 100%; text-align: center; font-size: 12px; font-weight: 500; color: #424242; line-height: 1.4;"
+                      >
+                        Taxes, discounts and shipping calculated at checkout
+                      </p>
+                    </div>
+                  {% else %}
+                    {% render 'cart-summary', section_id: 'cart-drawer-section' %}
+                  {% endif %}
                 </div>
               </scroll-hint>
             {%- endif -%}
@@ -276,3 +375,202 @@
     }
   }
 {% endstylesheet %}
+
+{% style %}
+  {% if settings.enable_custom_cart_drawer %}
+    /* =========================================================
+      CUSTOM CART CHECKOUT
+      ========================================================= */
+    .custom-cart-checkout {
+      {{ settings.custom_cart_checkout_wrapper_css }}
+
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-md);
+      width: 100%;
+    }
+
+    /* =========================================================
+      DATE PICKER
+      ========================================================= */
+    .custom-cart-checkout__date {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-xs);
+      width: 100%;
+    }
+
+    .custom-cart-checkout__date-label {
+      font-size: {{ settings.custom_cart_date_font_size }}px;
+      font-weight: {{ settings.custom_cart_date_font_weight }};
+      color: {{ settings.custom_cart_date_text_color }};
+    }
+
+    .custom-cart-checkout__date-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .custom-cart-checkout__date-input {
+      width: 100%;
+      min-height: 44px;
+
+      padding-inline-end: calc(
+        {{ settings.custom_cart_date_icon_size }}px + var(--padding-md)
+      );
+
+      font-size: {{ settings.custom_cart_date_font_size }}px;
+      font-weight: {{ settings.custom_cart_date_font_weight }};
+      color: {{ settings.custom_cart_date_text_color }};
+
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .custom-cart-checkout__date-icon {
+      position: absolute;
+      top: 50%;
+      right: var(--padding-md);
+
+      width: {{ settings.custom_cart_date_icon_size }}px;
+      height: {{ settings.custom_cart_date_icon_size }}px;
+
+      transform: translateY(-50%);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      pointer-events: none;
+    }
+
+    .custom-cart-checkout__date-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .custom-cart-checkout__date-input {
+      {{ settings.custom_cart_date_css }}
+    }
+    .custom-cart-checkout__date-input::-webkit-calendar-picker-indicator {
+      opacity: 0;
+      display: none;
+      -webkit-appearance: none;
+    }
+    .custom-cart-checkout__date-input::-webkit-calendar-picker-indicator {
+      {{ settings.custom_cart_date_calendar_css }}
+    }
+
+    /* =========================================================
+      ESTIMATED TOTAL
+      ========================================================= */
+
+    .custom-cart-checkout__estimated-total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--gap-md);
+
+      width: 100%;
+
+      font-size: {{ settings.custom_cart_estimated_total_font_size }}px;
+      font-weight: {{ settings.custom_cart_estimated_total_font_weight }};
+      color: {{ settings.custom_cart_estimated_total_color }};
+    }
+
+    .custom-cart-checkout__estimated-total-label,
+    .custom-cart-checkout__estimated-total-value {
+      font-size: inherit;
+      font-weight: inherit;
+      color: inherit;
+    }
+
+
+    /* =========================================================
+      CHECKOUT BUTTON
+      ========================================================= */
+    .custom-cart-checkout__button {
+      width: 100%;
+
+      background-color: {{ settings.custom_cart_checkout_background }};
+      color: {{ settings.custom_cart_checkout_text_color }};
+
+      font-weight: {{ settings.custom_cart_checkout_font_weight }};
+
+      border: 0;
+      cursor: pointer;
+
+      {{ settings.custom_cart_checkout_css }}
+    }
+
+    .custom-cart-checkout__button:hover {
+      {{ settings.custom_cart_checkout_hover_css }}
+    }
+  {% endif %}
+{% endstyle %}
+
+{% if settings.enable_custom_cart_drawer %}
+  {% style %}
+    .custom-cart-drawer__header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: var(--padding-lg) var(--cart-drawer-padding);
+      border-bottom: 1px dashed #EFEFEF;
+      margin-bottom: 5px;
+    }
+
+    .custom-cart-drawer__header-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .custom-cart-drawer__heading {
+      margin: 0;
+      font-size: {{ settings.custom_cart_header_font_size }}px;
+      color: {{ settings.custom_cart_header_color }};
+      line-height: 1.2;
+    }
+
+    .custom-cart-drawer__subheading {
+      margin-block-start: 4px;
+      font-size: {{ settings.custom_cart_header_subheading_font_size }}px;
+      color: {{ settings.custom_cart_header_subheading_color }};
+      line-height: 1.2;
+    }
+
+    .custom-cart-drawer__close-button {
+      position: absolute;
+      inset-inline-end: var(--cart-drawer-padding);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--minimum-touch-target);
+      height: var(--minimum-touch-target);
+      padding: 0;
+      margin: 0;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .custom-cart-drawer__close-button:hover {
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .custom-cart-drawer__close-button .svg-wrapper,
+    .custom-cart-drawer__close-button svg {
+      width: 20px;
+      height: 20px;
+    }
+  {% endstyle %}
+{% endif %}
