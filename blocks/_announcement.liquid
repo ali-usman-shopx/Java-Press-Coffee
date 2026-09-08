@@ -31,7 +31,7 @@
     <p class="announcement-bar__text">
       {{ block.settings.text }}
 
-      {% if block_settings.enable_link and block_settings.link != blank and block_settings.link_text != blank %}//
+      {% if block_settings.enable_link and block_settings.link != blank and block_settings.link_text != blank %}
         <a
           class="announcement-bar__inline-link announcement-bar__inline-link--{{ block.id }}"
           href="{{ block_settings.link }}"
