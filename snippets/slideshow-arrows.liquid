@@ -8,7 +8,7 @@
   @param {string} [icon_shape] - The shape of the icon background (none, circle, square), defaults to 'none'
   @param {string} [arrows_position] - { 'left' | 'center' | 'right' } The position of the arrows, defaults to 'center'
 
-  @param {boolean} enable_arrow_background - Whether custom arrow background styling is enabled
+  @param {boolean} [enable_arrow_background] - Whether custom arrow background styling is enabled
 
   @example
   {%- render 'slideshow-arrows' -%}
@@ -30,7 +30,7 @@
   {%- render 'slideshow-arrow', action: 'next', icon_style: icon_style, icon_shape: icon_shape -%}
 </slideshow-arrows>
 
-{% style %}
+{% stylesheet %}
   slideshow-arrows {
     --cursor-previous: w-resize;
     --cursor-next: e-resize;
@@ -40,9 +40,6 @@
     display: flex;
     z-index: var(--layer-heightened);
     pointer-events: none;
-    {% if enable_arrow_background == false %}
-      mix-blend-mode: difference;
-    {% endif %}
     align-items: flex-end;
 
     &[position='left'] {
@@ -82,4 +79,12 @@
   slideshow-arrows .slideshow-control.slideshow-control--style-none {
     display: none;
   }
-{% endstyle %}
+{% endstylesheet %}
+
+{% if enable_arrow_background == false %}
+  {% style %}
+    slideshow-arrows {
+      mix-blend-mode: difference;
+    }
+  {% endstyle %}
+{% endif %}
