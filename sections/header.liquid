@@ -479,7 +479,7 @@
   type="module"
 ></script>
 
-{% style %}
+{% stylesheet %}
   body {
     --header-height: 60px;
     --header-group-height: var(--header-height);
@@ -1239,8 +1239,7 @@
       * the actual header.
       */
       .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
-        /* top: var(--header-height); */
-        top: calc(var(--header-height) + {{ section.settings.dropdown_top_offset }}px) !important;
+        /* top: ___; Offset calculated via liquid and hence in the subsequent style tags. */
         left: 0;
         width: 100%;
 
@@ -1307,9 +1306,14 @@
 
     }
   }
-{% endstyle %}
+{% endstylesheet %}
 
 {% style %}
+  .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
+    /* Offset Calculation; rest of the styling in stylesheet where possible. */
+    top: calc(var(--header-height) + {{ section.settings.dropdown_top_offset }}px) !important;
+  }
+
   {% if section.settings.enable_independent_dropdowns %}
     #header-component .menu-list__submenu-inner {
       padding-bottom: 0 !important;
