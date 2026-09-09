@@ -8,7 +8,7 @@
   @param {string} [icon_shape] - The shape of the icon background (none, circle, square), defaults to 'none'
   @param {string} [arrows_position] - { 'left' | 'center' | 'right' } The position of the arrows, defaults to 'center'
 
-  @param {boolean} [enable_arrow_background] - Whether custom arrow background styling is enabled
+  @param {boolean} [disable_arrow_mix_blend] - Whether custom arrow background styling is enabled
 
   @example
   {%- render 'slideshow-arrows' -%}
@@ -81,7 +81,7 @@
   }
 {% endstylesheet %}
 
-{% if enable_arrow_background == false %}
+{% if disable_arrow_mix_blend == false %}
   {% style %}
     slideshow-arrows {
       mix-blend-mode: difference;
