@@ -14,14 +14,9 @@
 
   .ai-product-carousel__tabs-{{ ai_gen_id }} {
     display: flex;
-    {% comment %} gap: 12px; {% endcomment %}
     margin-bottom: 32px;
     flex-wrap: wrap;
     border-bottom: 1px solid black;
-    {% comment %} justify-content: center; {% endcomment %}
-    {% comment %} padding-left: {{ block.settings.tab_padding }}; {% endcomment %}
-    {% comment %} padding-right: {{ block.settings.tab_padding }}; {% endcomment %}
-    {% comment %} justify-content: space-around; {% endcomment %}
     justify-content: center;
     gap: {{ block.settings.tabs_gap_desktop }};
     flex-wrap: nowrap;
@@ -30,10 +25,9 @@
     {% comment %} /* Establish a safe rendering context for bottom lines */ {% endcomment %}
     box-shadow: inset 0 -1px 0 0 #EBEAE7; 
     border-bottom: none;
-    {% comment %} ^ /* Replaced with inner shadow box */ {% endcomment %}
   }
 
-  {% comment %} /* Optional: Hides scrollbar on Chrome/Safari for cleaner navigation look */ {% endcomment %}
+  {% comment %} /* Hides scrollbar on Chrome/Safari for cleaner navigation look */ {% endcomment %}
   .ai-product-carousel__tabs-{{ ai_gen_id }}::-webkit-scrollbar {
       display: none;
   }
@@ -42,34 +36,24 @@
     padding: 12px 24px;
     padding-left: {{ block.settings.tab_padding }};
     padding-right: {{ block.settings.tab_padding }};
-    {% comment %} background-color: {{ block.settings.tab_background }}; {% endcomment %}
     background-color: transparent;
     color: {{ block.settings.inactive_tab_text_color }};
-    {% comment %} border: {{ block.settings.tab_border_width }}px solid {{ block.settings.tab_border_color }}; {% endcomment %}
     border: none;
     border-bottom: 1px solid transparent;
-    {% comment %} border-radius: {{ block.settings.tab_border_radius }}px; {% endcomment %}
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 14px;
     font-weight: 400;
-    {% comment %} margin-bottom: -1px; {% endcomment %}
-    {% comment %} ^ for border collapse {% endcomment %}
     flex-shrink: 0;
     {% comment %} ^ /* CRITICAL FIX: Stops text fields from squishing down */ {% endcomment %}
     margin-bottom: 0px;
-    {% comment %} Remove the overlap workaround; boxshadow handles alignment {% endcomment %}
   }
 
   .ai-product-carousel__tab-{{ ai_gen_id }}:hover {
-    {% comment %} background-color: {{ block.settings.tab_hover_background }};
-    color: {{ block.settings.tab_hover_text_color }}; {% endcomment %}
     border-bottom: 1px solid #EF4444;
   }
 
   .ai-product-carousel__tab-{{ ai_gen_id }}.active {
-    {% comment %} background-color: {{ block.settings.tab_active_background }};
-    border-color: {{ block.settings.tab_active_border_color }}; {% endcomment %}
     color: {{ block.settings.tab_active_text_color }};
     font-weight: 500;
     border-bottom: 1px solid #EF4444;
@@ -103,24 +87,6 @@
     flex: 0 0 calc((100% - ({{ block.settings.products_per_row }} - 1) * {{ block.settings.card_gap }}px) / {{ block.settings.products_per_row }});
     background-color: transparent;
   }
-
-  {% comment %} .ai-product-carousel__image-container-{{ ai_gen_id }} {
-    position: relative;
-    background-color: {{ block.settings.image_background }};
-    {% comment %} border-radius: {{ block.settings.image_border_radius }}px; {% endcomment %}
-    border-radius: 5px;
-    padding: {{ block.settings.image_padding }}px;
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-
-  .ai-product-carousel__image-{{ ai_gen_id }} {
-    width: 100%;
-    height: auto;
-    display: block;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-  } {% endcomment %}
 
   .ai-product-carousel__image-container-{{ ai_gen_id }} {
     position: relative;
@@ -191,7 +157,6 @@
   .ai-product-carousel__stars-{{ ai_gen_id }} {
     display: flex;
     gap: 2px;
-    {% comment %} color: {{ block.settings.star_color }}; {% endcomment %}
     color: #EF4444;
   }
 
@@ -227,11 +192,9 @@
   .ai-product-carousel__add-to-cart-{{ ai_gen_id }} {
     width: 100%;
     padding: 12px 20px;
-    {% comment %} background-color: {{ block.settings.button_background }}; {% endcomment %}
     background-color: #EF4444;
     color: {{ block.settings.button_text_color }};
     border: none;
-    {% comment %} border-radius: {{ block.settings.button_border_radius }}px; {% endcomment %}
     border-radius: 5px;
     font-size: 14px;
     font-weight: 600;
@@ -240,7 +203,6 @@
   }
 
   .ai-product-carousel__add-to-cart-{{ ai_gen_id }}:hover {
-    {% comment %} background-color: {{ block.settings.button_hover_background }}; {% endcomment %}
     opacity: 0.8;
   }
 
@@ -254,7 +216,6 @@
     {% endif %}
     width: 40px;
     height: 40px;
-    {% comment %} background-color: {{ block.settings.nav_background }}; {% endcomment %}
     background-color: black;
     border: none;
     border-radius: 50%;
@@ -267,7 +228,6 @@
   }
 
   .ai-product-carousel__nav-{{ ai_gen_id }}:hover {
-    {% comment %} background-color: {{ block.settings.nav_hover_background }}; {% endcomment %}
     opacity: 0.8;
   }
 
@@ -282,7 +242,6 @@
   .ai-product-carousel__nav-{{ ai_gen_id }} svg {
     width: 20px;
     height: 20px;
-    {% comment %} color: {{ block.settings.nav_icon_color }}; {% endcomment %}
     color: white;
   }
 
@@ -435,20 +394,6 @@
                         <a href="{{ product.url }}">{{ product.title }}</a>
                       </h3>
 
-                      {% comment %} {% if block.settings.show_reviews %}
-                        <div class="ai-product-carousel__reviews-{{ ai_gen_id }}">
-                          <div class="ai-product-carousel__stars-{{ ai_gen_id }}">
-                            {% for star in (0..4) %}
-                              <svg class="ai-product-carousel__star-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                              </svg>
-                            {% endfor %}
-                          </div>
-                          {% comment %} <span class="ai-product-carousel__review-count-{{ ai_gen_id }}">({{ block.settings.default_review_count }})</span> {% endcomment %}
-                          <span class="ai-product-carousel__review-count-{{ ai_gen_id }}">({{ product.metafields.custom.reviews_count }})</span>
-                          </div>
-                      {% endif %} {% endcomment %}
-
                       {% if block.settings.show_reviews %}
                         {%- comment -%} Establish the score with a default fallback of 5 {%- endcomment -%}
                         {%- assign raw_score = product.metafields.custom.reviews_score.value | default: 5 -%}
@@ -494,29 +439,6 @@
                 {% endfor %}
               </div>
 
-              {% comment %} {% if collection.products.size > block.settings.products_per_row %}
-                <button
-                  class="ai-product-carousel__nav-{{ ai_gen_id }} ai-product-carousel__nav-{{ ai_gen_id }}--prev"
-                  data-nav="prev"
-                  data-collection="{{ i }}"
-                  aria-label="Previous products"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                  </svg>
-                </button>
-                <button
-                  class="ai-product-carousel__nav-{{ ai_gen_id }} ai-product-carousel__nav-{{ ai_gen_id }}--next"
-                  data-nav="next"
-                  data-collection="{{ i }}"
-                  aria-label="Next products"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </button>
-              {% endif %} {% endcomment %}
-              {% comment %} {% if collection.products.size > block.settings.products_per_row %} {% endcomment %}
               {% if collection.products.size > 1 %}
                 <button
                   class="ai-product-carousel__nav-{{ ai_gen_id }} ai-product-carousel__nav-{{ ai_gen_id }}--prev"
@@ -605,31 +527,6 @@
         });
       }
 
-      {% comment %} setupNavigation() {
-        this.navButtons.forEach((button) => {
-          button.addEventListener('click', () => {
-            const direction = button.dataset.nav;
-            const collectionId = button.dataset.collection;
-            const track = this.querySelector(`[data-track="${collectionId}"]`);
-            const cards = track.querySelectorAll('.ai-product-carousel__card-{{ ai_gen_id }}');
-            
-            const isMobile = window.innerWidth < 750;
-            const perRow = isMobile ? this.productsPerRowMobile : this.productsPerRow;
-            const maxSlide = Math.max(0, cards.length - perRow);
-
-            if (direction === 'next') {
-              this.currentSlide[collectionId] = Math.min(this.currentSlide[collectionId] + 1, maxSlide);
-            } else {
-              this.currentSlide[collectionId] = Math.max(this.currentSlide[collectionId] - 1, 0);
-            }
-
-            const cardWidth = cards[0].offsetWidth;
-            const gap = {{ block.settings.card_gap }};
-            const offset = this.currentSlide[collectionId] * (cardWidth + gap);
-            track.style.transform = `translateX(-${offset}px)`;
-          });
-        });
-      } {% endcomment %}
       setupNavigation() {
         this.navButtons.forEach((button) => {
           button.addEventListener('click', () => {
@@ -646,38 +543,6 @@
           });
         });
       }
-
-      {% comment %} setupDots() {
-        this.dotContainers.forEach((container) => {
-          const collectionId = container.dataset.dots;
-          const track = this.querySelector(`[data-track="${collectionId}"]`);
-          const cards = track.querySelectorAll('.ai-product-carousel__card-{{ ai_gen_id }}');
-
-          const isMobile = window.innerWidth < 750;
-          const perRow = isMobile ? this.productsPerRowMobile : this.productsPerRow;
-          const maxSlide = Math.max(0, cards.length - perRow);
-
-          container.innerHTML = '';
-
-          for (let i = 0; i <= maxSlide; i++) {
-            const dot = document.createElement('button');
-
-            dot.className = 'ai-product-carousel__dot-{{ ai_gen_id }}';
-            dot.dataset.slide = i;
-            dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-
-            if (i === 0) {
-              dot.classList.add('active');
-            }
-
-            dot.addEventListener('click', () => {
-              this.goToSlide(collectionId, i);
-            });
-
-            container.appendChild(dot);
-          }
-        });
-      } {% endcomment %}
 
       setupDots() {
         this.dotContainers.forEach((container) => {
@@ -822,27 +687,6 @@
           });
         });
       }
-
-      {% comment %} goToSlide(collectionId, slide) {
-        const track = this.querySelector(`[data-track="${collectionId}"]`);
-        const cards = track.querySelectorAll('.ai-product-carousel__card-{{ ai_gen_id }}');
-
-        if (!cards.length) return;
-
-        const isMobile = window.innerWidth < 750;
-        const perRow = isMobile ? this.productsPerRowMobile : this.productsPerRow;
-        const maxSlide = Math.max(0, cards.length - perRow);
-
-        this.currentSlide[collectionId] = Math.max(0, Math.min(slide, maxSlide));
-
-        const cardWidth = cards[0].offsetWidth;
-        const gap = {{ block.settings.card_gap }};
-        const offset = this.currentSlide[collectionId] * (cardWidth + gap);
-
-        track.style.transform = `translateX(-${offset}px)`;
-
-        this.updateDots(collectionId);
-      } {% endcomment %}
 
       goToSlide(collectionId, slide) {
         const track = this.querySelector(`[data-track="${collectionId}"]`);
@@ -1077,71 +921,15 @@
     },
     {
       "type": "color",
-      "id": "tab_background",
-      "label": "Background",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
       "id": "inactive_tab_text_color",
       "label": "Inactive Text color",
       "default": "#6c6c6c"
     },
     {
       "type": "color",
-      "id": "tab_border_color",
-      "label": "Border color",
-      "default": "#dfdfdf"
-    },
-    {
-      "type": "range",
-      "id": "tab_border_width",
-      "label": "Border width",
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "unit": "px",
-      "default": 1
-    },
-    {
-      "type": "range",
-      "id": "tab_border_radius",
-      "label": "Border radius",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 8
-    },
-    {
-      "type": "color",
-      "id": "tab_hover_background",
-      "label": "Hover background",
-      "default": "#f5f5f5"
-    },
-    {
-      "type": "color",
-      "id": "tab_hover_text_color",
-      "label": "Hover text color",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "tab_active_background",
-      "label": "Active background",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
       "id": "tab_active_text_color",
       "label": "Active Tab Text color",
       "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "tab_active_border_color",
-      "label": "Active border color",
-      "default": "#000000"
     },
     {
       "type": "header",
@@ -1152,16 +940,6 @@
       "id": "image_background",
       "label": "Image container background",
       "default": "#f5f5f5"
-    },
-    {
-      "type": "range",
-      "id": "image_border_radius",
-      "label": "Image container radius",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 12
     },
     {
       "type": "range",
@@ -1236,24 +1014,9 @@
     },
     {
       "type": "color",
-      "id": "star_color",
-      "label": "Star color",
-      "default": "#FFD700"
-    },
-    {
-      "type": "color",
       "id": "review_count_color",
       "label": "Review count color",
       "default": "#666666"
-    },
-    {
-      "type": "range",
-      "id": "default_review_count",
-      "label": "Default review count",
-      "min": 0,
-      "max": 500,
-      "step": 5,
-      "default": 50
     },
     {
       "type": "header",
@@ -1303,31 +1066,9 @@
     },
     {
       "type": "color",
-      "id": "button_background",
-      "label": "Background",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
       "id": "button_text_color",
       "label": "Text color",
       "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "button_hover_background",
-      "label": "Hover background",
-      "default": "#333333"
-    },
-    {
-      "type": "range",
-      "id": "button_border_radius",
-      "label": "Border radius",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 8
     },
     {
       "type": "header",
@@ -1344,24 +1085,6 @@
       "id": "offset_tuning",
       "label": "Offset tuning",
       "default": "0%"
-    },
-    {
-      "type": "color",
-      "id": "nav_background",
-      "label": "Background",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "nav_hover_background",
-      "label": "Hover background",
-      "default": "#f5f5f5"
-    },
-    {
-      "type": "color",
-      "id": "nav_icon_color",
-      "label": "Icon color",
-      "default": "#000000"
     }
   ],
   "presets": [
