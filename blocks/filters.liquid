@@ -638,8 +638,7 @@
 
                     <button
                       type="button"
-                      class="facets-subdrawer__row{% if filter_is_active %} facets-subdrawer__row--active{% endif %}"
-                      data-filter-subdrawer-trigger
+                      class="facets-subdrawer__row{% if filter_is_active %} facets-subdrawer__row--active{% endif %} subdrawer-trigger"
                       data-filter-index="{{ forloop.index0 }}"
                       aria-haspopup="dialog"
                       aria-controls="filter-subdrawer-{{ section.id }}-{{ forloop.index0 }}"
@@ -682,8 +681,7 @@
 
                     <button
                       type="button"
-                      class="facets-subdrawer__row facets-subdrawer__sort-row"
-                      data-filter-subdrawer-trigger
+                      class="facets-subdrawer__row facets-subdrawer__sort-row subdrawer-trigger"
                       data-filter-index="sort"
                       aria-haspopup="dialog"
                       aria-controls="filter-subdrawer-sort-{{ section.id }}"
@@ -734,8 +732,7 @@
 
                 <div
                   id="filter-subdrawer-{{ section.id }}-{{ forloop.index0 }}"
-                  class="facets-subdrawer__panel"
-                  data-filter-subdrawer-panel
+                  class="facets-subdrawer__panel subdrawer-panel"
                   data-filter-index="{{ forloop.index0 }}"
                   hidden
                 >
@@ -820,8 +817,7 @@
 
                 <div
                   id="filter-subdrawer-sort-{{ section.id }}"
-                  class="facets-subdrawer__panel"
-                  data-filter-subdrawer-panel
+                  class="facets-subdrawer__panel subdrawer-panel"
                   data-filter-index="sort"
                   hidden
                 >
@@ -2168,8 +2164,8 @@
         }
 
         const mainView = drawer.querySelector('.facets-subdrawer__main');
-        const panels = drawer.querySelectorAll('[data-filter-subdrawer-panel]');
-        const triggers = drawer.querySelectorAll('[data-filter-subdrawer-trigger]');
+        const panels = drawer.querySelectorAll('.subdrawer-panel');
+        const triggers = drawer.querySelectorAll('.subdrawer-trigger');
 
         if (!mainView || !panels.length || !triggers.length) {
           return;
@@ -2183,12 +2179,11 @@
           });
 
           mainView.hidden = false;
-          delete drawer.dataset.subdrawerActive;
         };
 
         const showPanel = (index) => {
           const panel = drawer.querySelector(
-            `[data-filter-subdrawer-panel][data-filter-index="${index}"]`
+            `.subdrawer-panel[data-filter-index="${index}"]`
           );
 
           if (!panel) {
@@ -2200,8 +2195,6 @@
           panels.forEach((item) => {
             item.hidden = item !== panel;
           });
-
-          drawer.dataset.subdrawerActive = index;
         };
 
         triggers.forEach((trigger) => {
