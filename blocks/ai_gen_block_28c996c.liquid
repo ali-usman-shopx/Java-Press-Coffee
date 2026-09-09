@@ -558,7 +558,8 @@
   </div>
 </product-carousel-{{ ai_gen_id }}>
 
-<script>
+<script type="module">
+  import { CartLinesUpdateEvent } from '@shopify/events';
   (function() {
     class ProductCarousel{{ ai_gen_id }} extends HTMLElement {
       constructor() {
@@ -718,43 +719,106 @@
 
       setupAddToCart() {
         this.addToCartButtons.forEach((button) => {
-          button.addEventListener('click', () => {
+          button.addEventListener('click', async () => {
             const variantId = button.dataset.variantId;
             const originalText = button.textContent;
 
             button.textContent = 'Adding...';
             button.disabled = true;
 
-            fetch('/cart/add.js', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                id: variantId,
-                quantity: 1
+            const cartItemsComponents = document.querySelectorAll('cart-items-component');
+            const sectionIds = [];
+
+            cartItemsComponents.forEach((item) => {
+              if (item instanceof HTMLElement && item.dataset.sectionId) {
+                sectionIds.push(item.dataset.sectionId);
+              }
+            });
+
+            // We handoff to the cart for cart updates
+            const deferredEventPromise = CartLinesUpdateEvent.createPromise();
+
+            // Tell the cart which promise will contain info about added products
+            this.dispatchEvent(
+              new CartLinesUpdateEvent({
+                action: 'add',
+                context: 'product',
+                lines: [
+                  {
+                    merchandiseId: variantId,
+                    quantity: 1,
+                  },
+                ],
+                promise: deferredEventPromise.promise,
               })
-            })
-            .then(response => response.json())
-            .then(data => {
+            );
+
+            try {
+              const response = await fetch(`${Theme.routes.cart_url}/add.js`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+                },
+                body: JSON.stringify({
+                  id: Number(variantId),
+                  quantity: 1,
+                  sections: sectionIds.join(','),
+                }),
+              });
+
+              const data = await response.json();
+
+              if (data.status) {
+                throw new Error(data.message || 'Add to cart failed');
+              }
+
+              // The native product-form does this second request
+              // createCartFromAjaxResponse() expects the full cart object.
+              const cartResponse = await fetch(`${Theme.routes.cart_url}.json`, {
+                headers: {
+                  Accept: 'application/json',
+                },
+                credentials: 'same-origin',
+              });
+
+              if (!cartResponse.ok) {
+                throw new Error('Failed to fetch updated cart');
+              }
+
+              const cart = await cartResponse.json();
+
+              // Resolve the promise, trigger the actual updates.
+              deferredEventPromise.resolve({
+                cart: CartLinesUpdateEvent.createCartFromAjaxResponse(cart),
+                detail: {
+                  items: cart.items,
+                  source: 'product-carousel',
+                  itemCount: cart.item_count,
+                  sections: data.sections,
+                  didError: false,
+                },
+              });
+
               button.textContent = 'Added!';
+
               setTimeout(() => {
                 button.textContent = originalText;
                 button.disabled = false;
               }, 2000);
 
-              if (window.theme && window.theme.cart) {
-                window.theme.cart.refresh();
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
+            } catch (error) {
+              console.error('Error adding to cart:', error);
+
+              deferredEventPromise.reject(error);
+
               button.textContent = 'Error';
+
               setTimeout(() => {
                 button.textContent = originalText;
                 button.disabled = false;
               }, 2000);
-            });
+            }
           });
         });
       }
