@@ -1,4 +1,3 @@
-{% comment %} 
 
 {% if section.blocks.size > 1 %}
   <script
@@ -8,16 +7,37 @@
   ></script>
 {% endif %}
 
-{% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+{% if section.settings.enable_custom_background %}
+  {% render 'contrast-override',
+    background_color: section.settings.background_color,
+    section_id: section.id
+  %}
+{% endif %}
 
-<div class="section-background color-custom-{{ section.id }}"></div>
+<div
+  class="section-background{% if section.settings.enable_custom_background %} color-custom-{{ section.id }}{% endif %}"
+  {% if section.settings.enable_custom_background and section.settings.background_color != blank %}
+    style="background-color: {{ section.settings.background_color }};"
+  {% endif %}
+></div>
+
 <aside
-  class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-custom-{{ section.id }}"
-  style="{% render 'spacing-padding', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;{% if section.settings.divider_color != blank %} --color-border: {{ section.settings.divider_color }};{% endif %}"
+  class="announcement-bar spacing-style section section--{{ section.settings.section_width }}{% if section.settings.enable_custom_background %} color-custom-{{ section.id }}{% endif %}"
+  style="
+    {% render 'spacing-padding', settings: section.settings %};
+    --border-bottom-width: {{ section.settings.divider_width }}px;
+    {% if section.settings.divider_color != blank %}
+      --color-border: {{ section.settings.divider_color }};
+    {% endif %}
+    {% if section.settings.enable_custom_background and section.settings.background_color != blank %}
+      background-color: {{ section.settings.background_color }};
+    {% endif %}
+  "
 >
   {% liquid
     assign autoplay = false
     assign show_arrows = false
+
     if section.blocks.size > 1
       assign autoplay = true
       assign show_arrows = true
@@ -167,10 +187,17 @@
       "default": "page-width"
     },
     {
+      "type": "checkbox",
+      "id": "enable_custom_background",
+      "label": "Enable custom background",
+      "default": false
+    },
+    {
       "type": "color",
       "id": "background_color",
       "label": "t:settings.background_color",
-      "placeholder": "t:settings.default"
+      "placeholder": "t:settings.default",
+      "visible_if": "{{ section.settings.enable_custom_background }}"
     },
     {
       "type": "range",
@@ -226,4 +253,4 @@
     }
   ]
 }
-{% endschema %} {% endcomment %}
+{% endschema %}

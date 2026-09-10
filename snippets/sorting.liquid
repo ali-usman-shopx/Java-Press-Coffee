@@ -8,10 +8,17 @@
   @param {string} [sort_position] - { 'desktop' | 'mobile' } Used in a data-testID selector for automated testing
   @param {boolean} should_use_select_on_mobile - Whether to use a select element for the sorting component on mobile
   @param {string} section_id - The section ID
+  @param {string} [additional_classes] - Any additional classes that the parent wants to attach
+  @param {boolean} [use_select_style] - Whether to use the select-style appearance
 {%- enddoc -%}
 
 <sorting-filter-component
-  class="sorting-filter{% if filter_style == 'horizontal' %} sorting-filter__horizontal{% endif %}"
+  class="
+    sorting-filter
+    {% if filter_style == 'horizontal' %}sorting-filter__horizontal{% endif %}
+    {% if use_select_style %}sorting-filter--select-style{% endif %}
+    {{ additional_classes }}
+  "
   on:change="/updateFilterAndSorting"
   on:keydown="/handleKeyDown"
   {% if sort_position != blank %}
@@ -77,28 +84,56 @@
       data-auto-close-details="desktop,mobile"
       on:toggle="/handleToggle"
     >
-      <summary
-        class="facets__summary"
-        role="button"
-        aria-expanded="false"
-        aria-controls="sorting-options-{{ section_id }}-{{ suffix }}"
-        ref="summary"
-      >
-        <span
-          class="facets__label"
-          id="sort-label-{{ section_id }}"
+      {% if use_select_style %}
+        <summary
+          class="sorting-filter__select-summary"
+          role="button"
+          aria-expanded="false"
+          aria-controls="sorting-options-{{ section_id }}-{{ suffix }}"
+          ref="summary"
         >
-          {{- 'actions.sort' | t -}}
-        </span>
-        <span
-          class="facets__status h6 desktop:hidden"
+          <span
+            class="sorting-filter__select-label"
+            id="sort-label-{{ section_id }}"
+          >
+            {{- 'actions.sort' | t -}}
+          </span>
+
+          <span class="sorting-filter__select-control">
+            <span class="sorting-filter__select-value">
+              {{- status -}}
+            </span>
+
+            <span class="sorting-filter__select-caret">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </span>
+        </summary>
+      {% else %}
+        <summary
+          class="facets__summary"
+          role="button"
+          aria-expanded="false"
+          aria-controls="sorting-options-{{ section_id }}-{{ suffix }}"
+          ref="summary"
         >
-          {{- status -}}
-        </span>
-        <span class="svg-wrapper icon-caret icon-animated">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
-      </summary>
+          <span
+            class="facets__label"
+            id="sort-label-{{ section_id }}"
+          >
+            {{- 'actions.sort' | t -}}
+          </span>
+          <span
+            class="facets__status h6 desktop:hidden"
+          >
+            {{- status -}}
+          </span>
+          <span class="svg-wrapper icon-caret icon-animated">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </summary>
+      {% endif %}
+
       <floating-panel-component
         id="sorting-options-{{ section_id }}-{{ suffix }}"
         class="sorting-filter__options color-custom-popover"
@@ -352,6 +387,90 @@
   .facets--drawer .sorting-filter {
     @media screen and (min-width: 750px) {
       display: none;
+    }
+  }
+
+  /* Select-style sorting */
+  .sorting-filter--select-style {
+    .sorting-filter__select-summary {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+
+      min-height: var(--minimum-touch-target);
+      padding: 0;
+
+      border: 0;
+      background: transparent;
+
+      cursor: pointer;
+    }
+
+    /*
+    * "Sort" label
+    * Completely separate from the select-like control.
+    */
+    .sorting-filter__select-label {
+      flex: 0 0 auto;
+
+      margin: 0;
+      padding: 0;
+
+      white-space: nowrap;
+    }
+
+    /*
+    * Select-like control.
+    *
+    * This contains ONLY:
+    * - current sort value
+    * - caret
+    */
+    .sorting-filter__select-control {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--gap-sm);
+
+      min-height: var(--minimum-touch-target);
+
+      padding: var(--padding-xs) var(--padding-sm);
+
+      border: var(--style-border-width) solid var(--color-border);
+      /* border-radius: var(--variant-picker-button-radius); */
+      border-radius: 5px;
+
+      background-color: var(--color-background);
+
+      white-space: nowrap;
+    }
+
+    .sorting-filter__select-status {
+      display: block;
+
+      margin: 0;
+      padding: 0;
+
+      font-weight: normal;
+      white-space: nowrap;
+    }
+
+    .sorting-filter__select-control .icon-caret {
+      flex: 0 0 auto;
+
+      width: var(--icon-size-2xs);
+      height: var(--icon-size-2xs);
+    }
+
+    .sorting-filter__select-summary:hover
+      .sorting-filter__select-control {
+      background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+    }
+
+    .sorting-filter__options {
+      margin-top: var(--padding-2xs);
+      /* border-radius: var(--variant-picker-button-radius); */
+      border-radius: 5px;
     }
   }
 {% endstylesheet %}

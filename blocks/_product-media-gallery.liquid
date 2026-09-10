@@ -144,6 +144,119 @@
     },
     {
       "type": "header",
+      "content": "Carousel arrow background"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_arrow_background",
+      "label": "Enable arrow background styling",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "arrow_background_color",
+      "label": "Background color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.enable_arrow_background }}"
+    },
+    {
+      "type": "color",
+      "id": "arrow_indicator_color",
+      "label": "Arrow color",
+      "default": "#FFFFFF",
+      "visible_if": "{{ block.settings.enable_arrow_background }}"
+    },
+    {
+      "type": "range",
+      "id": "arrow_background_opacity",
+      "label": "Background opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ block.settings.enable_arrow_background }}"
+    },
+    {
+      "type": "range",
+      "id": "arrow_background_padding",
+      "label": "Padding",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8,
+      "visible_if": "{{ block.settings.enable_arrow_background }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "arrow_background_separate_padding",
+      "label": "Separate X and Y padding",
+      "default": false,
+      "visible_if": "{{ block.settings.enable_arrow_background }}"
+    },
+    {
+      "type": "range",
+      "id": "arrow_background_padding_x",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8,
+      "visible_if": "{{ block.settings.enable_arrow_background and block.settings.arrow_background_separate_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "arrow_background_padding_y",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 8,
+      "visible_if": "{{ block.settings.enable_arrow_background and block.settings.arrow_background_separate_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "arrow_background_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_arrow_background }}"
+    },
+    {
+      "type": "header",
+      "content": "Carousel slide background"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slide_background",
+      "label": "Enable slide background",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "slide_background_color",
+      "label": "Background color",
+      "default": "#FFFFFF",
+      "visible_if": "{{ block.settings.enable_slide_background }}"
+    },
+    {
+      "type": "range",
+      "id": "slide_background_border_radius",
+      "label": "Slideshow border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
       "content": "t:content.thumbnails",
       "visible_if": "{{ block.settings.slideshow_controls_style == 'thumbnails' or block.settings.slideshow_mobile_controls_style == 'thumbnails' }}"
     },
@@ -238,8 +351,35 @@
           "label": "t:options.contain"
         }
       ],
-      "default": "cover",
-      "visible_if": "{{ block.settings.aspect_ratio == 'adapt' and block.settings.constrain_to_viewport == true }}"
+      "default": "cover"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_container_padding",
+      "label": "Enable image container padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "image_container_padding_x",
+      "label": "Image container horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_image_container_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "image_container_padding_y",
+      "label": "Image container vertical padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.enable_image_container_padding }}"
     },
     {
       "type": "range",

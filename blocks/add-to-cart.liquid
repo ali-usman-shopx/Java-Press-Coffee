@@ -12,12 +12,15 @@
   assign scoped_class = block.settings.style_class | append: '--' | append: block.id
   assign class = 'add-to-cart-button ' | append: block.settings.style_class | append: ' ' | append: scoped_class
   assign id = 'BuyButtons-ProductSubmitButton-' | append: block.id
+  assign wrapper_class = 'add-to-cart-button-wrapper--' | append: block.id
 %}
+
 {% render 'button-custom-styles', block_settings: block.settings, block_id: block.id %}
 {% render 'add-to-cart-button-styles' %}
 {% render 'fly-to-cart-styles' %}
 
 <span
+  class="{{ wrapper_class }}"
   {{ block.shopify_attributes }}
   style="--add-to-cart-font-case: {{ settings.button_text_case }};"
 >
@@ -31,6 +34,14 @@
     data_testid: 'standalone-add-to-cart'
   %}
 </span>
+
+<style>
+  @media screen and (max-width: 749px) {
+    .{{ wrapper_class }} {
+      {{ block.settings.mobile_css_override }}
+    }
+  }
+</style>
 
 {% schema %}
 {
@@ -86,6 +97,13 @@
       "default": "{{ settings.color_palette.background }}",
       "alpha": true,
       "visible_if": "{{ block.settings.style_class == 'button-custom' }}"
+    },
+    {
+      "type": "textarea",
+      "id": "mobile_css_override",
+      "label": "Button Wrapper Mobile CSS Override",
+      "default": ";",
+      "info": "CSS declarations applied to the button wrapper on mobile only."
     }
   ]
 }

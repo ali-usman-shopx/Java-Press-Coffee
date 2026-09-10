@@ -1,0 +1,415 @@
+{%- doc -%}
+  Custom product card.
+
+  This snippet intentionally contains the complete markup and behavior for
+  the custom product card. Its settings are supplied by the calling block.
+
+  @param {object} product - The product object.
+  @param {object} settings - The custom product card settings.
+  @param {string} id - A unique ID used to scope styles and JavaScript.
+{%- enddoc -%}
+
+{% liquid
+  assign custom_product = product
+  assign card_id = id
+  assign card_settings = settings
+
+  assign raw_score = custom_product.metafields.custom.reviews_score.value | default: 5
+  assign total_stars = raw_score | plus: 0 | round
+  assign review_count = custom_product.metafields.custom.reviews_count.value | default: 0
+%}
+
+{% style %}
+  .custom-product-card-{{ card_id }} {
+    --image-container__background-color: {{ card_settings.image_background }};
+    --image-container__border-radius: {{ card_settings.image_border_radius }}px;
+    --image-container__padding: {{ card_settings.image_padding }}px;
+    --image-container__margin-bottom: {{ card_settings.image_margin_bottom }}px;
+
+    {% if card_settings.stamp_image != blank %}
+      --stamp__should-render: flex;
+    {% else %}
+      --stamp__should-render: none;
+    {% endif %}
+    --stamp__top: {{ card_settings.stamp_position_top }}px;
+    --stamp__right: {{ card_settings.stamp_position_right }}px;
+    --stamp__width: {{ card_settings.stamp_size }}px;
+    --stamp__height: {{ card_settings.stamp_size }}px;
+
+    --info__padding-inline: {{ card_settings.info_padding_inline }}px;
+
+    --title__font-size: {{ card_settings.title_font_size }}px;
+    --title__font-weight: {{ card_settings.title_font_weight }};
+    --title__line-height: {{ card_settings.title_line_height }};
+    --title__margin: 0 0 {{ card_settings.title_margin_bottom }}px;
+    --title__color: {{ card_settings.title_color }};
+
+    --reviews__gap: {{ card_settings.review_gap }}px;
+    --reviews__margin-bottom: {{ card_settings.review_margin_bottom }}px;
+
+    --stars__gap: {{ card_settings.star_gap }}px;
+    --stars__color: {{ card_settings.star_color }};
+
+    --star__width: {{ card_settings.star_size }}px;
+    --star__height: {{ card_settings.star_size }}px;
+    --star__flex: 0 0 {{ card_settings.star_size }}px;
+
+    --review-count__font-size: {{ card_settings.review_count_font_size }}px;
+    --review-count__font-weight: {{ card_settings.review_count_font_weight }};
+    --review-count__color: {{ card_settings.review_count_color }};
+
+    --price__gap: {{ card_settings.price_gap }}px;
+    --price__margin-bottom: {{ card_settings.price_margin_bottom }}px;
+
+    --current-price__font-size: {{ card_settings.price_font_size }}px;
+    --current-price__font-weight: {{ card_settings.price_font_weight }};
+    --current-price__color: {{ card_settings.price_color }};
+
+    --compare-price__font-size: {{ card_settings.compare_price_font_size }}px;
+    --compare-price__font-weight: {{ card_settings.compare_price_font_weight }};
+    --compare-price__color: {{ card_settings.compare_price_color }};
+
+    --add-to-cart__padding:
+      {{ card_settings.button_padding_vertical }}px
+      {{ card_settings.button_padding_horizontal }}px;
+    --add-to-cart__background-color: {{ card_settings.button_background }};
+    --add-to-cart__color: {{ card_settings.button_text_color }};
+    --add-to-cart__border-radius: {{ card_settings.button_border_radius }}px;
+    --add-to-cart__font-size: {{ card_settings.button_font_size }}px;
+    --add-to-cart__font-weight: {{ card_settings.button_font_weight }};
+    --add-to-cart__line-height: {{ card_settings.button_line_height }};
+    --add-to-cart__transition: opacity {{ card_settings.button_transition_duration }}ms ease;
+
+    --add-to-cart__HOVER__opacity: {{ card_settings.button_hover_opacity | divided_by: 100.0 }};
+
+    width: 100%;
+    background: transparent;
+  }
+{% endstyle %}
+
+{% stylesheet %}
+  /*
+   * ------------------------------------------------------------
+   * Image
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card__image-container {
+    position: relative;
+    background-color: var(--image-container__background-color);
+    border-radius: var(--image-container__border-radius);
+    padding: var(--image-container__padding);
+    margin-bottom: var(--image-container__margin-bottom);
+    overflow: hidden;
+  }
+
+  .custom-product-card__image-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .custom-product-card__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+  }
+
+  .custom-product-card__image-placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Stamp
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card__stamp {
+    display: var(--stamp__should-render);
+    position: absolute;
+    top: var(--stamp__top);
+    right: var(--stamp__right);
+    width: var(--stamp__width);
+    height: var(--stamp__height);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .custom-product-card__stamp img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Product information
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card__info {
+    padding-inline: var(--info__padding-inline);
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Title
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card__title {
+    font-size: var(--title__font-size);
+    font-weight: var(--title__font-weight);
+    line-height: var(--title__line-height);
+    margin: var(--title__margin);
+    color: var(--title__color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    min-height: 2lh;
+  }
+
+  .custom-product-card__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Reviews
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card__reviews {
+    display: flex;
+    align-items: center;
+    gap: var(--reviews__gap);
+    margin-bottom: var(--reviews__margin-bottom);
+  }
+
+  .custom-product-card__stars {
+    display: flex;
+    gap: var(--stars__gap);
+    color: var(--stars__color);
+  }
+
+  .custom-product-card__star {
+    width: var(--star__width);
+    height: var(--star__height);
+    flex: var(--star__flex);
+  }
+
+  .custom-product-card__review-count {
+    font-size: var(--review-count__font-size);
+    font-weight: var(--review-count__font-weight);
+    color: var(--review-count__color);
+    line-height: 1;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Price
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card__price {
+    display: flex;
+    align-items: center;
+    gap: var(--price__gap);
+    margin-bottom: var(--price__margin-bottom);
+  }
+
+  .custom-product-card__current-price {
+    font-size: var(--current-price__font-size);
+    font-weight: var(--current-price__font-weight);
+    color: var(--current-price__color);
+  }
+
+  .custom-product-card__compare-price {
+    font-size: var(--compare-price__font-size);
+    font-weight: var(--compare-price__font-weight);
+    color: var(--compare-price__color);
+    text-decoration: line-through;
+  }
+
+  /*
+   * ------------------------------------------------------------
+   * Add to cart
+   * ------------------------------------------------------------
+   */
+
+  .custom-product-card__add-to-cart {
+    width: 100%;
+    padding: var(--add-to-cart__padding);
+    background-color: var(--add-to-cart__background-color);
+    color: var(--add-to-cart__color);
+    border: none;
+    border-radius: var(--add-to-cart__border-radius);
+    font-size: var(--add-to-cart__font-size);
+    font-weight: var(--add-to-cart__font-weight);
+    line-height: var(--add-to-cart__line-height);
+    cursor: pointer;
+    transition: var(--add-to-cart__transition);
+  }
+
+  .custom-product-card__add-to-cart:hover {
+    opacity: var(--add-to-cart__HOVER__opacity);
+  }
+
+  .custom-product-card__add-to-cart:disabled {
+    cursor: default;
+  }
+
+  .custom-product-card__form {
+    width: 100%;
+  }
+{% endstylesheet %}
+
+<div class="custom-product-card-{{ card_id }}">
+
+  <div class="custom-product-card__image-container">
+
+    {% if card_settings.stamp_image != blank %}
+      <div class="custom-product-card__stamp">
+        <img
+          src="{{ card_settings.stamp_image | image_url: width: 200 }}"
+          alt="{{ card_settings.stamp_image.alt | escape }}"
+          loading="lazy"
+          width="200"
+          height="auto"
+        >
+      </div>
+    {% endif %}
+
+    <a
+      href="{{ custom_product.url }}"
+      class="custom-product-card__image-link"
+    >
+      {% if custom_product.featured_image %}
+        <img
+          src="{{ custom_product.featured_image | image_url: width: 600 }}"
+          alt="{{ custom_product.featured_image.alt | escape }}"
+          class="custom-product-card__image"
+          loading="lazy"
+          width="600"
+          height="600"
+        >
+      {% else %}
+        <div class="custom-product-card__image-placeholder">
+          {{ 'product-1' | placeholder_svg_tag }}
+        </div>
+      {% endif %}
+    </a>
+
+  </div>
+
+  <div class="custom-product-card__info">
+
+    <h3 class="custom-product-card__title">
+      <a href="{{ custom_product.url }}">
+        {{ custom_product.title }}
+      </a>
+    </h3>
+
+    {% if card_settings.show_reviews %}
+      <div class="custom-product-card__reviews">
+
+        <div class="custom-product-card__stars">
+          {% for star in (1..total_stars) %}
+            <svg
+              class="custom-product-card__star"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          {% endfor %}
+        </div>
+
+        <span class="custom-product-card__review-count">
+          ({{ review_count }})
+        </span>
+
+      </div>
+    {% endif %}
+
+    <div class="custom-product-card__price">
+
+      <span class="custom-product-card__current-price">
+        {{ custom_product.price | money }}
+      </span>
+
+      {% if custom_product.compare_at_price > custom_product.price %}
+        <span class="custom-product-card__compare-price">
+          {{ custom_product.compare_at_price | money }}
+        </span>
+      {% endif %}
+
+    </div>
+
+    <product-form-component
+        data-section-id="{{ section.id }}"
+        data-product-id="{{ custom_product.id }}"
+        data-product-url="{{ custom_product.url }}"
+        on:submit="/handleSubmit"
+        data-quantity-default="1"
+        data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+    >
+    <div
+        class="visually-hidden"
+        aria-live="assertive"
+        role="status"
+        aria-atomic="true"
+        ref="liveRegion"
+    ></div>
+
+    {% assign custom_form_id = 'CustomProductForm-' | append: card_id %}
+
+    {% form 'product',
+        custom_product,
+        id: custom_form_id,
+        class: custom_form_class,
+        data-type: 'add-to-cart-form'
+    %}
+
+        <input
+        type="hidden"
+        name="id"
+        ref="variantId"
+        value="{{ custom_product.selected_or_first_available_variant.id }}"
+        >
+
+        <input
+        type="hidden"
+        name="quantity"
+        value="1"
+        >
+
+        <add-to-cart-component>
+        <button
+            type="submit"
+            name="add"
+            class="custom-product-card__add-to-cart"
+            ref="addToCartButton"
+            {% unless custom_product.available %}
+            disabled
+            {% endunless %}
+        >
+            {{ card_settings.button_text }}
+        </button>
+        </add-to-cart-component>
+
+    {% endform %}
+    </product-form-component>
+
+  </div>
+</div>

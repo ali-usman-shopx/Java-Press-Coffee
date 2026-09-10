@@ -326,7 +326,7 @@
   {{ media_slot_1 }}
   {{ media_slot_2 }}
 
-  {% if media_count == 0 %}
+  {% if media_count == 0 and section.settings.enable_default_placeholder %}
     {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
   {%- endif -%}
 {% endcapture %}
@@ -459,9 +459,17 @@
 {% # A first-section hero consumes `--header-group-height` at first paint (`.hero-wrapper:first-child` rule below) %}
 {% render 'measure-header-heights', only_when_first_section: true %}
 
+{%- liquid
+  assign mobile_background_image_enabled = false
+
+  if section.settings.enable_mobile_background_image and section.settings.mobile_background_image != blank
+    assign mobile_background_image_enabled = true
+  endif
+-%}
+
 <div
   id="Hero-{{ section.id }}"
-  class="hero{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.stack_media_on_mobile %} hero--stack-mobile{% endif %}"
+  class="hero{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}{% if section.blocks.size == 0 and section.settings.section_height == 'auto' %} hero--no-blocks-auto-height{% endif %}{% if section.settings.stack_media_on_mobile %} hero--stack-mobile{% endif %}{% if mobile_background_image_enabled %} hero--mobile-background-image{% endif %}"
   style="
     --hero-border-style: {{ section.settings.border }};
     --hero-border-width: {{ section.settings.border_width }}px;
@@ -473,6 +481,10 @@
        --hero-min-height: 100svh;
     {% else %}
       --hero-min-height: var(--section-height-{{ section.settings.section_height }});
+    {% endif %}
+    {% if mobile_background_image_enabled %}
+      --hero-mobile-background-image: url('{{ section.settings.mobile_background_image | image_url: width: 3840 }}');
+      --hero-mobile-background-position: top {{ section.settings.mobile_background_image_alignment }};
     {% endif %}
   "
   {% if request.visual_preview_mode %}
@@ -753,6 +765,19 @@
       }
     }
   }
+
+  .hero--mobile-background-image {
+    background-image: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .hero--mobile-background-image {
+      background-image: var(--hero-mobile-background-image);
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: var(--hero-mobile-background-position);
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -790,6 +815,12 @@
     "groups": ["header"]
   },
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_default_placeholder",
+      "label": "Enable default placeholder image",
+      "default": true
+    },
     {
       "type": "header",
       "content": "t:content.media_1"
@@ -1157,6 +1188,39 @@
       "id": "background_color",
       "label": "t:settings.background_color",
       "placeholder": "t:settings.default"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_background_image",
+      "label": "Enable mobile background image",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_background_image",
+      "label": "Mobile background image",
+      "visible_if": "{{ section.settings.enable_mobile_background_image }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_background_image_alignment",
+      "label": "Mobile background image alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "visible_if": "{{ section.settings.enable_mobile_background_image }}"
     },
     {
       "type": "checkbox",
